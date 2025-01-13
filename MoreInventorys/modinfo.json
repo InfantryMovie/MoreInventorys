@@ -1,0 +1,13 @@
+{
+  "type": "code",
+  "modid": "moreinventorys",
+  "name": "MoreInventorys",
+  "authors": [
+    "InfantryMovie"
+  ],
+  "description": "This mod adds more beautiful inventory to the game.",
+  "version": "1.19.0-1.0.3",
+  "dependecny": {
+    "game": "1.19.0"
+  }
+}

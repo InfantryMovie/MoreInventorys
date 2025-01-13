@@ -1,0 +1,20 @@
+{
+  "code": "myshelf",
+  "name": "myshelf",
+  "creativeinventory": {
+    "general": [ "*" ]
+  },
+  "blockmaterial": "Wood",
+  "drawtype": "Cube",
+  "tags": [ "furniture", "storage" ],
+  "textures": {
+    "all": {
+      "base": "moreinventorys:block/shelf_*"
+    }
+  },
+  "sounds": {
+    "place": "game:block/planks",
+    "walk": "game:walk/wood"
+  }
+  
+}
