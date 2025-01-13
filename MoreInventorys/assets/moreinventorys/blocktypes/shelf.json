@@ -1,5 +1,7 @@
 {
   "code": "myshelf",
+  "class": "myshelf",
+  "entityClass": "beshelf",
   "name": "myshelf",
   "creativeinventory": {
     "general": [ "*" ]
@@ -9,12 +11,25 @@
   "tags": [ "furniture", "storage" ],
   "textures": {
     "all": {
-      "base": "moreinventorys:block/shelf_*"
+      "base": "moreinventorys:block/myshelf"
     }
   },
   "sounds": {
     "place": "game:block/planks",
     "walk": "game:walk/wood"
+  },
+  "guiTransform": {
+    "rotation": {
+      "x": -22.6,
+      "y": -145,
+      "z": 0
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0.9,
+      "z": 0.5
+    },
+    "scale": 0.72
   }
-  
+
 }

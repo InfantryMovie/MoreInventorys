@@ -10,10 +10,6 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
-  <Compile Remove="assets\moreinventorys\blocktypes\**" />
-  <Content Remove="assets\moreinventorys\blocktypes\**" />
-  <EmbeddedResource Remove="assets\moreinventorys\blocktypes\**" />
-  <None Remove="assets\moreinventorys\blocktypes\**" />
   <None Remove="assets\moreinventorys\block\textures\shelf-bottom.png" />
   <None Remove="assets\moreinventorys\block\textures\shelf-top.png" />
   <Content Include="modinfo.json">
@@ -29,6 +25,7 @@
 
 <ItemGroup>
   <Folder Include="assets\moreinventorys\blockentities\" />
+  <Folder Include="assets\moreinventorys\blocktypes\" />
 </ItemGroup>
 
 </Project>
