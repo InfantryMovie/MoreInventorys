@@ -3,9 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeBuild", "CakeBuild\CakeBuild.csproj", "{4D3E8757-CF71-44BB-855B-7746DF1EC662}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeBuild", "CakeBuild\CakeBuild.csproj", "{4D3E8757-CF71-44BB-855B-7746DF1EC662}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreInventorys", "MoreInventorys\MoreInventorys.csproj", "{D849FB3A-A4F7-4E7D-B102-529DF7562C43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreInventorys", "MoreInventorys\MoreInventorys.csproj", "{D849FB3A-A4F7-4E7D-B102-529DF7562C43}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4D3E8757-CF71-44BB-855B-7746DF1EC662} = {4D3E8757-CF71-44BB-855B-7746DF1EC662}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

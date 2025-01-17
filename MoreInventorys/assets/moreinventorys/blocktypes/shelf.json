@@ -1,7 +1,7 @@
 {
   "code": "myshelf",
-  "class": "myshelf",
-  "entityClass": "beshelf",
+  "class": "ShelfBlock",
+  "entityClass": "BEShelf",
   "name": "myshelf",
   "creativeinventory": {
     "general": [ "*" ]

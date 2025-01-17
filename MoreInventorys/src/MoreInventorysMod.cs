@@ -24,7 +24,12 @@ namespace MoreInventorys.src
             api.RegisterBlockEntityClass("BEShelf", typeof(BEShelf));
 
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
-            api.Logger.Notification("Mod 'More Inventorys' успешно загружен!");
+            api.Logger.Notification("Mod 'More Inventorys' успешно загружен! ------------------------------------------------------------------------------------------------");
         }
+
+       /* public override bool ShouldLoad(EnumAppSide forSide)
+        {
+            return true;
+        }*/
     }
 }

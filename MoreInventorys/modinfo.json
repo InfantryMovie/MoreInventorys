@@ -6,8 +6,8 @@
     "InfantryMovie"
   ],
   "description": "This mod adds more beautiful inventory to the game.",
-  "version": "1.19.0-1.0.3",
-  "dependecny": {
+  "version": "1.19.0-0.0.1",
+  "dependency": {
     "game": "1.19.0"
   }
 }
