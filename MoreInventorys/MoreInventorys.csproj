@@ -24,35 +24,34 @@
   <Folder Include="assets\moreinventorys\recipes\" />
   <Folder Include="assets\moreinventorys\shapes\" />
   <Folder Include="assets\moreinventorys\sounds\" />
+  <Folder Include="assets\moreinventorys\textures\block\" />
 </ItemGroup>
 
 <ItemGroup>
-  <Reference Include="cairo-sharp">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\Lib\cairo-sharp.dll</HintPath>
-  </Reference>
-  <Reference Include="csvorbis">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\Lib\csvorbis.dll</HintPath>
-  </Reference>
-  <Reference Include="Newtonsoft.Json">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\Lib\Newtonsoft.Json.dll</HintPath>
-  </Reference>
   <Reference Include="Vintagestory">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\Vintagestory.dll</HintPath>
   </Reference>
   <Reference Include="VintagestoryAPI">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryAPI.dll</HintPath>
+    <Private>False</Private>
+  </Reference>
+  <Reference Include="VintagestoryLib">
+    <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryLib.dll</HintPath>
   </Reference>
   <Reference Include="VintagestoryServer">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryServer.dll</HintPath>
   </Reference>
   <Reference Include="VSCreativeMod">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSCreativeMod.dll</HintPath>
+    <Private>False</Private>
   </Reference>
   <Reference Include="VSEssentials">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSEssentials.dll</HintPath>
+    <Private>False</Private>
   </Reference>
   <Reference Include="VSSurvivalMod">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSSurvivalMod.dll</HintPath>
+    <Private>False</Private>
   </Reference>
 </ItemGroup>
 

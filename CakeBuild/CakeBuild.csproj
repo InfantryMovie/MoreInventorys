@@ -10,10 +10,4 @@
     <PackageReference Include="Cake.Json" Version="7.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="VintagestoryAPI">
-      <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryAPI.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>

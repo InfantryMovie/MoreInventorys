@@ -1,4 +1,7 @@
 {
-  "block.shelf.name": "моя полка",
-  "block.shelf.desc": "полка для хранения предметов."
+  "block.shelf.name": "моя полка 1",
+  "block.shelf.desc": "полка для хранения предметов.",
+
+
+  "game:tabname-moreinventorys": "More Inventorys"
 }

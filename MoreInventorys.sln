@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeBuild", "CakeBuild\CakeBuild.csproj", "{4D3E8757-CF71-44BB-855B-7746DF1EC662}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreInventorys", "MoreInventorys\MoreInventorys.csproj", "{D849FB3A-A4F7-4E7D-B102-529DF7562C43}"
-	ProjectSection(ProjectDependencies) = postProject
-		{4D3E8757-CF71-44BB-855B-7746DF1EC662} = {4D3E8757-CF71-44BB-855B-7746DF1EC662}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

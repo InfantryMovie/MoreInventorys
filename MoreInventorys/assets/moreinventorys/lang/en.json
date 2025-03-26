@@ -1,4 +1,5 @@
 {
-  "block.shelf.name": "MyShelf",
-  "block.shelf.desc": "A simple storage shelf."
+  "block.shelf.name": "MyShelf1",
+  "block.shelf.desc": "A simple storage shelf.",
+  "game:tabname-moreinventorys": "More Inventorys"
 }

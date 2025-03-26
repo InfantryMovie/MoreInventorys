@@ -20,11 +20,11 @@ namespace MoreInventorys.src
             base.Start(api);
 
             // Регистрируем наш блок "полка"
-            api.RegisterBlockClass("ShelfBlock", typeof(ShelfBlock));
-            api.RegisterBlockEntityClass("BEShelf", typeof(BEShelf));
+            api.RegisterBlockClass("firstshelfblock", typeof(FirstShelfBlock));
+            api.RegisterBlockEntityClass("beshelf", typeof(BEFirstShelf));
 
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
-            api.Logger.Notification("Mod 'More Inventorys' успешно загружен! ------------------------------------------------------------------------------------------------");
+            api.Logger.Notification("Mod 'More Inventorys' успешно загружен!");
         }
 
        /* public override bool ShouldLoad(EnumAppSide forSide)
