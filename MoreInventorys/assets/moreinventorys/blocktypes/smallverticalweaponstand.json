@@ -1,0 +1,121 @@
+{
+  "code": "smallverticalweaponstand",
+  "name": "smallverticalweaponstand",
+  "class": "smallverticalweaponstandblock",
+  "entityClass": "besmallverticalweaponstand",
+  "creativeinventory": {
+    "general": [ "*" ],
+    "moreinventorys": [ "*" ]
+  },
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "blockmaterial": "Wood",
+  "combustibleProps": {
+    "burnTemperature": 600,
+    "burnDuration": 35
+  },
+  "collisionselectionboxes": [
+    {
+      "x1": 0.07500, // Начальный отступ от левой границы
+      "y1": 0,
+      "z1": 0.15,
+      "x2": 0.17000, // Ширина секции уменьшена вдвое, плюс небольшой отступ
+      "y2": 1,
+      "z2": 0.35,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.22500, // Отступ от предыдущего хитбокса
+      "y1": 0,
+      "z1": 0.15,
+      "x2": 0.32000, // Ширина секции уменьшена вдвое
+      "y2": 1,
+      "z2": 0.35,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.37500, // Отступ от предыдущего хитбокса
+      "y1": 0,
+      "z1": 0.15,
+      "x2": 0.47000, // Ширина секции уменьшена вдвое
+      "y2": 1,
+      "z2": 0.35,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.52500, // Отступ от предыдущего хитбокса
+      "y1": 0,
+      "z1": 0.15,
+      "x2": 0.62000, // Ширина секции уменьшена вдвое
+      "y2": 1,
+      "z2": 0.35,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.67500, // Отступ от предыдущего хитбокса
+      "y1": 0,
+      "z1": 0.15,
+      "x2": 0.77000, // Ширина секции уменьшена вдвое
+      "y2": 1,
+      "z2": 0.35,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.82500, // Отступ от предыдущего хитбокса
+      "y1": 0,
+      "z1": 0.15,
+      "x2": 0.92000, // Ширина секции уменьшена вдвое
+      "y2": 1,
+      "z2": 0.35,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    }
+
+    
+  ],
+  "materialDensity": 400,
+  "replaceable": 900,
+  "resistance": 1.5,
+  "lightAbsorption": 1,
+  "tags": [ "furniture", "storage", "stand" ],
+  "shape": { "base": "moreinventorys:smallverticalweaponstand" },
+  "sounds": {
+    "place": "game:block/planks",
+    "hit": "game:block/planks",
+    "break": "game:block/planks",
+    "walk": "game:walk/wood"
+  }
+}
