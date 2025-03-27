@@ -10,6 +10,7 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <None Remove="assets\moreinventorys\blocktypes\shieldstand.json" />
   <None Remove="assets\moreinventorys\block\textures\shelf-bottom.png" />
   <None Remove="assets\moreinventorys\block\textures\shelf-top.png" />
   <Content Include="modinfo.json">
@@ -19,7 +20,6 @@
 
 <ItemGroup>
   <Folder Include="assets\moreinventorys\blockentities\" />
-  <Folder Include="assets\moreinventorys\blocktypes\" />
   <Folder Include="assets\moreinventorys\itemtypes\" />
   <Folder Include="assets\moreinventorys\recipes\" />
   <Folder Include="assets\moreinventorys\shapes\" />
@@ -30,6 +30,7 @@
 <ItemGroup>
   <Reference Include="Vintagestory">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\Vintagestory.dll</HintPath>
+    <Private>False</Private>
   </Reference>
   <Reference Include="VintagestoryAPI">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryAPI.dll</HintPath>
@@ -37,6 +38,7 @@
   </Reference>
   <Reference Include="VintagestoryLib">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryLib.dll</HintPath>
+    <Private>False</Private>
   </Reference>
   <Reference Include="VintagestoryServer">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryServer.dll</HintPath>

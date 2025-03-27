@@ -1,0 +1,78 @@
+{
+  "code": "shieldstand",
+  "name": "shieldstand",
+  "class": "shieldstandblock",
+  "entityClass": "beshieldstand",
+  "creativeinventory": {
+    "general": [ "*" ],
+    "moreinventorys": [ "*" ]
+  },
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "blockmaterial": "Wood",
+  "combustibleProps": {
+    "burnTemperature": 600,
+    "burnDuration": 35
+  },
+  "collisionselectionboxes": [
+    {
+      "x1": 0.3, // Начальный отступ от левой границы
+      "y1": 0.3,
+      "z1": 0.0,
+      "x2": 0.7, // Ширина секции уменьшена вдвое, плюс небольшой отступ
+      "y2": 0.73,
+      "z2": 0.2,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0, // Начальный отступ от левой границы
+      "y1": 0.3,
+      "z1": 0.0,
+      "x2": 0.3, // Ширина секции уменьшена вдвое, плюс небольшой отступ
+      "y2": 0.73,
+      "z2": 0.2,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.7, // Начальный отступ от левой границы
+      "y1": 0.3,
+      "z1": 0.0,
+      "x2": 1, // Ширина секции уменьшена вдвое, плюс небольшой отступ
+      "y2": 0.73,
+      "z2": 0.2,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    }
+
+  ],
+  "materialDensity": 400,
+  "replaceable": 900,
+  "resistance": 1.5,
+  "lightAbsorption": 1,
+  "tags": [ "furniture", "storage" ],
+  "shape": { "base": "moreinventorys:shieldstand" },
+  "sounds": {
+    "place": "game:block/planks",
+    "hit": "game:block/planks",
+    "break": "game:block/planks",
+    "walk": "game:walk/wood"
+  }
+}

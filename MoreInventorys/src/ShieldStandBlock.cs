@@ -8,8 +8,8 @@ using Vintagestory.API.MathTools;
 
 namespace MoreInventorys.src
 {
-  public class FirstShelfBlock : Block
-  {
+    internal class ShieldStandBlock : Block
+    {
         public override void OnLoaded(ICoreAPI api)
         {
 
@@ -24,12 +24,11 @@ namespace MoreInventorys.src
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-          BEFirstShelf be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BEFirstShelf;
+            BEShieldStand be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BEShieldStand;
 
             if (be != null) return be.OnInteract(byPlayer, blockSel);
 
             return base.OnBlockInteractStart(world, byPlayer, blockSel);
         }
-   }   
-
+    }
 }

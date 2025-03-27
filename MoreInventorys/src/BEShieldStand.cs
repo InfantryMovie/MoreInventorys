@@ -1,34 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
-using Vintagestory.API.MathTools;
 using Vintagestory.GameContent;
-using VintagestoryAPI.Math;
 
 namespace MoreInventorys.src
 {
-    internal class BESmallVerticalWeaponstand : BlockEntityDisplay
+    internal class BEShieldStand : BlockEntityDisplay
     {
         InventoryGeneric inv;
         public override InventoryBase Inventory => inv;
-        public override string InventoryClassName => "smallVerticalWeaponStandInventory";
+        public override string InventoryClassName => "shieldstand";
 
-        public override string AttributeTransformCode => "onSmallVerticalWeaponStandInventoryTransform";
+        public override string AttributeTransformCode => "onShieldStandInventoryTransform";
 
         Block block;
 
-        static int slotCount = 6;
+        static int slotCount = 3;
 
-        public BESmallVerticalWeaponstand()
+        public BEShieldStand()
         {
-            inv = new InventoryGeneric(slotCount, "smallVerticalWeaponStand-0", null);
+            inv = new InventoryGeneric(slotCount, "shieldStand-0", null);
         }
 
         public override void Initialize(ICoreAPI api)
@@ -37,7 +34,7 @@ namespace MoreInventorys.src
             base.Initialize(api);
         }
 
-       
+
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
@@ -50,7 +47,7 @@ namespace MoreInventorys.src
                 return false;
             }
 
-            if (!IsTool(slot.Itemstack)) return false; //только для оружия
+            if (!IsSwordOrShield(slot.Itemstack)) return false; 
 
             if (slot.Itemstack.Collectible.ItemClass != EnumItemClass.Item) return false;
 
@@ -66,20 +63,39 @@ namespace MoreInventorys.src
             return false;
         }
 
-        private bool IsTool(ItemStack itemstack)
+        private bool IsSwordOrShield(ItemStack itemstack)
         {
             if (itemstack == null) return false;
-            if (itemstack.Collectible.Code.Path.Contains("saw")) return false;
 
-            return itemstack.Collectible.Tool != null ? true : false;
-            
+            if (itemstack.Collectible.Code.Path.Contains("shield") || itemstack.Collectible.Code.Path.Contains("blade")) return true;
+
+            return false;
+
         }
+
+        private bool IsShield(ItemStack itemstack)
+        {
+            if (itemstack == null) return false;
+
+            if (itemstack.Collectible.Code.Path.Contains("shield")) return true;
+
+            return false;
+
+        }
+
+
 
         private bool TryPut(ItemSlot slot, BlockSelection blockSel)
         {
-            
+
             if (inv[blockSel.SelectionBoxIndex].Empty)
             {
+                if (blockSel.SelectionBoxIndex == 0 && !IsShield(slot.Itemstack)) return false;
+
+                if (blockSel.SelectionBoxIndex == 1 && IsShield(slot.Itemstack)) return false;
+
+                if (blockSel.SelectionBoxIndex == 2 && IsShield(slot.Itemstack)) return false;
+
                 int num = slot.TryPutInto(Api.World, inv[blockSel.SelectionBoxIndex]);
                 MarkDirty();
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
@@ -115,47 +131,73 @@ namespace MoreInventorys.src
         {
             float[][] tfMatrices = new float[slotCount][];
 
+
+
             for (int index = 0; index < slotCount; index++)
             {
-                //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса
-                float x = (index * 0.15f) + 0.67f;
-                float z = 0.35f; //глубина
-                float itemHeight = 0.1f;
-
+                //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса //float x = (index * 0.15f) + 0.67f;
+                float x = 0f; //ширина
+                float z = 0f; //глубина
+                float y = 0f; //высота
                 ItemSlot slot = inv[index];
 
-                if (!slot.Empty)
+                switch (index)
                 {
-                    CollectibleObject colObj = slot.Itemstack.Collectible;
+                    //shield
+                    case 0:
+                        x = 1.0f;
+                        z = 0.35f;
+                        y = 0.45f;
+                        tfMatrices[index] = new Matrixf()
+                           .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                           .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                           .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                           .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                           .Scale(0.9f, 0.9f, 0.9f)
+                           .RotateZDeg(45f) // поднимает  вертикально
+                         //.RotateYDeg(5f) // наклон 
+                           .Values;
+                        break;
 
-                    if (colObj.Attributes.KeyExists("toolrackTransform"))
-                    {
-                        JsonObject toolrackTransform = colObj.Attributes["toolrackTransform"];
+                    //sword1
+                    case 1:
+                        x = 0.29f;
+                        z = 0.46f;
+                        y = 0.25f;
+                        tfMatrices[index] = new Matrixf()
+                          .Translate(0.5f, 0f, 0.5f)
+                           .RotateYDeg(block.Shape.rotateY)
+                           .Translate(x - 0.5f, y, z - 0.4f)
+                           .Translate(-0.5f, 0f, -0.5f)
+                           .Scale(0.7f, 0.7f, 0.7f)
+                           .RotateZDeg(-90f)
+                           .RotateXDeg(90f)
+                           .RotateYDeg(155f)
+                           .Values;
+                        break;
 
-                        if (toolrackTransform != null && toolrackTransform.KeyExists("translation"))
-                        {
-                            JsonObject translation = toolrackTransform["translation"];
+                    //sword2
+                    case 2:
+                        x = 1.73f;
+                        z = 0.56f;
+                        y = 0.27f;
+                        tfMatrices[index] = new Matrixf()
+                           .Translate(0.5f, 0f, 0.5f)
+                           .RotateYDeg(block.Shape.rotateY)
+                           .Translate(x - 0.5f, y, z - 0.4f)
+                           .Translate(-0.5f, 0f, -0.5f)
+                           .Scale(0.7f, 0.7f, 0.7f)
+                           .RotateZDeg(235f)
+                           .RotateXDeg(-90f)
+                           .RotateY(90f)
+                           .Values;
+                        break;
 
-                            if (translation != null && translation.KeyExists("x"))
-                            {
-                                itemHeight = translation["x"].AsFloat(0.1f); // Читаем y, если нет - 0.1f по умолчанию
-                            }
-                        }
-                    }
+                    default:
+                        break;
                 }
 
-                // float y = 0.60f - itemHeight; //высота
-                float y = itemHeight + 0.55f;
-
-                 tfMatrices[index] = new Matrixf()
-                    .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
-                    .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
-                    .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
-                    .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
-                    .Scale(0.75f, 0.75f, 0.75f)
-                    .RotateZDeg(90f) // поднимает  вертикально
-                    .RotateYDeg(5f) // наклон 
-                    .Values;
+                
             }
 
             return tfMatrices;

@@ -24,9 +24,9 @@ namespace MoreInventorys.src
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-            BESmallVerticalWeaponstand beshelf = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BESmallVerticalWeaponstand;
+            BESmallVerticalWeaponstand be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BESmallVerticalWeaponstand;
 
-            if (beshelf != null) return beshelf.OnInteract(byPlayer, blockSel);
+            if (be != null) return be.OnInteract(byPlayer, blockSel);
 
             return base.OnBlockInteractStart(world, byPlayer, blockSel);
         }

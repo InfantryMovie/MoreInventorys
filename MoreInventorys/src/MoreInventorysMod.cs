@@ -26,6 +26,9 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("smallverticalweaponstandblock", typeof(SmallVerticalWeaponstandBlock));
             api.RegisterBlockEntityClass("besmallverticalweaponstand", typeof(BESmallVerticalWeaponstand));
 
+            api.RegisterBlockClass("shieldstandblock", typeof(ShieldStandBlock));
+            api.RegisterBlockEntityClass("beshieldstand", typeof(BEShieldStand));
+
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
             api.Logger.Notification("Mod 'More Inventorys' успешно загружен!");
         }
