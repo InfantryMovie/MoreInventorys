@@ -117,9 +117,9 @@ namespace MoreInventorys.src.BlockEntityFolder
             for (int index = 0; index < slotCount; index++)
             {
                 //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса
-                float x = 0.37f;
-                float z = 0.82f - (index * 0.10f); //глубина
-                float y =  0.67f + (index * 0.06f); //высота
+                float x = 1.7f;
+                float z = 1.38f - (index * 0.11f); //глубина
+                float y =  0.45f + (index * 0.08f); //высота
 
                 tfMatrices[index] = new Matrixf()
                    .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
@@ -129,8 +129,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                    .Scale(1f, 0.85f, 0.85f)
                    //.RotateZDeg(90f) // поднимает  вертикально
                    //.RotateYDeg(5f) // наклон 
-                   .RotateXDeg(90f)
-                   .RotateXDeg(-5f)
+                   .RotateYDeg(180f)
+                   .RotateXDeg(50f)
                    .Values;
             }
 
