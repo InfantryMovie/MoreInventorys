@@ -1,6 +1,12 @@
 {
-  "block.shelf.name": "моя полка 1",
-  "block.shelf.desc": "полка для хранения предметов.",
+  "block-firstshelf-ebony1": "Первая Бородатая Полочка!",
+  "block-firstshelf-ebony1.desc": "На полку можно положить все то, что и на ванильную полку.",
+
+  "block-shieldstand": "Стенд для щита и мечей",
+  "block-shieldstand.desc": "левый и правый слот только для ванильных мечей, центральный для щита",
+
+  "block-smallverticalweaponstand.name": "Маленький вертикальный стенд для оружия",
+  "block-moreinventorys:smallverticalweaponstand.desc": "А что по название блока не понятно что он делает ?",
 
 
   "game:tabname-moreinventorys": "More Inventorys"

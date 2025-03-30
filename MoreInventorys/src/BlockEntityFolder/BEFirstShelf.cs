@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Server;
 using Vintagestory.GameContent;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
-namespace MoreInventorys.src
+namespace MoreInventorys.src.BlockEntityFolder
 {
     public class BEFirstShelf : BlockEntityDisplay
     {
@@ -22,17 +25,19 @@ namespace MoreInventorys.src
 
         Block block;
 
-        static int slotCount = 8;
+        static int slotCount = 24;
 
         public BEFirstShelf()
         {
             inv = new InventoryGeneric(slotCount, "firstshelf-0", null);
         }
 
+
         public override void Initialize(ICoreAPI api)
         {
             block = api.World.BlockAccessor.GetBlock(Pos);
             base.Initialize(api);
+
         }
 
         protected override float Inventory_OnAcquireTransitionSpeed(EnumTransitionType transType, ItemStack stack, float baseMul)
@@ -62,8 +67,10 @@ namespace MoreInventorys.src
             return 1f;
         }
 
+
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
+
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
             if (slot.Empty)
             {
@@ -79,7 +86,7 @@ namespace MoreInventorys.src
                 AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
                 if (TryPut(slot, blockSel))
                 {
-                    Api.World.PlaySoundAt((sound != null) ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                    Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
                     MarkDirty();
                     return true;
                 }
@@ -92,7 +99,7 @@ namespace MoreInventorys.src
         {
             bool num = blockSel.SelectionBoxIndex > 1;
             bool left = blockSel.SelectionBoxIndex % 2 == 0;
-            int num2 = (num ? 4 : 0) + ((!left) ? 2 : 0);
+            int num2 = (num ? 4 : 0) + (!left ? 2 : 0);
             int end = num2 + 2;
             for (int i = num2; i < end; i++)
             {
@@ -111,7 +118,7 @@ namespace MoreInventorys.src
         {
             bool num = blockSel.SelectionBoxIndex > 1;
             bool left = blockSel.SelectionBoxIndex % 2 == 0;
-            int start = (num ? 4 : 0) + ((!left) ? 2 : 0);
+            int start = (num ? 4 : 0) + (!left ? 2 : 0);
             for (int i = start + 2 - 1; i >= start; i--)
             {
                 if (!inv[i].Empty)
@@ -120,7 +127,7 @@ namespace MoreInventorys.src
                     if (byPlayer.InventoryManager.TryGiveItemstack(stack))
                     {
                         AssetLocation sound = stack.Block?.Sounds?.Place;
-                        Api.World.PlaySoundAt((sound != null) ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                        Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
                     }
                     if (stack.StackSize > 0)
                     {
@@ -139,10 +146,9 @@ namespace MoreInventorys.src
             float[][] tfMatrices = new float[slotCount][];
             for (int index = 0; index < slotCount; index++)
             {
-                float x = ((index % 4 >= 2) ? 0.75f : 0.25f);
-                float y = ((index >= 4) ? 0.560f : 0.06f);
-                //float z = ((index % 2 == 0) ? 0.25f : 0.625f);
-                float z = ((index % 2 == 0) ? 0.25f : 0.625f);
+                float x = index % 4 >= 2 ? 0.75f : 0.25f;
+                float y = index >= 4 ? 0.560f : 0.06f;
+                float z = index % 2 == 0 ? 0.25f : 0.625f;
                 tfMatrices[index] = new Matrixf().Translate(0.5f, 0f, 0.5f).RotateYDeg(block.Shape.rotateY).Translate(x - 0.5f, y, z - 0.4f)
                     .Translate(-0.5f, 0f, -0.5f)
                     .Values;
@@ -187,6 +193,10 @@ namespace MoreInventorys.src
                     }
                 }
             }
+            //тут можно добавить описание к блоку которое будет видно при наведении на блок в мире
+            //sb.AppendLine();
+            //sb.AppendLine("Че тут будет?\nПроверка 1\nПроверка 2");
+
         }
 
         public static string PerishableInfoCompact(ICoreAPI Api, ItemSlot contentSlot, float ripenRate, bool withStackName = true)
@@ -227,9 +237,9 @@ namespace MoreInventorys.src
                                     break;
                                 }
                                 double hoursPerday2 = Api.World.Calendar.HoursPerDay;
-                                if ((double)freshHoursLeft / hoursPerday2 >= (double)Api.World.Calendar.DaysPerYear)
+                                if ((double)freshHoursLeft / hoursPerday2 >= Api.World.Calendar.DaysPerYear)
                                 {
-                                    dsc.Append(", " + Lang.Get("fresh for {0} years", Math.Round((double)freshHoursLeft / hoursPerday2 / (double)Api.World.Calendar.DaysPerYear, 1)));
+                                    dsc.Append(", " + Lang.Get("fresh for {0} years", Math.Round((double)freshHoursLeft / hoursPerday2 / Api.World.Calendar.DaysPerYear, 1)));
                                 }
                                 else if ((double)freshHoursLeft > hoursPerday2)
                                 {
@@ -254,9 +264,9 @@ namespace MoreInventorys.src
                                     break;
                                 }
                                 double hoursPerday = Api.World.Calendar.HoursPerDay;
-                                if ((double)freshHoursLeft / hoursPerday >= (double)Api.World.Calendar.DaysPerYear)
+                                if ((double)freshHoursLeft / hoursPerday >= Api.World.Calendar.DaysPerYear)
                                 {
-                                    dsc.Append(", " + Lang.Get("will ripen in {0} years", Math.Round((double)freshHoursLeft / hoursPerday / (double)Api.World.Calendar.DaysPerYear, 1)));
+                                    dsc.Append(", " + Lang.Get("will ripen in {0} years", Math.Round((double)freshHoursLeft / hoursPerday / Api.World.Calendar.DaysPerYear, 1)));
                                 }
                                 else if ((double)freshHoursLeft > hoursPerday)
                                 {
@@ -324,7 +334,7 @@ namespace MoreInventorys.src
             }
             DummyInventory dummyInv = new DummyInventory(Api);
             ItemSlot contentSlot = BlockCrock.GetDummySlotForFirstPerishableStack(Api.World, stacks, null, dummyInv);
-            dummyInv.OnAcquireTransitionSpeed = (EnumTransitionType transType, ItemStack stack, float mul) => mul * crock.GetContainingTransitionModifierContained(world, inSlot, transType) * inv.GetTransitionSpeedMul(transType, stack);
+            dummyInv.OnAcquireTransitionSpeed = (transType, stack, mul) => mul * crock.GetContainingTransitionModifierContained(world, inSlot, transType) * inv.GetTransitionSpeedMul(transType, stack);
             TransitionState[] transitionStates = contentSlot.Itemstack?.Collectible.UpdateAndGetTransitionStates(Api.World, contentSlot);
             bool addNewLine = true;
             if (transitionStates != null)
@@ -350,9 +360,9 @@ namespace MoreInventorys.src
                         continue;
                     }
                     double hoursPerday = Api.World.Calendar.HoursPerDay;
-                    if ((double)freshHoursLeft / hoursPerday >= (double)Api.World.Calendar.DaysPerYear)
+                    if ((double)freshHoursLeft / hoursPerday >= Api.World.Calendar.DaysPerYear)
                     {
-                        dsc.AppendLine(" " + Lang.Get("Fresh for {0} years", Math.Round((double)freshHoursLeft / hoursPerday / (double)Api.World.Calendar.DaysPerYear, 1)));
+                        dsc.AppendLine(" " + Lang.Get("Fresh for {0} years", Math.Round((double)freshHoursLeft / hoursPerday / Api.World.Calendar.DaysPerYear, 1)));
                     }
                     else if ((double)freshHoursLeft > hoursPerday)
                     {

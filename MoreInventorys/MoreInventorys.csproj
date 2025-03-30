@@ -10,6 +10,10 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <Compile Remove="assets\moreinventorys\blockentities\**" />
+  <Content Remove="assets\moreinventorys\blockentities\**" />
+  <EmbeddedResource Remove="assets\moreinventorys\blockentities\**" />
+  <None Remove="assets\moreinventorys\blockentities\**" />
   <None Remove="assets\moreinventorys\blocktypes\shieldstand.json" />
   <None Remove="assets\moreinventorys\block\textures\shelf-bottom.png" />
   <None Remove="assets\moreinventorys\block\textures\shelf-top.png" />
@@ -19,12 +23,14 @@
 </ItemGroup>
 
 <ItemGroup>
-  <Folder Include="assets\moreinventorys\blockentities\" />
   <Folder Include="assets\moreinventorys\itemtypes\" />
-  <Folder Include="assets\moreinventorys\recipes\" />
   <Folder Include="assets\moreinventorys\shapes\" />
   <Folder Include="assets\moreinventorys\sounds\" />
   <Folder Include="assets\moreinventorys\textures\block\" />
+</ItemGroup>
+
+<ItemGroup>
+  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 </ItemGroup>
 
 <ItemGroup>
@@ -42,6 +48,7 @@
   </Reference>
   <Reference Include="VintagestoryServer">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryServer.dll</HintPath>
+    <Private>False</Private>
   </Reference>
   <Reference Include="VSCreativeMod">
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSCreativeMod.dll</HintPath>

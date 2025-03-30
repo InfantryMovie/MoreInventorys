@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoreInventorys.src.BlockEntityFolder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 
-namespace MoreInventorys.src
+namespace MoreInventorys.src.BlockFolder
 {
-    internal class ShieldStandBlock : Block
+    internal class SmallHorizontleSwordStandBlock : Block
     {
         public override void OnLoaded(ICoreAPI api)
         {
@@ -24,7 +25,7 @@ namespace MoreInventorys.src
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-            BEShieldStand be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BEShieldStand;
+            BESmallHorizontleSwordStand be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BESmallHorizontleSwordStand;
 
             if (be != null) return be.OnInteract(byPlayer, blockSel);
 

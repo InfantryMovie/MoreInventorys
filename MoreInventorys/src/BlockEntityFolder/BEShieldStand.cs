@@ -9,7 +9,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent;
 
-namespace MoreInventorys.src
+namespace MoreInventorys.src.BlockEntityFolder
 {
     internal class BEShieldStand : BlockEntityDisplay
     {
@@ -37,6 +37,7 @@ namespace MoreInventorys.src
 
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
+
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
             if (slot.Empty)
             {
@@ -47,7 +48,7 @@ namespace MoreInventorys.src
                 return false;
             }
 
-            if (!IsSwordOrShield(slot.Itemstack)) return false; 
+            if (!IsSwordOrShield(slot.Itemstack)) return false;
 
             if (slot.Itemstack.Collectible.ItemClass != EnumItemClass.Item) return false;
 
@@ -56,7 +57,7 @@ namespace MoreInventorys.src
             AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
             if (TryPut(slot, blockSel))
             {
-                Api.World.PlaySoundAt((sound != null) ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
                 MarkDirty();
                 return true;
             }
@@ -87,7 +88,7 @@ namespace MoreInventorys.src
 
         private bool TryPut(ItemSlot slot, BlockSelection blockSel)
         {
-
+            // 0 - shield, 1 и 2 - sword
             if (inv[blockSel.SelectionBoxIndex].Empty)
             {
                 if (blockSel.SelectionBoxIndex == 0 && !IsShield(slot.Itemstack)) return false;
@@ -112,7 +113,7 @@ namespace MoreInventorys.src
                 if (byPlayer.InventoryManager.TryGiveItemstack(stack))
                 {
                     AssetLocation sound = stack.Block?.Sounds?.Place;
-                    Api.World.PlaySoundAt((sound != null) ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                    Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
                 }
                 if (stack.StackSize > 0)
                 {
@@ -154,8 +155,7 @@ namespace MoreInventorys.src
                            .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
                            .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
                            .Scale(0.9f, 0.9f, 0.9f)
-                           .RotateZDeg(45f) // поднимает  вертикально
-                         //.RotateYDeg(5f) // наклон 
+                           .RotateZDeg(45f)
                            .Values;
                         break;
 
@@ -197,7 +197,7 @@ namespace MoreInventorys.src
                         break;
                 }
 
-                
+
             }
 
             return tfMatrices;

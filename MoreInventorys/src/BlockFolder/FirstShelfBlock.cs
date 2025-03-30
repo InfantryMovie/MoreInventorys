@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MoreInventorys.src.BlockEntityFolder;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 
-namespace MoreInventorys.src
+namespace MoreInventorys.src.BlockFolder
 {
-    internal class SmallVerticalWeaponstandBlock : Block
+    public class FirstShelfBlock : Block
     {
         public override void OnLoaded(ICoreAPI api)
         {
@@ -24,11 +25,12 @@ namespace MoreInventorys.src
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-            BESmallVerticalWeaponstand be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BESmallVerticalWeaponstand;
+            BEFirstShelf be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BEFirstShelf;
 
             if (be != null) return be.OnInteract(byPlayer, blockSel);
 
             return base.OnBlockInteractStart(world, byPlayer, blockSel);
         }
     }
+
 }

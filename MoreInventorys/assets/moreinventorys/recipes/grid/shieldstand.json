@@ -1,0 +1,20 @@
+{
+  "ingredientPattern": "PP_,LL_,PP_",
+  "ingredients": {
+    "P": {
+      "type": "item",
+      "code": "game:plank-oak"
+    },
+    "L": {
+      "type": "item",
+      "code": "game:leather-plain"
+    }
+  },
+  "width": 3,
+  "height": 3,
+  "shapeless": true,
+  "output": {
+    "type": "block",
+    "code": "shieldstand"
+  }
+}

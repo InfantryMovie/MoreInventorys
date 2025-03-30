@@ -1,0 +1,21 @@
+{
+  "ingredientPattern": "PP_,_S_,PP_",
+  "ingredients": {
+    "P": {
+      "type": "item",
+      "code": "game:plank-oak"
+    //"quantity:2
+    },
+    "S": {
+      "type": "block",
+      "code": "game:shelf-normal-east"
+    }
+  },
+  "width": 3,
+  "height": 3,
+  "shapeless": true,
+  "output": {
+    "type": "block",
+    "code": "firstshelf"
+  }
+}

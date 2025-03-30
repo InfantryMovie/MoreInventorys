@@ -1,6 +1,5 @@
 {
   "code": "smallverticalweaponstand",
-  "name": "smallverticalweaponstand",
   "class": "smallverticalweaponstandblock",
   "entityClass": "besmallverticalweaponstand",
   "creativeinventory": {
@@ -104,7 +103,7 @@
       }
     }
 
-    
+
   ],
   "materialDensity": 400,
   "replaceable": 900,
@@ -117,5 +116,6 @@
     "hit": "game:block/planks",
     "break": "game:block/planks",
     "walk": "game:walk/wood"
-  }
+  },
+  "placementRotationFix": true
 }

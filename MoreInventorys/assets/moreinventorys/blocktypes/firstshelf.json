@@ -96,5 +96,19 @@
     "hit": "game:block/planks",
     "break": "game:block/planks",
     "walk": "game:walk/wood"
+  },
+  "placementRotationFix": true,
+  "guiTransform": {
+    "rotation": {
+      "x": -22.6,
+      "y": -145,
+      "z": 0
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0.9,
+      "z": 0.5
+    },
+    "scale": 0.72
   }
 }
