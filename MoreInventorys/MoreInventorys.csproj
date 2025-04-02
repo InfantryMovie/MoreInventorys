@@ -24,7 +24,6 @@
 
 <ItemGroup>
   <Folder Include="assets\moreinventorys\itemtypes\" />
-  <Folder Include="assets\moreinventorys\shapes\" />
   <Folder Include="assets\moreinventorys\sounds\" />
   <Folder Include="assets\moreinventorys\textures\block\" />
 </ItemGroup>

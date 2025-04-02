@@ -25,11 +25,12 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         Block block;
 
-        static int slotCount = 24;
+        static int slotCount = 8;
 
         public BEFirstShelf()
         {
             inv = new InventoryGeneric(slotCount, "firstshelf-0", null);
+            inv.AddSlots(slotCount);
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 using Vintagestory.GameContent;
 
 namespace MoreInventorys.src.BlockEntityFolder
@@ -37,6 +39,26 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
+            // Проверяем, зажат ли Shift
+            bool isSneaking = byPlayer.Entity.Controls.Sneak;
+
+            if (isSneaking)
+            {
+                byte[] data;
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
+                    binaryWriter.Write("BlockEntityInventory");
+                    binaryWriter.Write("DialogTitle");
+                    binaryWriter.Write((byte)4);
+                    TreeAttribute treeAttribute = new TreeAttribute();
+                    inv.ToTreeAttributes(treeAttribute);
+                    treeAttribute.ToBytes(binaryWriter);
+                    data = memoryStream.ToArray();
+                }
+
+                byPlayer.InventoryManager.OpenInventory(inv);
+            }
 
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
             if (slot.Empty)
@@ -48,6 +70,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 return false;
             }
 
+            
+
             if (!IsSwordOrShield(slot.Itemstack)) return false;
 
             if (slot.Itemstack.Collectible.ItemClass != EnumItemClass.Item) return false;
@@ -55,6 +79,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             CollectibleObject colObj = slot.Itemstack.Collectible;
 
             AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+
+
             if (TryPut(slot, blockSel))
             {
                 Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
@@ -79,6 +105,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (itemstack == null) return false;
 
             if (itemstack.Collectible.Code.Path.Contains("shield")) return true;
+            
+            
 
             return false;
 

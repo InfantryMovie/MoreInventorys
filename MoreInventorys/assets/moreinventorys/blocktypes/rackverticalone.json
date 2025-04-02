@@ -1,0 +1,46 @@
+{
+  "code": "rackverticalone",
+  "class": "rackverticaloneblock",
+  "name": "RackVerticalOne",
+  "entityClass": "berackverticalone",
+  "creativeinventory": {
+    "general": [ "*" ],
+    "moreinventorys": [ "*" ]
+  },
+  "allowOverlap": true,
+
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "blockmaterial": "Wood",
+  "variantgroups": [
+    {
+      "code": "planks",
+      "states": [ "ebony1", "oak1", "birch1" ]
+    }
+  ],
+  "textures": {
+    "ebony1": { "base": "game:block/wood/planks/{planks}" }
+  },
+  "combustibleProps": {
+    "burnTemperature": 600,
+    "burnDuration": 35
+  },
+  "materialDensity": 400,
+  "replaceable": 1000,
+  "resistance": 1.5,
+  "lightAbsorption": 1,
+  "tags": [ "storage" ],
+  "shape": { "base": "moreinventorys:rackverticalone" },
+  "sounds": {
+    "place": "game:block/planks",
+    "hit": "game:block/planks",
+    "break": "game:block/planks",
+    "walk": "game:walk/wood"
+  },
+  "placementRotationFix": true
+
+}

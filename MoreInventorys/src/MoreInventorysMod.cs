@@ -8,6 +8,8 @@ using MoreInventorys.src.BlockEntityFolder;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Client;
+using Vintagestory.API.Server;
 
 
 
@@ -16,6 +18,13 @@ namespace MoreInventorys.src
     // Основной класс мода
     public class MoreInventorysMod : ModSystem
     {
+        private ICoreServerAPI serverApi;
+        private ICoreClientAPI clientApi;
+
+        public static IServerNetworkChannel serverChannel;
+
+        public static IClientNetworkChannel clientChannel;
+
         // Метод, вызываемый при загрузке мода
         public override void Start(ICoreAPI api)
         {
@@ -37,13 +46,34 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("smallhorizontleswordstandblock", typeof(SmallHorizontleSwordStandBlock));
             api.RegisterBlockEntityClass("besmallhorizontleswordstand", typeof(BESmallHorizontleSwordStand));
 
+            api.RegisterBlockClass("rackverticaloneblock", typeof(RackVerticalOneBlock));
+            api.RegisterBlockEntityClass("berackverticalone", typeof(BERackVerticalOne));
+           
+
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
             api.Logger.Notification("Mod 'More Inventorys' успешно загружен!");
         }
 
-       /* public override bool ShouldLoad(EnumAppSide forSide)
+        public override void StartClientSide(ICoreClientAPI api)
         {
-            return true;
-        }*/
+            clientApi = api;
+            clientChannel = api.Network.GetChannel("moreinventorys");
+            
+        }
+
+        public override void StartServerSide(ICoreServerAPI api)
+        {
+            //((ModSystem)this).StartServerSide(api);
+            serverApi = api;
+            serverChannel = serverApi.Network.GetChannel("moreinventorys");
+            
+        }
+
+        public override void Dispose()
+        {
+            //((ModSystem)this).Dispose();
+            serverChannel = null;
+            clientChannel = null;
+        }
     }
 }
