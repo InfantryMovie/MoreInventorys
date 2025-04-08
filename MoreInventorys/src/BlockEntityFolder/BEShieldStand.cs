@@ -39,27 +39,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
-            // Проверяем, зажат ли Shift
-            bool isSneaking = byPlayer.Entity.Controls.Sneak;
-
-            if (isSneaking)
-            {
-                byte[] data;
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
-                    binaryWriter.Write("BlockEntityInventory");
-                    binaryWriter.Write("DialogTitle");
-                    binaryWriter.Write((byte)4);
-                    TreeAttribute treeAttribute = new TreeAttribute();
-                    inv.ToTreeAttributes(treeAttribute);
-                    treeAttribute.ToBytes(binaryWriter);
-                    data = memoryStream.ToArray();
-                }
-
-                byPlayer.InventoryManager.OpenInventory(inv);
-            }
-
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
             if (slot.Empty)
             {
@@ -105,11 +84,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (itemstack == null) return false;
 
             if (itemstack.Collectible.Code.Path.Contains("shield")) return true;
-            
-            
 
             return false;
-
         }
 
 

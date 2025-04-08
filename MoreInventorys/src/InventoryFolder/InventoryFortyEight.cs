@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace MoreInventorys.src
+namespace MoreInventorys.src.InventoryFolder
 {
     public class InventoryFortyEight : InventoryBase, ISlotProvider
     {
@@ -45,7 +45,7 @@ namespace MoreInventorys.src
         {
             slots = GenEmptySlots(48);
             baseWeight = 4f;
-            
+
         }
 
         protected override ItemSlot NewSlot(int slotId)

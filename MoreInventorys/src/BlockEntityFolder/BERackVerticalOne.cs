@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using MoreInventorys.src.GuiFolder;
+using MoreInventorys.src.InventoryFolder;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -12,23 +16,33 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
     internal class BERackVerticalOne : BlockEntityDisplay
     {
+        static BERackVerticalOne bERackVerticalOne;
+        Dictionary<int, int> containerSlotAddedSlots = new Dictionary<int, int>();
         Block block;
-        InventoryFortyEight inventory;
-
-        int slotCount = 48;
+        InventoryDynamic inventory;
+        
         public override InventoryBase Inventory => inventory;
-        public override string InventoryClassName => "rackfortyeight";
-        GuiDialogRackVerticalOne storageDlg;
+        public override string InventoryClassName => "rackverticalonedynamic";
+
+        GuiDialogDynamic storageDlg;
+
+        //число слотов для инвентарей которые будут установлены на стеллажи
+        const int MAX_CONTAINER_BLOC_SLOTS = 3;
+        public static IPlayer fromPlayer;
+
+
         public bool isOpened;
 
         public BERackVerticalOne()
         {
-            inventory = new InventoryFortyEight(null, null);
+            inventory = new InventoryDynamic("rackverticalone-0", 3, null);
+            bERackVerticalOne = this;
         }
 
         public override void Initialize(ICoreAPI api)
@@ -42,15 +56,28 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         private void OnSlotModified(int slotid)
         {
+
+
             if (Api.World.Side == EnumAppSide.Client)
             {
                 UpdateShape();
+                return;
             }
+            
+            UpdateShape();
         }
 
         public void UpdateShape()
         {
             MarkDirty(Api.Side != EnumAppSide.Server);
+        }
+
+        public static void ClosInterface()
+        {
+            if (bERackVerticalOne.Api.World.Side == EnumAppSide.Client)
+            {
+                ((ICoreClientAPI)bERackVerticalOne.Api).Network.SendBlockEntityPacket(bERackVerticalOne.Pos.X, bERackVerticalOne.Pos.Y, bERackVerticalOne.Pos.Z, 1000);
+            }
         }
 
         public override void OnReceivedServerPacket(int packetid, byte[] data)
@@ -71,7 +98,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (storageDlg == null)
                 {
                     Open();
-                    storageDlg = new GuiDialogRackVerticalOne(Lang.Get("moreinventorys:rackverticalone-title"), Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackverticalone-title"), Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
@@ -97,8 +124,63 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
-        public bool OnBlockInteract(IPlayer byPlayer)
+        public (bool, int quantitySlots) IsContainer(ItemSlot slot )
         {
+            var storageBlock = slot.Itemstack.Block;
+            var defaultType = storageBlock?.Attributes?["defaultType"]?.ToString();
+            var quantitySlots = storageBlock?.Attributes?["quantitySlots"]?[defaultType]?.AsInt();
+
+            if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
+
+            return (true, (int)quantitySlots);
+        }
+
+        public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
+        {
+            fromPlayer = byPlayer;
+            ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
+            if(!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
+            {
+                //попытка поставить блок с инвентарем на стеллаж
+                //на данный момент проверяем атрибуты по примеру ванильных сундуков
+
+                int slotsCount = 0;
+                var storageBlock = slot.Itemstack.Block;
+
+                var isContainerResult = IsContainer(slot);
+                var isContainer = isContainerResult.Item1;
+                var quantitySlots = isContainerResult.quantitySlots;
+                if (isContainer)
+                {
+                    slotsCount = (int)quantitySlots;
+                    AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+
+                    if (TryPut(slot, blockSel, storageBlock))
+                    {
+                        if (slotsCount > 0)
+                        {
+                            //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа
+                            int lastId = inventory[inventory.Count - 1].SlotId;
+                            int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
+
+                            lock (inventory.LockContainerSlots)
+                            {
+                                inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                            }
+                            //увеличиваем слоты стеллажа
+                            inventory.AddSlots(slotsCount);
+                            inventory.dynamicSlots += slotsCount;
+                            inventory.containerBlockSlotsActive++;
+                        }
+
+                        Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                        MarkDirty();
+                        return true;
+                    }
+                    return false;
+                }   
+            }
+
             if (Api.Side != EnumAppSide.Client)
             {
                 byte[] data;
@@ -113,7 +195,22 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, Pos.X, Pos.Y, Pos.Z, 1000, data);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
+            MarkDirty();
             return true;
+        }
+
+        bool TryPut(ItemSlot slot, BlockSelection blockSel, Block storageContainer)
+        {
+            int blockIndex = blockSel.SelectionBoxIndex + inventory.containerBlockSlotsActive;
+            if (inventory[blockIndex].Empty)
+            {
+                int num = slot.TryPutInto(Api.World, inventory[blockIndex]);
+                MarkDirty();
+
+                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+                return num > 0;
+            }
+            return false;
         }
 
         public bool Open()
@@ -124,14 +221,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             return true;
         }
-
-        public void SortInventory()
-        {
-            if (!isOpened)
-                return;
-
-        }
-
         public override void OnReceivedClientPacket(IPlayer fromPlayer, int packetid, byte[] data)
         {
             if (packetid <= 1000)
@@ -164,27 +253,62 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             base.ToTreeAttributes(tree);
             tree.SetBool("isOpened", isOpened);
+            tree.SetInt("dynamicSlots", inventory.dynamicSlots);
+            
         }
 
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
         {
             base.FromTreeAttributes(tree, worldAccessForResolve);
             isOpened = tree.GetBool("isOpened");
+            inventory.dynamicSlots = tree.GetInt("dynamicSlots");
         }
 
         protected override float[][] genTransformationMatrices()
         {
-            float[][] tfMatrices = new float[slotCount][];
-            for (int index = 0; index < slotCount; index++)
+            float[][] tfMatrices = new float[3][];
+            for (int index = 0; index < 3; index++)
             {
-                float x = index % 4 >= 2 ? 0.75f : 0.25f;
-                float y = index >= 4 ? 0.560f : 0.06f;
-                float z = index % 2 == 0 ? 0.25f : 0.625f;
-                tfMatrices[index] = new Matrixf().Translate(0.5f, 0f, 0.5f).Translate(x - 0.5f, y, z - 0.4f)
-                    .Translate(-0.5f, 0f, -0.5f)
-                    .Values;
+                if(index == 0)
+                {
+                    float x = 1.02f;
+                    float z = 0.05f;
+                    float y = 0f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .Translate(x - 1f, y, z) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(0.9f, 0.9f, 0.9f)
+                       .Values;
+
+                }
+                if (index == 1)
+                {
+                    float x = 1.02f;
+                    float z = 0.05f; 
+                    float y = 1f; 
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) 
+                       .Translate(x - 1f, y, z) 
+                       .Translate(-0.5f, 0f, -0.5f) 
+                       .Scale(0.9f, 0.9f, 0.9f)
+                       .Values;
+                }
+                if (index == 2)
+                {
+                    float x = 1.02f;
+                    float z = 0.05f;
+                    float y = 2f; 
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) 
+                       .Translate(x - 1f, y, z) 
+                       .Translate(-0.5f, 0f, -0.5f) 
+                       .Scale(0.9f, 0.9f, 0.9f)
+                       .Values;
+                }
             }
-            return new float[0][];
+            return tfMatrices;
         }
+
     }
 }
