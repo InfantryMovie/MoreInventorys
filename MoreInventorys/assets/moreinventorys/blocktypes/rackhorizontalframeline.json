@@ -1,8 +1,8 @@
 {
-  "code": "rackverticalone",
-  "class": "rackverticaloneblock",
-  "name": "RackVerticalOne",
-  "entityClass": "berackverticalone",
+  "code": "rackhorizontalframeline",
+  "class": "rackhorizontalblock",
+  "name": "RackHorizontalFrameLine",
+  "entityClass": "berackhorizontal",
   "creativeinventory": {
     "general": [ "*" ],
     "moreinventorys": [ "*" ]
@@ -45,10 +45,38 @@
       }
     },
     {
+      "x1": 1.06,
+      "y1": 0.06,
+      "z1": 0.06,
+      "x2": 1.94,
+      "y2": 0.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
       "x1": 0.06,
       "y1": 1,
       "z1": 0.06,
       "x2": 0.94,
+      "y2": 1.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 1.06,
+      "y1": 1,
+      "z1": 0.06,
+      "x2": 1.94,
       "y2": 1.93,
       "z2": 0.94,
       "rotateYByType": {
@@ -71,6 +99,20 @@
         "*-west": 90,
         "*-south": 180
       }
+    },
+    {
+      "x1": 1.06,
+      "y1": 2,
+      "z1": 0.06,
+      "x2": 1.94,
+      "y2": 2.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
     }
   ],
   "materialDensity": 400,
@@ -78,7 +120,7 @@
   "resistance": 1.5,
   "lightAbsorption": 1,
   "tags": [ "storage" ],
-  "shape": { "base": "moreinventorys:rackverticalone" },
+  "shape": { "base": "moreinventorys:rackhorizontalframeline" },
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

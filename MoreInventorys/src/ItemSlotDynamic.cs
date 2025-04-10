@@ -18,11 +18,30 @@ namespace MoreInventorys.src
     {
         
         public int SlotId { get; }
-
+        int MaxContainerBlockSlots;
         public ItemSlotDynamic(InventoryBase inventory, int slotId) : base(inventory)
         {
             this.SlotId = slotId;
-            if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) MaxSlotStackSize = 1;
+            
+            if(inventory is InventoryDynamic inv)
+            {
+                MaxContainerBlockSlots = inv.MaxContainerBlockSlots;
+
+                switch (inv.MaxContainerBlockSlots)
+                {
+                    case 3:
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) MaxSlotStackSize = 1;
+                        break;
+                    case 6:
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||
+                            this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5) MaxSlotStackSize = 1;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
         }
 
         public (bool, int quantitySlots, Block container) IsContainer(ItemSlot slot)
@@ -38,10 +57,28 @@ namespace MoreInventorys.src
         }
 
         public override bool CanTake()
-        { 
-            if (SlotId == 0 || SlotId == 1 || SlotId == 2)
+        {
+            switch (MaxContainerBlockSlots)
             {
-                 /*bool result =  CanTakeContainer(SlotId);
+                case 3:
+                    if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
+                    break;
+                case 6:
+                    if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||
+                        this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5) return false;
+                    break;
+
+                default:
+                    return false;
+                    break;
+            }
+
+            //-----------логика для удаления контейнера из стеллажа:
+            // текущие проблемы:
+            // - после удаления контейнера нужно перерисовать интерфейс (слотов должно стать меньше)
+            // - после кода ниже, удаляются слоты и получаем кучу ошибок, пока не разобрался
+
+            /*bool result =  CanTakeContainer(SlotId);
                  if(result)
                  {
                      //контейнер пуст, удаляем из списка, отдаем контейнер
@@ -68,10 +105,7 @@ namespace MoreInventorys.src
                          inv.containerBlockSlotsActive--;
                          inv.dynamicSlots -= slotsToRemove.Count;
                      }
-                 }
-                 return result;*/
-                return false;
-            }
+                 }*/
 
             return base.CanTake();
         }
@@ -84,37 +118,39 @@ namespace MoreInventorys.src
                 int quantitySlots = containerResult.quantitySlots;
                 var container = containerResult.container;
 
-                if (SlotId == 0 || SlotId == 1 || SlotId == 2)
+                switch (MaxContainerBlockSlots)
                 {
-                    if (isContainer && container != null)
+                    case 3:
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
+                        break;
+                    case 6:
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||
+                            this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5) return false;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                //---------логика для возможности установить контейнер для получения слотов прямо из интерфейса:
+                // текущая проблема - как перерисовать интерфейс после этого?
+
+                /*if (isContainer && container != null)
                     {
                         AddContainer(SlotId, quantitySlots);
                         return true;
                     } 
 
-                    else return false;
-                    
-                }
+                    else return false;*/
 
             }
 
             return base.CanHold(sourceSlot);
         }
 
-        public override bool CanTakeFrom(ItemSlot sourceSlot, EnumMergePriority priority = EnumMergePriority.AutoMerge)
-        {
-            return base.CanTakeFrom(sourceSlot, priority);
-        }
 
-        public override void OnItemSlotModified(ItemStack sinkStack)
-        {
-            if (SlotId == 0 || SlotId == 1 || SlotId == 2)
-            {
 
-            }
 
-            base.OnItemSlotModified(sinkStack);
-        }
 
         bool CanTakeContainer(int containerSlotId)
         {

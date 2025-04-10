@@ -22,9 +22,13 @@ namespace MoreInventorys.src.InventoryFolder
         public override int Count => slots.Length;
 
         //число слотов внутренних хранилищ стеллажа
-        public int dynamicSlots = 3;
-        //число слотов которые уже заняты контейнерами на стеллаже, 3 максимум, 0 = нет ни 1-го контейнера
+        public int dynamicSlots = 0;
+        //число слотов которые уже заняты контейнерами
         public int containerBlockSlotsActive = 0;
+
+        //максимальное число контейнеров на стеллаже
+        public int MaxContainerBlockSlots; 
+
 
         public new ItemSlotDynamic this[int slotId]
         {
@@ -50,30 +54,17 @@ namespace MoreInventorys.src.InventoryFolder
             }
         }
 
-
-        public InventoryDynamic(string inventoryID, int slots, ICoreAPI api)
+        public InventoryDynamic(string inventoryID, int slots,ICoreAPI api)
             : base(slots, inventoryID, api)
         {
             this.slots = GenEmptySlots(slots);
+            dynamicSlots = slots;
             baseWeight = 4f;
             ContainerSlots = new Dictionary<int, int[]>();
             LockContainerSlots = new object();
+            MaxContainerBlockSlots = slots;
 
         }
-
-        public bool RemoveSlots(int[] slots)
-        {
-            // Преобразуем slots в HashSet для ускорения поиска
-            var slotsToRemove = new HashSet<int>(slots);
-
-            // Фильтруем массив, оставляя только те элементы, индексы которых отсутствуют в slotsToRemove
-            this.slots = this.slots.Where((value, index) => !slotsToRemove.Contains(index)).ToArray();
-
-            return true;
-        }
-
-      
-        
 
         protected override ItemSlotDynamic NewSlot(int slotId)
         {
@@ -85,11 +76,25 @@ namespace MoreInventorys.src.InventoryFolder
             return new ItemSlotDynamic(this, slotId);
         }
 
-        public override void FromTreeAttributes(ITreeAttribute tree)
+        public bool RemoveSlots(int[] slots)
         {
-            slots = SlotsFromTreeAttributes(tree);
+            var slotsToRemove = new HashSet<int>(slots);
+
+            // Фильтруем массив, оставляя только те элементы, индексы которых отсутствуют в slotsToRemove
+            this.slots = this.slots.Where((value, index) => !slotsToRemove.Contains(index)).ToArray();
+
+            return true;
+        }
 
 
+
+        public override void FromTreeAttributes(ITreeAttribute treeAttribute)
+        {
+            /*int num = slots.Length;
+            slots = SlotsFromTreeAttributes(treeAttribute, slots);
+            int amount = num - slots.Length;
+            AddSlots(amount);*/
+            slots = SlotsFromTreeAttributes(treeAttribute);
         }
 
         public override void ToTreeAttributes(ITreeAttribute tree)

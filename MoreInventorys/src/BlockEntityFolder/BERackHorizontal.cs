@@ -1,46 +1,38 @@
-﻿using System;
+﻿using MoreInventorys.src.GuiFolder;
+using MoreInventorys.src.InventoryFolder;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using MoreInventorys.src.GuiFolder;
-using MoreInventorys.src.InventoryFolder;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
-using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    internal class BERackVerticalOne : BlockEntityDisplay
+    internal class BERackHorizontal : BlockEntityDisplay
     {
         Dictionary<int, int> containerSlotAddedSlots = new Dictionary<int, int>();
         Block block;
         InventoryDynamic inventory;
-        
+
         public override InventoryBase Inventory => inventory;
-        public override string InventoryClassName => "rackverticalonedynamic";
+        public override string InventoryClassName => "rackhorizontaldynamic";
 
         GuiDialogDynamic storageDlg;
 
         //число слотов для инвентарей которые будут установлены на стеллажи
-        public const int MAX_CONTAINER_BLOC_SLOTS = 3;
+        public const int MAX_CONTAINER_BLOC_SLOTS = 6;
         public static IPlayer fromPlayer;
-
-
         public bool isOpened;
-
-        public BERackVerticalOne()
+        public BERackHorizontal()
         {
-            inventory = new InventoryDynamic("rackverticalone-0", 3, null);
+            inventory = new InventoryDynamic("rackhorizontal-0", MAX_CONTAINER_BLOC_SLOTS, null);
         }
 
         public override void Initialize(ICoreAPI api)
@@ -61,7 +53,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 UpdateShape();
                 return;
             }
-            
+
             UpdateShape();
         }
 
@@ -70,7 +62,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             MarkDirty(Api.Side != EnumAppSide.Server);
         }
 
-       
+
         public override void OnReceivedServerPacket(int packetid, byte[] data)
         {
             if (packetid == 1101)
@@ -89,7 +81,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (storageDlg == null)
                 {
                     Open();
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackverticalone-title"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackhorizontal-title"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
@@ -115,7 +107,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
-        public (bool, int quantitySlots) IsContainer(ItemSlot slot )
+        public (bool, int quantitySlots) IsContainer(ItemSlot slot)
         {
             var storageBlock = slot.Itemstack.Block;
             var defaultType = storageBlock?.Attributes?["defaultType"]?.ToString();
@@ -130,7 +122,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             fromPlayer = byPlayer;
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
-            if(!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
+            if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
             {
                 //попытка поставить блок с инвентарем на стеллаж
                 //на данный момент проверяем атрибуты по примеру ванильных сундуков
@@ -161,6 +153,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                             //увеличиваем слоты стеллажа
                             inventory.AddSlots(slotsCount);
                             inventory.dynamicSlots += slotsCount;
+                            if(storageBlock.BlockId == 8872)
+                            {
+                                inventory.containerBlockSlotsActive++;
+                            }
                             inventory.containerBlockSlotsActive++;
                         }
 
@@ -169,7 +165,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         return true;
                     }
                     return false;
-                }   
+                }
             }
 
             if (Api.Side != EnumAppSide.Client)
@@ -197,7 +193,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             {
                 int num = slot.TryPutInto(Api.World, inventory[blockIndex]);
                 MarkDirty();
-
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
             }
@@ -238,14 +233,14 @@ namespace MoreInventorys.src.BlockEntityFolder
                 fromPlayer.InventoryManager.CloseInventory(Inventory);
             }
         }
-       
+
 
         public override void ToTreeAttributes(ITreeAttribute tree)
         {
             base.ToTreeAttributes(tree);
             tree.SetBool("isOpened", isOpened);
             tree.SetInt("dynamicSlots", inventory.dynamicSlots);
-            
+
         }
 
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
@@ -262,21 +257,21 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         protected override float[][] genTransformationMatrices()
         {
-            float[][] tfMatrices = new float[3][];
+            float[][] tfMatrices = new float[6][];
             float scale = 0.9f;
             float x = 0;
             float z = 0;
             float y = 0;
-            for (int index = 0; index < 3; index++)
+            for (int index = 0; index < 6; index++)
             {
-                if(index == 0)
+                if (index == 0)
                 {
                     x = 1.02f;
                     z = 0.05f;
                     y = 0f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(block.Shape.rotateY)// Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(block.Shape.offsetY)// Сначала перемещаем предмет в центр блока
                        .Translate(x - 1f, y, z) // Двигаем предмет на нужные координаты (x, y, z)
                        .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
                        .Scale(scale, scale, scale)
@@ -285,14 +280,14 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
                 if (index == 1)
                 {
-                    x = 1.02f;
-                    z = 0.05f; 
-                    y = 1f; 
+                    x = 2.04f;
+                    z = 0.05f;
+                    y = 0f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(block.Shape.rotateY)
-                       .Translate(x - 1f, y, z) 
-                       .Translate(-0.5f, 0f, -0.5f) 
+                       .RotateYDeg(block.Shape.offsetY)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
                        .Values;
                 }
@@ -300,12 +295,54 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     x = 1.02f;
                     z = 0.05f;
-                    y = 2f; 
+                    y = 1f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(block.Shape.rotateY)
-                       .Translate(x - 1f, y, z) 
-                       .Translate(-0.5f, 0f, -0.5f) 
+                       .RotateYDeg(block.Shape.offsetY)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                }
+
+                if (index == 3)
+                {
+                    x = 2.04f;
+                    z = 0.05f;
+                    y = 1f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(block.Shape.offsetY)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                }
+
+                if (index == 4)
+                {
+                    x = 1.02f;
+                    z = 0.05f;
+                    y = 2f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(block.Shape.offsetY)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                }
+
+                if (index == 5)
+                {
+                    x = 2.04f;
+                    z = 0.05f;
+                    y = 2f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(block.Shape.offsetY)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
                        .Values;
                 }

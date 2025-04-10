@@ -1,7 +1,7 @@
 {
-  "code": "rackverticalone",
+  "code": "rackverticaloneframacorner",
   "class": "rackverticaloneblock",
-  "name": "RackVerticalOne",
+  "name": "RackVerticalOneFrameCorner",
   "entityClass": "berackverticalone",
   "creativeinventory": {
     "general": [ "*" ],
@@ -78,7 +78,7 @@
   "resistance": 1.5,
   "lightAbsorption": 1,
   "tags": [ "storage" ],
-  "shape": { "base": "moreinventorys:rackverticalone" },
+  "shape": { "base": "moreinventorys:rackverticaloneframecorner" },
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

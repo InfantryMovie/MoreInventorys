@@ -8,6 +8,10 @@
   "block-smallverticalweaponstand.name": "Маленький вертикальный стенд для оружия",
   "block-moreinventorys:smallverticalweaponstand.desc": "А что по название блока не понятно что он делает ?",
 
+  "block-rackverticalone": "Вертикальный Стеллаж",
+  "block-rackverticalone-title": "Стеллаж",
+  "block-rackverticalone-obony1": "Вертикальный Стеллаж",
+  "block-rackverticalone-obony1-title": "Стеллаж",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }
