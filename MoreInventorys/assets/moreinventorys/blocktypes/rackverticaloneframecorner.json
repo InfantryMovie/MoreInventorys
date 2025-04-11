@@ -1,11 +1,11 @@
 {
-  "code": "rackverticaloneframacorner",
+  "code": "rackverticaloneframecorner",
   "class": "rackverticaloneblock",
   "name": "RackVerticalOneFrameCorner",
   "entityClass": "berackverticalone",
   "creativeinventory": {
-    "general": [ "*" ],
-    "moreinventorys": [ "*" ]
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
   },
   "allowOverlap": true,
 
@@ -20,6 +20,9 @@
     {
       "code": "planks",
       "states": [ "ebony1", "oak1", "birch1" ]
+    },
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
   "textures": {
@@ -79,6 +82,25 @@
   "lightAbsorption": 1,
   "tags": [ "storage" ],
   "shape": { "base": "moreinventorys:rackverticaloneframecorner" },
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "shapebytype": {
+    "*-north": {
+      "base": "rackverticaloneframecorner",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "rackverticaloneframacorner",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "rackverticaloneframecorner",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "rackverticaloneframecorner",
+      "rotateY": 90
+    }
+  },
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

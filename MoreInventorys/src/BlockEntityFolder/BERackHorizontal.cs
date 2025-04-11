@@ -129,6 +129,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 int slotsCount = 0;
                 var storageBlock = slot.Itemstack.Block;
+                var shapeRotateY = storageBlock.Shape.rotateY;
 
                 var isContainerResult = IsContainer(slot);
                 var isContainer = isContainerResult.Item1;
@@ -192,6 +193,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (inventory[blockIndex].Empty)
             {
                 int num = slot.TryPutInto(Api.World, inventory[blockIndex]);
+                genTransformationMatrices();
                 MarkDirty();
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
@@ -254,6 +256,8 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             base.updateMeshes();
         }
+
+        
 
         protected override float[][] genTransformationMatrices()
         {

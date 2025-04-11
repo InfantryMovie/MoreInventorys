@@ -3,10 +3,17 @@
   "name": "shieldstand",
   "class": "shieldstandblock",
   "entityClass": "beshieldstand",
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "drawtype": "json",
   "creativeinventory": {
-    "general": [ "*" ],
-    "moreinventorys": [ "*" ]
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
   },
+  "variantgroups": [
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
   "sidesolid": {
     "all": false
   },
@@ -69,6 +76,24 @@
   "lightAbsorption": 1,
   "tags": [ "furniture", "storage" ],
   "shape": { "base": "moreinventorys:shieldstand" },
+  "shapebytype": {
+    "*-north": {
+      "base": "shieldstand",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "shieldstand",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "shieldstand",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "shieldstand",
+      "rotateY": 90
+    }
+  },
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

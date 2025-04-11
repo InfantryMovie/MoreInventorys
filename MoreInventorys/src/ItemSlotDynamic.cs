@@ -70,7 +70,7 @@ namespace MoreInventorys.src
 
                 default:
                     return false;
-                    break;
+                   // break;
             }
 
             //-----------логика для удаления контейнера из стеллажа:
@@ -129,7 +129,7 @@ namespace MoreInventorys.src
                         break;
 
                     default:
-                        break;
+                        return false;
                 }
 
                 //---------логика для возможности установить контейнер для получения слотов прямо из интерфейса:

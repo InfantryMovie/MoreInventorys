@@ -3,9 +3,10 @@
   "name": "firstshelf",
   "class": "firstshelfblock",
   "entityClass": "beshelf",
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
   "creativeinventory": {
-    "general": [ "*" ],
-    "moreinventorys": [ "*" ]
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
   },
   "sidesolid": {
     "all": false
@@ -18,8 +19,35 @@
     {
       "code": "planks",
       "states": [ "ebony1", "oak1", "birch1" ]
+    },
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
+  "textures": {
+    "ebony1": { "base": "game:block/wood/planks/{planks}" }
+  },
+  "drawtype": "json",
+  "shape": { "base": "moreinventorys:firstshelf" },
+  "shapebytype": {
+    "*-north": {
+      "base": "firstshelf",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "firstshelf",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "firstshelf",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "firstshelf",
+      "rotateY": 90
+    }
+  },
+
   "combustibleProps": {
     "burnTemperature": 600,
     "burnDuration": 35
@@ -87,10 +115,7 @@
   "resistance": 1.5,
   "lightAbsorption": 1,
   "tags": [ "furniture", "storage" ],
-  "shape": { "base": "moreinventorys:firstshelf" },
-  "textures": {
-    "ebony1": { "base": "game:block/wood/planks/{planks}" }
-  },
+
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

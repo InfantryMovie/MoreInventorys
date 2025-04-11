@@ -3,8 +3,8 @@
   "class": "smallverticalweaponstandblock",
   "entityClass": "besmallverticalweaponstand",
   "creativeinventory": {
-    "general": [ "*" ],
-    "moreinventorys": [ "*" ]
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
   },
   "sidesolid": {
     "all": false
@@ -17,6 +17,11 @@
     "burnTemperature": 600,
     "burnDuration": 35
   },
+  "variantgroups": [
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
   "collisionselectionboxes": [
     {
       "x1": 0.07500, // Начальный отступ от левой границы
@@ -111,6 +116,25 @@
   "lightAbsorption": 1,
   "tags": [ "furniture", "storage", "stand" ],
   "shape": { "base": "moreinventorys:smallverticalweaponstand" },
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "shapebytype": {
+    "*-north": {
+      "base": "smallverticalweaponstand",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "smallverticalweaponstand",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "smallverticalweaponstand",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "smallverticalweaponstand",
+      "rotateY": 90
+    }
+  },
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

@@ -3,19 +3,20 @@
   "ingredients": {
     "P": {
       "type": "item",
-      "code": "game:plank-oak"
-    //"quantity:2
+      "code": "game:plank-*",
+      "name": "plank",
+      "allowedVariants": [ "ebony1", "oak1", "birch1" ]
     },
     "S": {
       "type": "block",
-      "code": "game:shelf-normal-east"
+      "code": "game:shelf*"
     }
   },
   "width": 3,
   "height": 3,
-  "shapeless": true,
+  "shapeless": false,
   "output": {
     "type": "block",
-    "code": "firstshelf"
+    "code": "firstshelf-{plank}-north"
   }
 }

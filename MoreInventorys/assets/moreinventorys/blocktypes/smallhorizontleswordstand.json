@@ -3,8 +3,8 @@
   "class": "smallhorizontleswordstandblock",
   "entityClass": "besmallhorizontleswordstand",
   "creativeinventory": {
-    "general": [ "*" ],
-    "moreinventorys": [ "*" ]
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
   },
   "sidesolid": {
     "all": false
@@ -17,6 +17,9 @@
     {
       "code": "planks",
       "states": [ "ebony1", "oak1", "birch1" ]
+    },
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
   "textures": {
@@ -106,6 +109,25 @@
   "lightAbsorption": 1,
   "tags": [ "furniture", "storage" ],
   "shape": { "base": "moreinventorys:smallhorizontleswordstand" },
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "shapebytype": {
+    "*-north": {
+      "base": "smallhorizontleswordstand",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "smallhorizontleswordstand",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "smallhorizontleswordstand",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "smallhorizontleswordstand",
+      "rotateY": 90
+    }
+  },
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

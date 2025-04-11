@@ -17,6 +17,10 @@ namespace MoreInventorys.src.BlockEntityFolder
 {
     public class BEFirstShelf : BlockEntityDisplay
     {
+        public float meshAngle;
+
+        private MeshData currentMesh;
+
         InventoryGeneric inv;
         public override InventoryBase Inventory => inv;
         public override string InventoryClassName => "firstshelfinventory";
@@ -38,6 +42,11 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             block = api.World.BlockAccessor.GetBlock(Pos);
             base.Initialize(api);
+
+            if (api is ICoreClientAPI)
+            {
+                ((ICoreClientAPI)api).Tesselator.TesselateBlock(((BlockEntity)this).Block, out currentMesh);
+            }
 
         }
 
@@ -162,8 +171,13 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             base.FromTreeAttributes(tree, worldForResolving);
             RedrawAfterReceivingTreeAttributes(worldForResolving);
+            meshAngle = tree.GetFloat("meshAngle", 0f);
         }
-
+        public override void ToTreeAttributes(ITreeAttribute tree)
+        {
+            base.ToTreeAttributes(tree);
+            tree.SetFloat("meshAngle", meshAngle);
+        }
         public override void GetBlockInfo(IPlayer forPlayer, StringBuilder sb)
         {
             base.GetBlockInfo(forPlayer, sb);
@@ -381,6 +395,14 @@ namespace MoreInventorys.src.BlockEntityFolder
                 dsc.AppendLine("");
             }
             return dsc.ToString();
+        }
+
+        public override bool OnTesselation(ITerrainMeshPool mesher, ITesselatorAPI tesselator)
+        {
+            //IL_001b: Unknown result type (might be due to invalid IL or missing references)
+            //IL_0035: Expected O, but got Unknown
+            mesher.AddMeshData(currentMesh.Clone().Rotate(new Vec3f(0.5f, 0.5f, 0.5f), 0f, meshAngle, 0f), 1);
+            return true;
         }
     }
 }

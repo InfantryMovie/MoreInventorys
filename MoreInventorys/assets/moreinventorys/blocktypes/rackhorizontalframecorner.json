@@ -4,8 +4,8 @@
   "name": "RackHorizontalFrameCorner",
   "entityClass": "berackhorizontal",
   "creativeinventory": {
-    "general": [ "*" ],
-    "moreinventorys": [ "*" ]
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
   },
   "allowOverlap": true,
 
@@ -20,6 +20,9 @@
     {
       "code": "planks",
       "states": [ "ebony1", "oak1", "birch1" ]
+    },
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
   "textures": {
@@ -121,6 +124,25 @@
   "lightAbsorption": 1,
   "tags": [ "storage" ],
   "shape": { "base": "moreinventorys:rackhorizontalframecorner" },
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "shapebytype": {
+    "*-north": {
+      "base": "rackhorizontalframecorner",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "rackhorizontalframecorner",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "rackhorizontalframecorner",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "rackhorizontalframecorner",
+      "rotateY": 90
+    }
+  },
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",
