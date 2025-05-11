@@ -17,6 +17,7 @@ namespace MoreInventorys.src.GuiFolder
         //общее кол-во слотов с учетом контейнеров и предметов 
         int DynamicSlots;
         int MaxContainerBlockSlots;
+        
         BlockPos Pos { get; }
         public GuiDialogDynamic(int slots, string dialogTitle, InventoryBase inventory, BlockPos blockEntityPos, ICoreClientAPI capi)
             : base(dialogTitle, inventory, blockEntityPos, capi)
@@ -30,6 +31,7 @@ namespace MoreInventorys.src.GuiFolder
                 if(inventory is InventoryDynamic inv)
                 {
                     MaxContainerBlockSlots = inv.MaxContainerBlockSlots;
+
                 }
                 SetupDialog();
 
@@ -39,25 +41,62 @@ namespace MoreInventorys.src.GuiFolder
 
         public void OnInventorySlotModified(int slotid)
         {
-
-            capi.Event.EnqueueMainThreadTask(SetupDialog, "setupfortyeightslotdlg");
+            capi.Event.EnqueueMainThreadTask(SetupDialog, "setupdynamicslotdlg");
         }
+
 
         private void SetupDialog()
         {
+            //на случай если у нас есть двойные сундуки, чтобы не рисовать пустые слоты которые дополнительно занимает двойной сундук, убираем эти слоты!
+            List<int> DoubleChestIndex = new List<int>();
+            if (Inventory is InventoryDynamic inv)
+            {
+                if(inv.containerBlockSlotsActive > 0 && inv.Count > MaxContainerBlockSlots)
+                {
+                   if(inv.DoubleChestIndex.Count > 0)
+                   {
+                        DoubleChestIndex = inv.DoubleChestIndex;
+                   }
+                }
+            }
             int cols = 0;
             int[] itemSlots = new int[0];
 
             int[] containerSlots = new int[0];
             double fixedHeigh = 100;
+
             if(MaxContainerBlockSlots == 3)
             {
                 containerSlots = new int[3] {0,1,2};
 
             }
+            if (MaxContainerBlockSlots == 4)
+            {
+                containerSlots = new int[4] { 0, 1, 2, 3};
+            }
+
             if (MaxContainerBlockSlots == 6)
             {
-                containerSlots = new int[6] { 0, 1, 2, 3, 4, 5 };
+                if(DoubleChestIndex.Count == 0)
+                {
+                    containerSlots = new int[6] { 0, 1, 2, 3, 4, 5 };
+                }
+                else
+                {
+                    int containerSlotsCount = 6;
+                    containerSlotsCount -= DoubleChestIndex.Count;
+                    List<int> containerSlotsList = new List<int>() { 0, 1, 2, 3, 4, 5 };
+
+                    foreach (var item in DoubleChestIndex)
+                    {
+                        containerSlotsList.Remove(item+1);
+                    }
+                    containerSlots = containerSlotsList.ToArray();
+                }
+
+                
+
+               
             }
 
             double fixedWidth = 0;
@@ -99,7 +138,7 @@ namespace MoreInventorys.src.GuiFolder
             ElementBounds mainBounds = ElementBounds.Fixed(0.0, 0.0, fixedWidth, fixedHeigh);
 
             // Левая часть — вертикальные слоты (для контейнеров)
-            ElementBounds containerSlotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0.0, 20.0, 1, MaxContainerBlockSlots);
+            ElementBounds containerSlotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.LeftFixed, 0.0, 20.0, 1, MaxContainerBlockSlots);
 
             ElementBounds slotsBounds = null;
             if (DynamicSlots > MaxContainerBlockSlots)
@@ -113,6 +152,7 @@ namespace MoreInventorys.src.GuiFolder
             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
             bgBounds.BothSizing = ElementSizing.FitToChildren;
             bgBounds.WithChildren(mainBounds);
+
 
             // Общие границы диалога
             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog
@@ -169,6 +209,8 @@ namespace MoreInventorys.src.GuiFolder
             }
             base.OnKeyPress(args);
         }
+
+
         private void SendInvPacket(object p)
         {
             capi.Network.SendBlockEntityPacket(base.BlockEntityPosition.X, base.BlockEntityPosition.Y, base.BlockEntityPosition.Z, p);

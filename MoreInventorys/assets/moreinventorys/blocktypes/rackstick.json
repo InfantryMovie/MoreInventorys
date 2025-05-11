@@ -1,8 +1,8 @@
 {
-  "code": "rackverticaloneframecorner",
-  "class": "rackverticaloneblock",
-  "name": "RackVerticalOneFrameCorner",
-  "entityClass": "berackverticalone",
+  "code": "rackstick",
+  "class": "rackstickblock",
+  "name": "RackStick",
+  "entityClass": "berackstick",
   "creativeinventory": {
     "general": [ "*-north" ],
     "moreinventorys": [ "*-north" ]
@@ -18,16 +18,9 @@
   "blockmaterial": "Wood",
   "variantgroups": [
     {
-      "code": "planks",
-      "states": [ "ebony1", "oak1", "birch1" ]
-    },
-    {
       "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
-  "textures": {
-    "ebony1": { "base": "game:block/wood/planks/{planks}" }
-  },
   "combustibleProps": {
     "burnTemperature": 600,
     "burnDuration": 35
@@ -35,9 +28,23 @@
   "collisionselectionboxes": [
     {
       "x1": 0.06,
-      "y1": 0.06,
+      "y1": 0.12,
       "z1": 0.06,
       "x2": 0.94,
+      "y2": 0.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 1.06,
+      "y1": 0.12,
+      "z1": 0.06,
+      "x2": 1.94,
       "y2": 0.93,
       "z2": 0.94,
       "rotateYByType": {
@@ -62,11 +69,11 @@
       }
     },
     {
-      "x1": 0.06,
-      "y1": 2,
+      "x1": 1.06,
+      "y1": 1,
       "z1": 0.06,
-      "x2": 0.94,
-      "y2": 2.93,
+      "x2": 1.94,
+      "y2": 1.93,
       "z2": 0.94,
       "rotateYByType": {
         "*-north": 0,
@@ -81,30 +88,30 @@
   "resistance": 1.5,
   "lightAbsorption": 1,
   "tags": [ "storage" ],
-  "shape": { "base": "moreinventorys:rackverticaloneframecorner" },
+  "shape": { "base": "moreinventorys:rackstick" },
   "behaviors": [ { "name": "HorizontalOrientable" } ],
   "shapebytype": {
     "*-north": {
-      "base": "rackverticaloneframecorner",
+      "base": "rackstick",
       "rotateY": 0
     },
     "*-east": {
-      "base": "rackverticaloneframecorner",
+      "base": "rackstick",
       "rotateY": 270
     },
     "*-south": {
-      "base": "rackverticaloneframecorner",
+      "base": "rackstick",
       "rotateY": 180
     },
     "*-west": {
-      "base": "rackverticaloneframecorner",
+      "base": "rackstick",
       "rotateY": 90
     }
   },
   "sounds": {
-    "place": "game:block/planks",
-    "hit": "game:block/planks",
-    "break": "game:block/planks",
+    "place": "game:block/stickplace",
+    "hit": "game:block/stickhit",
+    "break": "game:block/stickbreak",
     "walk": "game:walk/wood"
   },
   "placementRotationFix": true

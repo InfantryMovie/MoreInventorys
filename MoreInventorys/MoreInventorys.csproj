@@ -14,8 +14,10 @@
   <Content Remove="assets\moreinventorys\blockentities\**" />
   <EmbeddedResource Remove="assets\moreinventorys\blockentities\**" />
   <None Remove="assets\moreinventorys\blockentities\**" />
+  <None Remove="assets\moreinventorys\blocktypes\dummyforrackhorizontal.json" />
   <None Remove="assets\moreinventorys\blocktypes\rackhorizontalframecorner.json" />
   <None Remove="assets\moreinventorys\blocktypes\rackhorizontalframeline.json" />
+  <None Remove="assets\moreinventorys\blocktypes\rackstick.json" />
   <None Remove="assets\moreinventorys\blocktypes\rackverticaloneframecorner.json" />
   <None Remove="assets\moreinventorys\blocktypes\rackverticaloneframeline.json" />
   <None Remove="assets\moreinventorys\blocktypes\shieldstand.json" />

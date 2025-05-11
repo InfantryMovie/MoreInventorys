@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using MoreInventorys.src.BlockFolder;
 using MoreInventorys.src.BlockEntityFolder;
 using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
-using Vintagestory.API.MathTools;
 using Vintagestory.API.Client;
 using Vintagestory.API.Server;
+using Foundation.Extensions;
+
 
 
 
 namespace MoreInventorys.src
 {
-    // Основной класс мода
+    public class ModConfigFile
+    {
+        public static ModConfigFile Current { get; set; }
+
+        //список ванильных поддерживаемых  контейнеров
+        public List<string> VanilaStorageContainersCode { get; set; } = new List<string>();
+
+        //словарь модовых поддерживаемых контейнеров ключ: code/ значение: slot.count)
+        public Dictionary<string, int> ModedStorageContainersCode { get; set; } = new Dictionary<string, int>();
+
+    }
     public class MoreInventorysMod : ModSystem
     {
         private ICoreServerAPI serverApi;
@@ -24,6 +30,14 @@ namespace MoreInventorys.src
         public static IServerNetworkChannel serverChannel;
 
         public static IClientNetworkChannel clientChannel;
+
+
+        public override void StartPre(ICoreAPI api)
+        {
+            ModConfigFile.Current = api.LoadOrCreateConfig<ModConfigFile>("MoreInventorysConfig.json");
+           
+
+        }
 
         // Метод, вызываемый при загрузке мода
         public override void Start(ICoreAPI api)
@@ -41,7 +55,8 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("shieldstandblock", typeof(ShieldStandBlock));
             api.RegisterBlockEntityClass("beshieldstand", typeof(BEShieldStand));
 
-            api.RegisterBlockClass("dummy-up", typeof(DummyUP));
+            api.RegisterBlockClass("dummyrh", typeof(DummyRH));
+            api.RegisterBlockEntityClass("bedummyrh", typeof(BlockEntityDummy));
 
             api.RegisterBlockClass("smallhorizontleswordstandblock", typeof(SmallHorizontleSwordStandBlock));
             api.RegisterBlockEntityClass("besmallhorizontleswordstand", typeof(BESmallHorizontleSwordStand));
@@ -51,6 +66,10 @@ namespace MoreInventorys.src
 
             api.RegisterBlockClass("rackhorizontalblock", typeof(RackHorizontalBlock));
             api.RegisterBlockEntityClass("berackhorizontal", typeof(BERackHorizontal));
+
+            api.RegisterBlockClass("rackstickblock", typeof(RackStickBlock));
+            api.RegisterBlockEntityClass("berackstick", typeof(BERackStick));
+
 
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
             api.Logger.Notification("Mod 'More Inventorys' успешно загружен!");
@@ -65,7 +84,7 @@ namespace MoreInventorys.src
 
         public override void StartServerSide(ICoreServerAPI api)
         {
-            //((ModSystem)this).StartServerSide(api);
+            base.StartServerSide(api);
             serverApi = api;
             serverChannel = serverApi.Network.GetChannel("moreinventorys");
             
@@ -73,7 +92,7 @@ namespace MoreInventorys.src
 
         public override void Dispose()
         {
-            //((ModSystem)this).Dispose();
+            base.Dispose();
             serverChannel = null;
             clientChannel = null;
         }

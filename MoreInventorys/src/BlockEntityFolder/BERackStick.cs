@@ -1,16 +1,11 @@
-﻿using MoreInventorys.src.BlockFolder;
-using MoreInventorys.src.GuiFolder;
+﻿using MoreInventorys.src.GuiFolder;
 using MoreInventorys.src.InventoryFolder;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -18,28 +13,21 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
-using Vintagestory.ServerMods;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    internal class BERackHorizontal : BlockEntityDisplay
+    internal class BERackStick : BlockEntityDisplay
     {
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
 
         //словарь с контейнерами на стеллажах, для корректного отображения на полках
-        Dictionary<int, string> storageContainers { get; set; }
+        Dictionary<int, string> storageContainers;
 
         //ссылки на слоты контейнеров на стеллажах для сохранения в дереве
         string container1;
         string container2;
         string container3;
         string container4;
-        string container5;
-        string container6;
-
-        int doubleChestIndex1;
-        int doubleChestIndex2;
-        int doubleChestIndex3;
 
         bool isFirstLoad = true;
 
@@ -47,20 +35,17 @@ namespace MoreInventorys.src.BlockEntityFolder
         InventoryDynamic inventory;
 
         public override InventoryBase Inventory => inventory;
-        public override string InventoryClassName => "rackhorizontaldynamic";
+        public override string InventoryClassName => "rackstickdynamic";
 
         GuiDialogDynamic storageDlg;
 
         //число слотов для инвентарей которые будут установлены на стеллажи
-        public const int MAX_CONTAINER_BLOC_SLOTS = 6;
+        public const int MAX_CONTAINER_BLOC_SLOTS = 4;
         public bool isOpened;
-        public BERackHorizontal()
+        public BERackStick()
         {
-            inventory = new InventoryDynamic("rackhorizontal-0", MAX_CONTAINER_BLOC_SLOTS, null);
+            inventory = new InventoryDynamic("rackstick-0", MAX_CONTAINER_BLOC_SLOTS, null);
             storageContainers = new Dictionary<int, string>();
-            doubleChestIndex1 = -1;
-            doubleChestIndex2 = -1;
-            doubleChestIndex3 = -1;
         }
 
         public override void Initialize(ICoreAPI api)
@@ -72,27 +57,14 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         }
 
-        bool InitializeDoubleChestContainers()
-        {
-            if(inventory.DoubleChestIndex.Count > 1) return false;
-
-            if (doubleChestIndex1 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex1);
-            if (doubleChestIndex2 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex2);
-            if (doubleChestIndex3 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex3);
-
-            return true;
-        }
-
         bool InitializeStorageContainers()
         {
-            if (storageContainers.Count > 0) return false; 
-
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++) 
+            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        if (container1 != "") storageContainers.Add(0,container1);
+                        if (container1 != "") storageContainers.Add(0, container1);
                         break;
 
                     case 1:
@@ -107,17 +79,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                         if (container4 != "") storageContainers.Add(3, container4);
                         break;
 
-                    case 4:
-                        if (container5 != "") storageContainers.Add(4, container5);
-                        break;
-
-                    case 5:
-                        if (container6 != "") storageContainers.Add(5, container6);
-                        break;
+                    
                     default:
                         break;
                 }
             }
+
             return true;
         }
 
@@ -185,44 +152,24 @@ namespace MoreInventorys.src.BlockEntityFolder
                 storageDlg = null;
             }
         }
-        
+
 
         public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
         {
             string cod = GetValueBeforeDash(slot.Itemstack.Block.Code.Path);
             int? quantitySlots = 0;
-            if (!ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod) && !ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
-                return (false, 0);
+            //if (!ModConfigFile.Current.StorageContainersCode.Contains(cod)) return (false, 0);
 
-
-            if(ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod))
+            if (cod == "stationarybasket")
             {
+                //BlockGenericTypedContainer
                 string type = slot.Itemstack.Attributes.GetString("type");
                 if (type != null)
                 {
                     int? num = slot.Itemstack.ItemAttributes?["quantitySlots"]?[type]?.AsInt();
                     if (num != null) quantitySlots = (int)num;
                 }
-
             }
-
-            if(ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
-            {
-                quantitySlots = ModConfigFile.Current.ModedStorageContainersCode[cod];
-            }
-
-            /* ПОКА НЕ ЗНАЮ КАК РЕНДЕРИТЬ НУЖНЫЕ ТЕКСТУРЫ, ЯЩИКИ НЕЛЬЗЯ! У НИХ ЗНАК ? ВМЕСТО ТЕКСТУР
-             * if(cod == "crate")
-            {
-                //BlockCrate
-                //CrateProperties
-                CrateProperties props = slot.Itemstack.ItemAttributes.AsObject<CrateProperties>(null, slot.Itemstack.Block.Code.Domain);
-                if (props != null)
-                {
-                    string type = slot.Itemstack.Attributes.GetString("type", props.DefaultType);
-                    quantitySlots = props[type].QuantitySlots;
-                }
-            }*/
 
 
             if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
@@ -237,143 +184,82 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             if (indexOfDash >= 0)
             {
-                return input.Substring(0, indexOfDash); 
+                return input.Substring(0, indexOfDash);
             }
 
-            return input; 
+            return input;
         }
 
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
-            if (Api.Side == EnumAppSide.Client)
+            ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
+            if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
             {
-            }
-            else
-            {
-                ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
-                if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
+                //попытка поставить блок с инвентарем на стеллаж
+
+                int slotsCount = 0;
+                var storageBlock = slot.Itemstack.Block;
+                if (storageBlock.Code == null) return false;
+
+                var isContainerResult = IsValidContainer(slot);
+                var isContainer = isContainerResult.Item1;
+                var quantitySlots = isContainerResult.quantitySlots;
+
+                if (!isContainer) return false;
+
+                slotsCount = (int)quantitySlots;
+                AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+                if (slotsCount <= 0) return false;
+
+                if (TryPut(slot, blockSel, storageBlock))
                 {
-                    //попытка поставить блок с инвентарем на стеллаж
+                    //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
+                    int lastId = inventory[inventory.Count - 1].SlotId;
+                    int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
 
-                    int slotsCount = 0;
-                    var storageBlock = slot.Itemstack.Block;
-                    if (storageBlock.Code == null) return false;
-
-                    var isContainerResult = IsValidContainer(slot);
-                    var isContainer = isContainerResult.Item1;
-                    var quantitySlots = isContainerResult.quantitySlots;
-
-                    slotsCount = (int)quantitySlots;
-                    bool isLegitDoubleChest = true;
-                    if (storageBlock.BlockId == 8872)
+                    lock (inventory.LockContainerSlots)
                     {
-                        //попытка поставить двойной сундук, проверка на правые хитбоксы,
-                        //проверяем свободен ли левый слот, если да, то ставим на левый или не ставим
-
-                        switch (blockSel.SelectionBoxIndex)
-                        {
-                            case 1:
-
-                                if (!inventory[0].Empty) isLegitDoubleChest = false;
-
-                                blockSel.SelectionBoxIndex = 0;
-                                break;
-
-                            case 3:
-
-                                if (!inventory[2].Empty) isLegitDoubleChest = false;
-
-                                blockSel.SelectionBoxIndex = 2;
-                                break;
-
-                            case 5:
-
-                                if (!inventory[4].Empty) isLegitDoubleChest = false;
-
-                                blockSel.SelectionBoxIndex = 4;
-                                break;
-                            default:
-                                isLegitDoubleChest = true;
-                                break;
-                        }
+                        inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
                     }
 
-
-                    if (isContainer)
+                    if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
                     {
-                        if (TryPut(slot, blockSel.SelectionBoxIndex, storageBlock, isLegitDoubleChest))
-                        {
-                            //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
-                            int lastId = inventory[inventory.Count - 1].SlotId;
-                            int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
-
-                            lock (inventory.LockContainerSlots)
-                            {
-                                inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
-                            }
-
-                            if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                            {
-                                storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
-                            }
-
-
-                            switch (blockSel.SelectionBoxIndex)
-                            {
-                                case 0:
-                                    container1 = storageBlock.Code.Path;
-                                    break;
-
-                                case 1:
-                                    container2 = storageBlock.Code.Path;
-                                    break;
-
-                                case 2:
-                                    container3 = storageBlock.Code.Path;
-                                    break;
-
-                                case 3:
-                                    container4 = storageBlock.Code.Path;
-                                    break;
-
-                                case 4:
-                                    container5 = storageBlock.Code.Path;
-                                    break;
-
-                                case 5:
-                                    container6 = storageBlock.Code.Path;
-                                    break;
-
-                                default:
-                                    break;
-                            }
-
-                            //увеличиваем слоты стеллажа
-                            inventory.AddSlots(slotsCount);
-                            inventory.dynamicSlots += slotsCount;
-                            if (storageBlock.BlockId == 8872)
-                            {
-                                //это двойной сундук, занимаем дополнительный слот стеллажа под него
-                                inventory.containerBlockSlotsActive++;
-                                inventory.DoubleChestIndex.Add(blockSel.SelectionBoxIndex);
-
-                                var result = AddDoubleChestIndex(blockSel.SelectionBoxIndex);
-
-
-                            }
-                            inventory.containerBlockSlotsActive++;
-
-                            AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
-                            Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
-                            MarkDirty();
-                            return true;
-                        }
+                        storageContainers.Add(inventory.containerBlockSlotsActive, storageBlock.Code.Path + DateTime.Now.ToString());
                     }
 
+                    switch (inventory.containerBlockSlotsActive)
+                    {
+                        case 0:
+                            container1 = storageBlock.Code.Path;
+                            break;
 
+                        case 1:
+                            container2 = storageBlock.Code.Path;
+                            break;
+
+                        case 2:
+                            container3 = storageBlock.Code.Path;
+                            break;
+
+                        case 3:
+                            container4 = storageBlock.Code.Path;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    //увеличиваем слоты стеллажа
+                    inventory.AddSlots(slotsCount);
+                    inventory.dynamicSlots += slotsCount;
+                    inventory.containerBlockSlotsActive++;
+
+                    Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                    MarkDirty();
+                    return true;
                 }
+                return false;
             }
-           
 
             if (Api.Side != EnumAppSide.Client)
             {
@@ -393,45 +279,17 @@ namespace MoreInventorys.src.BlockEntityFolder
             return true;
         }
 
-        bool AddDoubleChestIndex (int index)
+        bool TryPut(ItemSlot slot, BlockSelection blockSel, Block storageContainer)
         {
-            if (doubleChestIndex1 == -1)
+            int blockIndex = blockSel.SelectionBoxIndex + inventory.containerBlockSlotsActive;
+            if (inventory[blockIndex].Empty)
             {
-                doubleChestIndex1 = index;
-                return true;
-            }
-
-            if (doubleChestIndex2 == -1)
-            {
-                doubleChestIndex2 = index;
-                return true;
-            }
-
-            if (doubleChestIndex3 == -1)
-            {
-                doubleChestIndex3 = index;
-                return true;
-            }
-
-            return true;
-        }
-
-        bool TryPut(ItemSlot slot, int blockSelIndex, Block storageContainer, bool isLegitDoubleChest)
-        {
-            if (!isLegitDoubleChest) return false;
-            //int blockIndex = blockSel.SelectionBoxIndex + inventory.containerBlockSlotsActive;
-            if (inventory[blockSelIndex].Empty)
-            {
-                inventory.IsTryPut = true;
-                int num = slot.TryPutInto(Api.World, inventory[blockSelIndex]);
-                inventory.IsTryPut = false;
+                int num = slot.TryPutInto(Api.World, inventory[blockIndex]);
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
             }
             return false;
         }
-
-    
 
         public bool Open()
         {
@@ -452,11 +310,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ICoreServerAPI obj = (ICoreServerAPI)Api;
                 if (isOpened)
                 {
-                  
                 }
                 else
                 {
-                    
+
 
                 }
                 isOpened = !isOpened;
@@ -480,12 +337,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             tree.SetString("container2", container2);
             tree.SetString("container3", container3);
             tree.SetString("container4", container4);
-            tree.SetString("container5", container5);
-            tree.SetString("container6", container6);
 
-            tree.SetInt("doubleChestIndex1", doubleChestIndex1);
-            tree.SetInt("doubleChestIndex2", doubleChestIndex2);
-            tree.SetInt("doubleChestIndex3", doubleChestIndex3);
 
             tree.SetInt("dummyCount", DummyPositions.Count);
             for (int i = 0; i < DummyPositions.Count; i++)
@@ -494,9 +346,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                 tree.SetInt("dy" + i, DummyPositions[i].Y);
                 tree.SetInt("dz" + i, DummyPositions[i].Z);
             }
-
-
-
         }
 
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
@@ -509,18 +358,11 @@ namespace MoreInventorys.src.BlockEntityFolder
             container2 = tree.GetString("container2");
             container3 = tree.GetString("container3");
             container4 = tree.GetString("container4");
-            container5 = tree.GetString("container5");
-            container6 = tree.GetString("container6");
-
-            doubleChestIndex1 = tree.GetInt("doubleChestIndex1");
-            doubleChestIndex2 = tree.GetInt("doubleChestIndex2");
-            doubleChestIndex3 = tree.GetInt("doubleChestIndex3");
 
             if (isFirstLoad)
             {
                 isFirstLoad = false;
                 bool num = InitializeStorageContainers();
-                bool num2 = InitializeDoubleChestContainers();
             }
 
             DummyPositions = new List<BlockPos>();
@@ -540,22 +382,22 @@ namespace MoreInventorys.src.BlockEntityFolder
             base.updateMeshes();
         }
 
-        (int,string) GetOrientationRateForMartices(int containerIndex)
+        (int, string) GetOrientationRateForMartices(int containerIndex)
         {
             int orientationRotate = 0;
 
-            if (storageContainers.Count == 0) 
+            if (storageContainers.Count == 0)
             {
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate,"");
+                return (orientationRotate, "");
             }
 
             if (!storageContainers.ContainsKey(containerIndex)) return (orientationRotate, "");
 
             var container = storageContainers[containerIndex];
-            if(string.IsNullOrEmpty(container))
+            if (string.IsNullOrEmpty(container))
             {
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
@@ -594,7 +436,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         protected override float[][] genTransformationMatrices()
         {
-            float[][] tfMatrices = new float[MAX_CONTAINER_BLOC_SLOTS][];
+            float[][] tfMatrices = new float[4][];
             float scale = 0.9f;
             float x = 0;
             float z = 0;
@@ -602,18 +444,17 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             int orientationRotate = 0;
             string code = "";
-            for (int index = 0; index < MAX_CONTAINER_BLOC_SLOTS; index++)
+            for (int index = 0; index < 4; index++)
             {
-                var orientationRotateResult = GetOrientationRateForMartices(index);
-                orientationRotate = orientationRotateResult.Item1;
-                code = orientationRotateResult.Item2;
+                orientationRotate = GetOrientationRateForMartices(index).Item1;
+                code = GetOrientationRateForMartices(index).Item2;
 
                 if (index == 0)
                 {
+
                     x = 1.02f;
                     z = 0.05f;
                     y = 0f;
-                    if (code == "trunk") z += 0.05f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(orientationRotate)// Сначала перемещаем предмет в центр блока
@@ -628,7 +469,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 2.04f;
                     z = 0.05f;
                     y = 0f;
-                    if(code == "chest")
+                    if (code == "chest")
                     {
                         z += 1;
                         x = 1;
@@ -646,7 +487,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 1.02f;
                     z = 0.05f;
                     y = 1f;
-                    if (code == "trunk") z += 0.05f;
+
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(orientationRotate)
@@ -666,41 +507,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 1;
                         x = 1;
                     }
-
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
-                }
-
-                if (index == 4)
-                {
-                    x = 1.02f;
-                    z = 0.05f;
-                    y = 2f;
-                    if (code == "trunk") z += 0.05f;
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
-                }
-
-                if (index == 5)
-                {
-                    x = 2.04f;
-                    z = 0.05f;
-                    y = 2f;
-                    if (code == "chest")
-                    {
-                        z += 1;
-                        x = 1;
-                    }
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(orientationRotate)
@@ -712,8 +518,5 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             return tfMatrices;
         }
-
-       
-
     }
 }

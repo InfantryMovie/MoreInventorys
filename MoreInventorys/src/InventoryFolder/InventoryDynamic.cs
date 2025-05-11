@@ -16,6 +16,9 @@ namespace MoreInventorys.src.InventoryFolder
     {
         //тут храним инфу по слотам которые дал текущий контейнер, ключ - блок, значение массив слотов с индексами == SlotId
         public Dictionary<int, int[]> ContainerSlots { get; set; }
+
+        //список двойных сундуков и индексы которые они занимают на стеллаже (нужно чтобы убрать по индексу в ГУИ лишние слоты)
+        public List<int> DoubleChestIndex { get; set; }
         public object LockContainerSlots { get; set; }
 
         private NewSlotDelegate onNewSlot;
@@ -27,7 +30,9 @@ namespace MoreInventorys.src.InventoryFolder
         public int containerBlockSlotsActive = 0;
 
         //максимальное число контейнеров на стеллаже
-        public int MaxContainerBlockSlots; 
+        public int MaxContainerBlockSlots;
+
+        public bool IsTryPut = false;
 
 
         public new ItemSlotDynamic this[int slotId]
@@ -63,6 +68,19 @@ namespace MoreInventorys.src.InventoryFolder
             ContainerSlots = new Dictionary<int, int[]>();
             LockContainerSlots = new object();
             MaxContainerBlockSlots = slots;
+            DoubleChestIndex = new List<int>();
+
+        }
+
+        public InventoryDynamic(string inventoryID, int slots, ICoreAPI api, NewSlotDelegate onNewSlot = null)
+            : base(slots, inventoryID, api)
+        {
+            this.slots = GenEmptySlots(slots);
+            dynamicSlots = slots;
+            baseWeight = 4f;
+            ContainerSlots = new Dictionary<int, int[]>();
+            LockContainerSlots = new object();
+            MaxContainerBlockSlots = slots;
 
         }
 
@@ -90,10 +108,7 @@ namespace MoreInventorys.src.InventoryFolder
 
         public override void FromTreeAttributes(ITreeAttribute treeAttribute)
         {
-            /*int num = slots.Length;
-            slots = SlotsFromTreeAttributes(treeAttribute, slots);
-            int amount = num - slots.Length;
-            AddSlots(amount);*/
+
             slots = SlotsFromTreeAttributes(treeAttribute);
         }
 

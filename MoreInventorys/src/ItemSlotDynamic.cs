@@ -10,31 +10,47 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
+using Vintagestory.Common;
 using Vintagestory.GameContent;
 
 namespace MoreInventorys.src
 {
     public class ItemSlotDynamic : ItemSlotSurvival
     {
-        
         public int SlotId { get; }
         int MaxContainerBlockSlots;
+        InventoryDynamic _inv;
         public ItemSlotDynamic(InventoryBase inventory, int slotId) : base(inventory)
         {
             this.SlotId = slotId;
             
             if(inventory is InventoryDynamic inv)
             {
+                _inv = inv;
+
                 MaxContainerBlockSlots = inv.MaxContainerBlockSlots;
 
                 switch (inv.MaxContainerBlockSlots)
                 {
                     case 3:
-                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) MaxSlotStackSize = 1;
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2)
+                        {
+                            HexBackgroundColor = "#9f9f9f";
+
+                        }
+                        break;
+                    case 4:
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 || this.SlotId == 3)
+                        {
+                            HexBackgroundColor = "#9f9f9f";
+                        }
                         break;
                     case 6:
                         if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||
-                            this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5) MaxSlotStackSize = 1;
+                            this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5)
+                        {
+                            HexBackgroundColor = "#9f9f9f";
+                        }
                         break;
 
                     default:
@@ -43,6 +59,8 @@ namespace MoreInventorys.src
             }
 
         }
+
+       
 
         public (bool, int quantitySlots, Block container) IsContainer(ItemSlot slot)
         {
@@ -55,6 +73,30 @@ namespace MoreInventorys.src
 
             return (true, (int)quantitySlots, storageBlock);
         }
+
+        public override bool CanTakeFrom(ItemSlot sourceSlot, EnumMergePriority priority = EnumMergePriority.AutoMerge)
+        {
+            if (_inv.IsTryPut) return base.CanTakeFrom(sourceSlot, priority);
+
+            switch (MaxContainerBlockSlots)
+            {
+                case 3:
+                    if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
+                    break;
+                case 6:
+                    if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||
+                        this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5) return false;
+                    break;
+
+                default:
+                    return false;
+                    // break;
+            }
+
+            return base.CanTakeFrom(sourceSlot, priority);
+        }
+
+        
 
         public override bool CanTake()
         {
@@ -109,18 +151,18 @@ namespace MoreInventorys.src
 
             return base.CanTake();
         }
+
+
         public override bool CanHold(ItemSlot sourceSlot)
         {
             if(!sourceSlot.Empty)
             {
-                var containerResult = IsContainer(sourceSlot);
-                bool isContainer = containerResult.Item1;
-                int quantitySlots = containerResult.quantitySlots;
-                var container = containerResult.container;
-
                 switch (MaxContainerBlockSlots)
                 {
                     case 3:
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
+                        break;
+                    case 4:
                         if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
                         break;
                     case 6:
@@ -135,7 +177,11 @@ namespace MoreInventorys.src
                 //---------логика для возможности установить контейнер для получения слотов прямо из интерфейса:
                 // текущая проблема - как перерисовать интерфейс после этого?
 
-                /*if (isContainer && container != null)
+             /* var containerResult = IsContainer(sourceSlot);
+                bool isContainer = containerResult.Item1;
+                int quantitySlots = containerResult.quantitySlots;
+                var container = containerResult.container;
+                if (isContainer && container != null)
                     {
                         AddContainer(SlotId, quantitySlots);
                         return true;

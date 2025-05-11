@@ -245,7 +245,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             base.ToTreeAttributes(tree);
             tree.SetBool("isOpened", isOpened);
             tree.SetInt("dynamicSlots", inventory.dynamicSlots);
-            
+            tree.SetInt("containerBlockSlotsActive", inventory.containerBlockSlotsActive);
+
         }
 
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
@@ -253,6 +254,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             base.FromTreeAttributes(tree, worldAccessForResolve);
             isOpened = tree.GetBool("isOpened");
             inventory.dynamicSlots = tree.GetInt("dynamicSlots");
+            inventory.containerBlockSlotsActive = tree.GetInt("containerBlockSlotsActive");
+            RedrawAfterReceivingTreeAttributes(worldAccessForResolve);
         }
 
         public override void updateMeshes()

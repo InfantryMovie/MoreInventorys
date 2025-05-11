@@ -32,6 +32,7 @@
     "burnTemperature": 600,
     "burnDuration": 35
   },
+
   "collisionselectionboxes": [
     {
       "x1": 0.06,
@@ -148,7 +149,7 @@
     "hit": "game:block/planks",
     "break": "game:block/planks",
     "walk": "game:walk/wood"
-  },
-  "placementRotationFix": true
+  }
+  //"placementRotationFix": true
 
 }
