@@ -21,7 +21,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
 
         //словарь с контейнерами на стеллажах, для корректного отображения на полках
-        Dictionary<int, string> storageContainers;
+        Dictionary<int, string> storageContainers { get; set; }
 
         //ссылки на слоты контейнеров на стеллажах для сохранения в дереве
         string container1;
@@ -126,7 +126,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     Open();
                     Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackhorizontal-title"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackhorizontal"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
@@ -205,61 +205,65 @@ namespace MoreInventorys.src.BlockEntityFolder
                 var isContainer = isContainerResult.Item1;
                 var quantitySlots = isContainerResult.quantitySlots;
 
-                if (!isContainer) return false;
+
 
                 slotsCount = (int)quantitySlots;
-                AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
-                if (slotsCount <= 0) return false;
 
-                if (TryPut(slot, blockSel, storageBlock))
+                if (isContainer)
                 {
-                    //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
-                    int lastId = inventory[inventory.Count - 1].SlotId;
-                    int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
-
-                    lock (inventory.LockContainerSlots)
+                    if (TryPut(slot, blockSel, storageBlock))
                     {
-                        inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                        //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
+                        int lastId = inventory[inventory.Count - 1].SlotId;
+                        int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
+
+                        lock (inventory.LockContainerSlots)
+                        {
+                            inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                        }
+
+                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                        {
+                            storageContainers.Add(inventory.containerBlockSlotsActive, storageBlock.Code.Path + DateTime.Now.ToString());
+                        }
+
+                        switch (blockSel.SelectionBoxIndex)
+                        {
+                            case 0:
+                                container1 = storageBlock.Code.Path;
+                                break;
+
+                            case 1:
+                                container2 = storageBlock.Code.Path;
+                                break;
+
+                            case 2:
+                                container3 = storageBlock.Code.Path;
+                                break;
+
+                            case 3:
+                                container4 = storageBlock.Code.Path;
+                                break;
+
+                            default:
+                                break;
+                        }
+
+                        //увеличиваем слоты стеллажа
+                        inventory.AddSlots(slotsCount);
+                        inventory.dynamicSlots += slotsCount;
+                        inventory.containerBlockSlotsActive++;
+
+                        AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+                        Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                        MarkDirty();
+                        return true;
                     }
 
-                    if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                    {
-                        storageContainers.Add(inventory.containerBlockSlotsActive, storageBlock.Code.Path + DateTime.Now.ToString());
-                    }
-
-                    switch (inventory.containerBlockSlotsActive)
-                    {
-                        case 0:
-                            container1 = storageBlock.Code.Path;
-                            break;
-
-                        case 1:
-                            container2 = storageBlock.Code.Path;
-                            break;
-
-                        case 2:
-                            container3 = storageBlock.Code.Path;
-                            break;
-
-                        case 3:
-                            container4 = storageBlock.Code.Path;
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                    //увеличиваем слоты стеллажа
-                    inventory.AddSlots(slotsCount);
-                    inventory.dynamicSlots += slotsCount;
-                    inventory.containerBlockSlotsActive++;
-
-                    Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
-                    MarkDirty();
-                    return true;
                 }
-                return false;
+
             }
+
 
             if (Api.Side != EnumAppSide.Client)
             {
@@ -281,10 +285,12 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         bool TryPut(ItemSlot slot, BlockSelection blockSel, Block storageContainer)
         {
-            int blockIndex = blockSel.SelectionBoxIndex + inventory.containerBlockSlotsActive;
+            int blockIndex = blockSel.SelectionBoxIndex;
             if (inventory[blockIndex].Empty)
             {
+                inventory.IsTryPut = true;
                 int num = slot.TryPutInto(Api.World, inventory[blockIndex]);
+                inventory.IsTryPut = false;
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
             }
@@ -396,39 +402,9 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             if (!storageContainers.ContainsKey(containerIndex)) return (orientationRotate, "");
 
-            var container = storageContainers[containerIndex];
-            if (string.IsNullOrEmpty(container))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "");
-            }
-
-            if (container.Contains("trunk"))
-            {
-                //двойной сундук
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
-                return (orientationRotate, "trunk");
-            }
-            else if (container.Contains("chest"))
-            {
-                //сундук
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 0;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
-                return (orientationRotate, "chest");
-            }
-            else
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-            }
+            if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+            if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+            if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
 
             return (orientationRotate, "");
 

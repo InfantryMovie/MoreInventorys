@@ -72,17 +72,7 @@ namespace MoreInventorys.src.InventoryFolder
 
         }
 
-        public InventoryDynamic(string inventoryID, int slots, ICoreAPI api, NewSlotDelegate onNewSlot = null)
-            : base(slots, inventoryID, api)
-        {
-            this.slots = GenEmptySlots(slots);
-            dynamicSlots = slots;
-            baseWeight = 4f;
-            ContainerSlots = new Dictionary<int, int[]>();
-            LockContainerSlots = new object();
-            MaxContainerBlockSlots = slots;
-
-        }
+      
 
         protected override ItemSlotDynamic NewSlot(int slotId)
         {

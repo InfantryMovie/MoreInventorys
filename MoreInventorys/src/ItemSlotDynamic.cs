@@ -83,6 +83,9 @@ namespace MoreInventorys.src
                 case 3:
                     if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
                     break;
+                case 4:
+                    if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 || this.SlotId == 3) return false;
+                    break;
                 case 6:
                     if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||
                         this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5) return false;
@@ -105,6 +108,11 @@ namespace MoreInventorys.src
                 case 3:
                     if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
                     break;
+
+                case 4:
+                    if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 || this.SlotId == 3) return false;
+                    break;
+
                 case 6:
                     if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||
                         this.SlotId == 3 || this.SlotId == 4 || this.SlotId == 5) return false;
@@ -163,7 +171,7 @@ namespace MoreInventorys.src
                         if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
                         break;
                     case 4:
-                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
+                        if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 || this.SlotId == 3) return false;
                         break;
                     case 6:
                         if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2 ||

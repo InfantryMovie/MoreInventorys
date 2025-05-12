@@ -89,7 +89,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (storageDlg == null)
                 {
                     Open();
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackverticalone-title"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackverticalone"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();

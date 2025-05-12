@@ -110,7 +110,7 @@ namespace MoreInventorys.src.GuiFolder
             }
             else
             {
-                fixedWidth = 50;
+                fixedWidth = 250;
                 cols = 1;
             }
 

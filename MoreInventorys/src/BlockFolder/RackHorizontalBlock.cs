@@ -118,8 +118,7 @@ namespace MoreInventorys.src.BlockFolder
                     world.BlockAccessor.SetBlock(0, dummy);
                 }
             }
-            //world.BlockAccessor.SetBlock(0, pos.UpCopy());
-            //world.BlockAccessor.SetBlock(0, pos.UpCopy(2));
+
             base.OnBlockRemoved(world, pos);
         }
         

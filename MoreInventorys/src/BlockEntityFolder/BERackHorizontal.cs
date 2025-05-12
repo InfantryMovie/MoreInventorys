@@ -159,7 +159,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     Open();
                     Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackhorizontal-title"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackhorizontal"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
@@ -245,135 +245,133 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
-            if (Api.Side == EnumAppSide.Client)
+            ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
+            if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
             {
-            }
-            else
-            {
-                ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
-                if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
+                //попытка поставить блок с инвентарем на стеллаж
+
+                int slotsCount = 0;
+                var storageBlock = slot.Itemstack.Block;
+                if (storageBlock.Code == null) return false;
+
+                var isContainerResult = IsValidContainer(slot);
+                var isContainer = isContainerResult.Item1;
+                var quantitySlots = isContainerResult.quantitySlots;
+
+                slotsCount = (int)quantitySlots;
+                bool isLegitDoubleChest = true;
+                if (storageBlock.BlockId == 8872)
                 {
-                    //попытка поставить блок с инвентарем на стеллаж
+                    //попытка поставить двойной сундук, проверка на правые хитбоксы,
+                    //проверяем свободен ли левый слот, если да, то ставим на левый или не ставим
 
-                    int slotsCount = 0;
-                    var storageBlock = slot.Itemstack.Block;
-                    if (storageBlock.Code == null) return false;
-
-                    var isContainerResult = IsValidContainer(slot);
-                    var isContainer = isContainerResult.Item1;
-                    var quantitySlots = isContainerResult.quantitySlots;
-
-                    slotsCount = (int)quantitySlots;
-                    bool isLegitDoubleChest = true;
-                    if (storageBlock.BlockId == 8872)
+                    switch (blockSel.SelectionBoxIndex)
                     {
-                        //попытка поставить двойной сундук, проверка на правые хитбоксы,
-                        //проверяем свободен ли левый слот, если да, то ставим на левый или не ставим
+                        case 1:
+
+                            if (!inventory[0].Empty) isLegitDoubleChest = false;
+
+                            blockSel.SelectionBoxIndex = 0;
+                            break;
+
+                        case 3:
+
+                            if (!inventory[2].Empty) isLegitDoubleChest = false;
+
+                            blockSel.SelectionBoxIndex = 2;
+                            break;
+
+                        case 5:
+
+                            if (!inventory[4].Empty) isLegitDoubleChest = false;
+
+                            blockSel.SelectionBoxIndex = 4;
+                            break;
+                        default:
+                            isLegitDoubleChest = true;
+                            break;
+                    }
+                }
+
+
+                if (isContainer)
+                {
+                    if (TryPut(slot, blockSel.SelectionBoxIndex, storageBlock, isLegitDoubleChest))
+                    {
+                        //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
+                        int lastId = inventory[inventory.Count - 1].SlotId;
+                        int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
+
+                        lock (inventory.LockContainerSlots)
+                        {
+                            inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                        }
+
+                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                        {
+                            storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                        }
+
 
                         switch (blockSel.SelectionBoxIndex)
                         {
+                            case 0:
+                                container1 = storageBlock.Code.Path;
+                                break;
+
                             case 1:
+                                container2 = storageBlock.Code.Path;
+                                break;
 
-                                if (!inventory[0].Empty) isLegitDoubleChest = false;
-
-                                blockSel.SelectionBoxIndex = 0;
+                            case 2:
+                                container3 = storageBlock.Code.Path;
                                 break;
 
                             case 3:
+                                container4 = storageBlock.Code.Path;
+                                break;
 
-                                if (!inventory[2].Empty) isLegitDoubleChest = false;
-
-                                blockSel.SelectionBoxIndex = 2;
+                            case 4:
+                                container5 = storageBlock.Code.Path;
                                 break;
 
                             case 5:
-
-                                if (!inventory[4].Empty) isLegitDoubleChest = false;
-
-                                blockSel.SelectionBoxIndex = 4;
+                                container6 = storageBlock.Code.Path;
                                 break;
+
                             default:
-                                isLegitDoubleChest = true;
                                 break;
                         }
-                    }
 
-
-                    if (isContainer)
-                    {
-                        if (TryPut(slot, blockSel.SelectionBoxIndex, storageBlock, isLegitDoubleChest))
+                        //увеличиваем слоты стеллажа
+                        inventory.AddSlots(slotsCount);
+                        inventory.dynamicSlots += slotsCount;
+                        if (storageBlock.BlockId == 8872)
                         {
-                            //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
-                            int lastId = inventory[inventory.Count - 1].SlotId;
-                            int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
-
-                            lock (inventory.LockContainerSlots)
-                            {
-                                inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
-                            }
-
-                            if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                            {
-                                storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
-                            }
-
-
-                            switch (blockSel.SelectionBoxIndex)
-                            {
-                                case 0:
-                                    container1 = storageBlock.Code.Path;
-                                    break;
-
-                                case 1:
-                                    container2 = storageBlock.Code.Path;
-                                    break;
-
-                                case 2:
-                                    container3 = storageBlock.Code.Path;
-                                    break;
-
-                                case 3:
-                                    container4 = storageBlock.Code.Path;
-                                    break;
-
-                                case 4:
-                                    container5 = storageBlock.Code.Path;
-                                    break;
-
-                                case 5:
-                                    container6 = storageBlock.Code.Path;
-                                    break;
-
-                                default:
-                                    break;
-                            }
-
-                            //увеличиваем слоты стеллажа
-                            inventory.AddSlots(slotsCount);
-                            inventory.dynamicSlots += slotsCount;
-                            if (storageBlock.BlockId == 8872)
-                            {
-                                //это двойной сундук, занимаем дополнительный слот стеллажа под него
-                                inventory.containerBlockSlotsActive++;
-                                inventory.DoubleChestIndex.Add(blockSel.SelectionBoxIndex);
-
-                                var result = AddDoubleChestIndex(blockSel.SelectionBoxIndex);
-
-
-                            }
+                            //это двойной сундук, занимаем дополнительный слот стеллажа под него
                             inventory.containerBlockSlotsActive++;
+                            inventory.DoubleChestIndex.Add(blockSel.SelectionBoxIndex);
 
-                            AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
-                            Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
-                            MarkDirty();
-                            return true;
+                            var result = AddDoubleChestIndex(blockSel.SelectionBoxIndex);
+
+
                         }
+                        inventory.containerBlockSlotsActive++;
+
+                        AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+                        Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+
+
+                        MarkDirty();
+                        return true;
                     }
-
-
                 }
+
             }
-           
+
+
+
+
 
             if (Api.Side != EnumAppSide.Client)
             {
@@ -522,6 +520,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 bool num = InitializeStorageContainers();
                 bool num2 = InitializeDoubleChestContainers();
             }
+
 
             DummyPositions = new List<BlockPos>();
             int count = tree.GetInt("dummyCount");
