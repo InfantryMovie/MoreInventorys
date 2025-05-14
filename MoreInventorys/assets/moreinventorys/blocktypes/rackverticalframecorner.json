@@ -1,8 +1,8 @@
 {
-  "code": "rackverticalone",
-  "class": "rackverticaloneblock",
-  "name": "RackVerticalOne",
-  "entityClass": "berackverticalone",
+  "code": "rackverticalframecorner",
+  "class": "rackverticalblock",
+  "name": "RackVerticalFrameCorner",
+  "entityClass": "berackvertical",
   "creativeinventory": {
     "general": [ "*-north" ],
     "moreinventorys": [ "*-north" ]
@@ -81,23 +81,23 @@
   "resistance": 1.5,
   "lightAbsorption": 1,
   "tags": [ "storage" ],
-  "shape": { "base": "moreinventorys:rackverticalone" },
+  "shape": { "base": "moreinventorys:rackverticalframecorner" },
   "behaviors": [ { "name": "HorizontalOrientable" } ],
   "shapebytype": {
     "*-north": {
-      "base": "rackverticalone",
+      "base": "rackverticalframecorner",
       "rotateY": 0
     },
     "*-east": {
-      "base": "rackverticalone",
+      "base": "rackverticalframecorner",
       "rotateY": 270
     },
     "*-south": {
-      "base": "rackverticalone",
+      "base": "rackverticalframecorner",
       "rotateY": 180
     },
     "*-west": {
-      "base": "rackverticalone",
+      "base": "rackverticalframecorner",
       "rotateY": 90
     }
   },

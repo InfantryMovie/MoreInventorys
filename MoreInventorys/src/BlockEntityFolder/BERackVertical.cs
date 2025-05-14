@@ -16,13 +16,16 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
+using Vintagestory.ServerMods;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    internal class BERackVerticalOne : BlockEntityDisplay
+    public class BERackVertical : BlockEntityDisplay
     {
+        public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
         Dictionary<int, int> containerSlotAddedSlots = new Dictionary<int, int>();
+        Dictionary<int, string> storageContainers { get; set; }
         Block block;
         InventoryDynamic inventory;
         
@@ -35,10 +38,14 @@ namespace MoreInventorys.src.BlockEntityFolder
         public const int MAX_CONTAINER_BLOC_SLOTS = 3;
         public static IPlayer fromPlayer;
 
+        string container1;
+        string container2;
+        string container3;
+
 
         public bool isOpened;
 
-        public BERackVerticalOne()
+        public BERackVertical()
         {
             inventory = new InventoryDynamic("rackverticalone-0", 3, null);
         }
@@ -48,6 +55,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             inventory.LateInitialize(InventoryClassName + "-" + Pos.X + "/" + Pos.Y + "/" + Pos.Z, api);
             inventory.SlotModified += OnSlotModified;
             block = api.World.BlockAccessor.GetBlock(Pos);
+            storageContainers = new Dictionary<int, string>();
             base.Initialize(api);
 
         }
@@ -70,7 +78,34 @@ namespace MoreInventorys.src.BlockEntityFolder
             MarkDirty(Api.Side != EnumAppSide.Server);
         }
 
-       
+        bool InitializeStorageContainers()
+        {
+            if (storageContainers.Count > 0) return false;
+
+            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        if (container1 != "") storageContainers.Add(0, container1);
+                        break;
+
+                    case 1:
+                        if (container2 != "") storageContainers.Add(1, container2);
+                        break;
+
+                    case 2:
+                        if (container3 != "") storageContainers.Add(2, container3);
+                        break;
+
+                  
+                    default:
+                        break;
+                }
+            }
+            return true;
+        }
+
         public override void OnReceivedServerPacket(int packetid, byte[] data)
         {
             if (packetid == 1101)
@@ -89,10 +124,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (storageDlg == null)
                 {
                     Open();
+                    Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
                     storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:rackverticalone"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
+                        Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelclose.ogg"), Pos.X, Pos.Y, Pos.Z);
                         capi.Network.SendBlockEntityPacket(Pos.X, Pos.Y, Pos.Z, 1001);
                         storageDlg = null;
                     };
@@ -115,16 +152,56 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
-        public (bool, int quantitySlots) IsContainer(ItemSlot slot )
+        public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
         {
             var storageBlock = slot.Itemstack.Block;
-            var defaultType = storageBlock?.Attributes?["defaultType"]?.ToString();
-            var quantitySlots = storageBlock?.Attributes?["quantitySlots"]?[defaultType]?.AsInt();
+            if(storageBlock != null)
+            {
+                //двойной сундук
+                if (storageBlock.BlockId == 8872) return (false, 0);
+            }
+
+            string cod = GetValueBeforeDash(slot.Itemstack.Block.Code.Path);
+            int? quantitySlots = 0;
+            if (!ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod) && !ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
+                return (false, 0);
+
+
+            if (ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod))
+            {
+                string type = slot.Itemstack.Attributes.GetString("type");
+                if (type != null)
+                {
+                    int? num = slot.Itemstack.ItemAttributes?["quantitySlots"]?[type]?.AsInt();
+                    if (num != null) quantitySlots = (int)num;
+                }
+
+            }
+
+            if (ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
+            {
+                quantitySlots = ModConfigFile.Current.ModedStorageContainersCode[cod];
+            }
 
             if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
 
             return (true, (int)quantitySlots);
         }
+
+        string GetValueBeforeDash(string input)
+        {
+            //получаем значение до знака "-"
+            int indexOfDash = input.IndexOf('-');
+
+            if (indexOfDash >= 0)
+            {
+                return input.Substring(0, indexOfDash);
+            }
+
+            return input;
+        }
+
+     
 
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
@@ -138,7 +215,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 int slotsCount = 0;
                 var storageBlock = slot.Itemstack.Block;
 
-                var isContainerResult = IsContainer(slot);
+                var isContainerResult = IsValidContainer(slot);
                 var isContainer = isContainerResult.Item1;
                 var quantitySlots = isContainerResult.quantitySlots;
                 if (isContainer)
@@ -157,6 +234,28 @@ namespace MoreInventorys.src.BlockEntityFolder
                             lock (inventory.LockContainerSlots)
                             {
                                 inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                            }
+
+                            if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                            {
+                                storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                            }
+
+                            switch (blockSel.SelectionBoxIndex)
+                            {
+                                case 0:
+                                    container1 = storageBlock.Code.Path;
+                                    break;
+
+                                case 1:
+                                    container2 = storageBlock.Code.Path;
+                                    break;
+
+                                case 2:
+                                    container3 = storageBlock.Code.Path;
+                                    break;
+                                default:
+                                    break;
                             }
                             //увеличиваем слоты стеллажа
                             inventory.AddSlots(slotsCount);
@@ -192,11 +291,12 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         bool TryPut(ItemSlot slot, BlockSelection blockSel, Block storageContainer)
         {
-            int blockIndex = blockSel.SelectionBoxIndex + inventory.containerBlockSlotsActive;
+            int blockIndex = blockSel.SelectionBoxIndex;
             if (inventory[blockIndex].Empty)
             {
+                inventory.IsTryPut = true;
                 int num = slot.TryPutInto(Api.World, inventory[blockIndex]);
-                MarkDirty();
+                inventory.IsTryPut = false;
 
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
@@ -247,6 +347,18 @@ namespace MoreInventorys.src.BlockEntityFolder
             tree.SetInt("dynamicSlots", inventory.dynamicSlots);
             tree.SetInt("containerBlockSlotsActive", inventory.containerBlockSlotsActive);
 
+            tree.SetString("container1", container1);
+            tree.SetString("container2", container2);
+            tree.SetString("container3", container3);
+
+            tree.SetInt("dummyCount", DummyPositions.Count);
+            for (int i = 0; i < DummyPositions.Count; i++)
+            {
+                tree.SetInt("dx" + i, DummyPositions[i].X);
+                tree.SetInt("dy" + i, DummyPositions[i].Y);
+                tree.SetInt("dz" + i, DummyPositions[i].Z);
+            }
+
         }
 
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
@@ -255,6 +367,18 @@ namespace MoreInventorys.src.BlockEntityFolder
             isOpened = tree.GetBool("isOpened");
             inventory.dynamicSlots = tree.GetInt("dynamicSlots");
             inventory.containerBlockSlotsActive = tree.GetInt("containerBlockSlotsActive");
+
+            container1 = tree.GetString("container1");
+            container2 = tree.GetString("container2");
+            container3 = tree.GetString("container3");
+
+            DummyPositions = new List<BlockPos>();
+            int count = tree.GetInt("dummyCount");
+            for (int i = 0; i < count; i++)
+            {
+                DummyPositions.Add(new BlockPos(tree.GetInt("dx" + i), tree.GetInt("dy" + i), tree.GetInt("dz" + i)));
+            }
+
             RedrawAfterReceivingTreeAttributes(worldAccessForResolve);
         }
 
@@ -263,6 +387,49 @@ namespace MoreInventorys.src.BlockEntityFolder
             base.updateMeshes();
         }
 
+        (int, string) GetOrientationRateForMartices(int containerIndex)
+        {
+            int orientationRotate = 0;
+
+            if (storageContainers.Count == 0)
+            {
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, "");
+            }
+
+            if (!storageContainers.ContainsKey(containerIndex)) return (orientationRotate, "");
+
+            var container = storageContainers[containerIndex];
+            if (string.IsNullOrEmpty(container))
+            {
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, "");
+            }
+
+            if (container.Contains("chest"))
+            {
+                //сундук
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 0;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
+                return (orientationRotate, "chest");
+            }
+            else
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+            }
+
+            return (orientationRotate, "");
+
+        }
         protected override float[][] genTransformationMatrices()
         {
             float[][] tfMatrices = new float[3][];
@@ -270,16 +437,24 @@ namespace MoreInventorys.src.BlockEntityFolder
             float x = 0;
             float z = 0;
             float y = 0;
+
+            int orientationRotate = 0;
+            string code = "";
             for (int index = 0; index < 3; index++)
             {
-                if(index == 0)
+                var orientationRotateResult = GetOrientationRateForMartices(index);
+                orientationRotate = orientationRotateResult.Item1;
+                code = orientationRotateResult.Item2;
+
+
+                if (index == 0)
                 {
                     x = 1.02f;
                     z = 0.05f;
                     y = 0f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(block.Shape.rotateY)// Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate)// Сначала перемещаем предмет в центр блока
                        .Translate(x - 1f, y, z) // Двигаем предмет на нужные координаты (x, y, z)
                        .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
                        .Scale(scale, scale, scale)
@@ -293,7 +468,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     y = 1f; 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(block.Shape.rotateY)
+                       .RotateYDeg(orientationRotate)
                        .Translate(x - 1f, y, z) 
                        .Translate(-0.5f, 0f, -0.5f) 
                        .Scale(scale, scale, scale)
@@ -306,7 +481,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     y = 2f; 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(block.Shape.rotateY)
+                       .RotateYDeg(orientationRotate)
                        .Translate(x - 1f, y, z) 
                        .Translate(-0.5f, 0f, -0.5f) 
                        .Scale(scale, scale, scale)

@@ -18,6 +18,10 @@ namespace MoreInventorys.src
         //список ванильных поддерживаемых  контейнеров
         public List<string> VanilaStorageContainersCode { get; set; } = new List<string>();
 
+        public List<string> VanilaStorageWeaponsCode { get; set; } = new List<string>();
+
+        public Dictionary<string, int> ModedStorageWeaponsCode { get; set; } = new Dictionary<string, int>();
+
         //словарь модовых поддерживаемых контейнеров ключ: code/ значение: slot.count)
         public Dictionary<string, int> ModedStorageContainersCode { get; set; } = new Dictionary<string, int>();
 
@@ -58,11 +62,13 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("dummyrh", typeof(DummyRH));
             api.RegisterBlockEntityClass("bedummyrh", typeof(BlockEntityDummy));
 
+            api.RegisterBlockClass("dummyrv", typeof(DummyRV));
+
             api.RegisterBlockClass("smallhorizontleswordstandblock", typeof(SmallHorizontleSwordStandBlock));
             api.RegisterBlockEntityClass("besmallhorizontleswordstand", typeof(BESmallHorizontleSwordStand));
 
-            api.RegisterBlockClass("rackverticaloneblock", typeof(RackVerticalOneBlock));
-            api.RegisterBlockEntityClass("berackverticalone", typeof(BERackVerticalOne));
+            api.RegisterBlockClass("rackverticalblock", typeof(RackVerticalBlock));
+            api.RegisterBlockEntityClass("berackvertical", typeof(BERackVertical));
 
             api.RegisterBlockClass("rackhorizontalblock", typeof(RackHorizontalBlock));
             api.RegisterBlockEntityClass("berackhorizontal", typeof(BERackHorizontal));

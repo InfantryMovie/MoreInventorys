@@ -18,8 +18,8 @@
   <None Remove="assets\moreinventorys\blocktypes\rackhorizontalframecorner.json" />
   <None Remove="assets\moreinventorys\blocktypes\rackhorizontalframeline.json" />
   <None Remove="assets\moreinventorys\blocktypes\rackstick.json" />
-  <None Remove="assets\moreinventorys\blocktypes\rackverticaloneframecorner.json" />
-  <None Remove="assets\moreinventorys\blocktypes\rackverticaloneframeline.json" />
+  <None Remove="assets\moreinventorys\blocktypes\rackverticalframecorner.json" />
+  <None Remove="assets\moreinventorys\blocktypes\rackverticalframeline.json" />
   <None Remove="assets\moreinventorys\blocktypes\shieldstand.json" />
   <None Remove="assets\moreinventorys\block\textures\shelf-bottom.png" />
   <None Remove="assets\moreinventorys\block\textures\shelf-top.png" />
