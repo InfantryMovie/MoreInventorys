@@ -6,11 +6,15 @@
   "block-smallverticalweaponstand-north.name": "Маленький вертикальный стенд для оружия",
 
 
-  "block-rackvertical*": "Одиночный cтеллаж",
-  
-  "block-rackhorizontal*": "Двойной Стеллаж",
+  "block-rackvertical-*": "Одиночный cтеллаж v1",
+  "block-rackverticalframecorner*": "Одиночный cтеллаж v2",
+  "block-rackverticalframeline*": "Одиночный cтеллаж v3",
 
+  "block-rackhorizontal-*": "Двойной стеллаж v1",
+  "block-rackhorizontalframecorner*": "Двойной стеллаж v2",
+  "block-rackhorizontalframeline*": "Двойной стеллаж v3",
 
+  "block-rackstick-*": "Стеллаж из палок",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

@@ -20,7 +20,7 @@
   "variantgroups": [
     {
       "code": "planks",
-      "states": [ "ebony1", "oak1", "birch1" ]
+      "states": [ "acacia1", "birch1", "kapok1", "maple1", "oak1", "pine1", "baldcypress1", "larch1", "redwood1", "ebony1", "walnut1", "purpleheart1" ]
     },
     {
       "loadFromProperties": "abstract/horizontalorientation"

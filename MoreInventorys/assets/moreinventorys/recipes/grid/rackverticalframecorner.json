@@ -16,7 +16,7 @@
   },
   "width": 3,
   "height": 3,
-  "shapeless": true,
+  "shapeless": false,
   "output": {
     "type": "block",
     "code": "rackverticalframecorner-{planks}1-north"
