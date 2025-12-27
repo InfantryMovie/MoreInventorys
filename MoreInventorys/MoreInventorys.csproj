@@ -23,6 +23,8 @@
   <None Remove="assets\moreinventorys\blocktypes\shieldstand.json" />
   <None Remove="assets\moreinventorys\block\textures\shelf-bottom.png" />
   <None Remove="assets\moreinventorys\block\textures\shelf-top.png" />
+  <None Remove="assets\moreinventorys\recipes\grid\rackverticalframecorner.json" />
+  <None Remove="assets\moreinventorys\recipes\grid\rackverticalframeline.json" />
   <Content Include="modinfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
@@ -67,6 +69,12 @@
     <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSSurvivalMod.dll</HintPath>
     <Private>False</Private>
   </Reference>
+</ItemGroup>
+
+<ItemGroup>
+  <Content Update="assets\moreinventorys\recipes\grid\rackverticalframecorner.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
 </ItemGroup>
 
 </Project>

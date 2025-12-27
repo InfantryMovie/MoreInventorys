@@ -18,15 +18,15 @@
   "blockmaterial": "Wood",
   "variantgroups": [
     {
-      "code": "planks",
-      "states": [ "ebony1", "oak1", "birch1" ]
+      "code": "ebony1",
+      "states": [ "acacia1", "birch1", "kapok1", "maple1", "oak1", "pine1", "baldcypress1", "larch1", "redwood1", "ebony1", "walnut1", "purpleheart1" ]
     },
     {
       "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
   "textures": {
-    "ebony1": { "base": "game:block/wood/planks/{planks}" }
+    "ebony1": { "base": "game:block/wood/planks/{ebony1}" }
   },
   "combustibleProps": {
     "burnTemperature": 600,

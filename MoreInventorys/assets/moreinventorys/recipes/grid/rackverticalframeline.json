@@ -1,5 +1,5 @@
 {
-  "ingredientPattern": "P_P,PNP,P_P",
+  "ingredientPattern": "P_P,P_P,PNP",
   "ingredients": {
     "P": {
       "type": "item",
@@ -10,7 +10,8 @@
     },
     "N": {
       "type": "item",
-      "code": "game:metalnailsandstrips-*"
+      "code": "game:metalnailsandstrips-*",
+      "quantity": 1
     }
   },
   "width": 3,
@@ -18,6 +19,6 @@
   "shapeless": true,
   "output": {
     "type": "block",
-    "code": "rackvertical-{planks}1-north"
+    "code": "rackverticalframeline-{planks}1-north"
   }
 }
