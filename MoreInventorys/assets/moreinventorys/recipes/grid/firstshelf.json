@@ -1,22 +1,25 @@
 {
-  "ingredientPattern": "PP_,_S_,PP_",
+  "ingredientPattern": "P_P,_N_,P_P",
   "ingredients": {
     "P": {
       "type": "item",
       "code": "game:plank-*",
-      "name": "plank",
-      "allowedVariants": [ "ebony1", "oak1", "birch1" ]
+      "name": "wood",
+      "allowedVariants": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ]
     },
-    "S": {
-      "type": "block",
-      "code": "game:shelf*"
+    "N": {
+      "type": "item",
+      "code": "game:metalnailsandstrips-*"
     }
   },
   "width": 3,
   "height": 3,
+  "recipeGroup": 1,
   "shapeless": false,
   "output": {
     "type": "block",
-    "code": "firstshelf-{plank}-north"
+    "code": "firstshelf-{wood}1-north"
   }
+  
+
 }

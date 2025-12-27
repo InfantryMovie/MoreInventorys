@@ -78,7 +78,7 @@ namespace MoreInventorys.src
 
 
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
-            api.Logger.Notification("Mod 'More Inventorys' успешно загружен!");
+            api.Logger.Notification("<-----------------Mod 'More Inventorys' успешно загружен!----------------->");
         }
 
         public override void StartClientSide(ICoreClientAPI api)

@@ -3,7 +3,9 @@
   "ingredients": {
     "P": {
       "type": "item",
-      "code": "game:plank-oak"
+      "code": "game:plank-*",
+      "name": "planks",
+      "allowedVariants": [ "ebony1", "oak1", "birch1" ]
     }
   },
   "width": 3,
@@ -11,6 +13,6 @@
   "shapeless": true,
   "output": {
     "type": "block",
-    "code": "rackverticalone"
+    "code": "rackvertical-{planks}-north"
   }
 }

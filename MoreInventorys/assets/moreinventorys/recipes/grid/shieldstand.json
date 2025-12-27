@@ -3,7 +3,7 @@
   "ingredients": {
     "P": {
       "type": "item",
-      "code": "game:plank-oak"
+      "code": "game:plank-*"
     },
     "L": {
       "type": "item",
@@ -15,6 +15,6 @@
   "shapeless": true,
   "output": {
     "type": "block",
-    "code": "shieldstand"
+    "code": "shieldstand-north"
   }
 }

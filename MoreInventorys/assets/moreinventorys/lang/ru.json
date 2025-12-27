@@ -1,38 +1,15 @@
 {
-  "block-firstshelf-ebony1": "Полка Для Еды Из Чёрного Дерева",
+  "block-firstshelf*": "Полка для еды",
 
-  "block-firstshelf-oak1": "Полка Для Еды Из Дуба",
+  "block-shieldstand*": "Стенд для щита и мечей",
 
-  "block-firstshelf-birch1": "Полка Для Еды Из Берёзы",
-
-  "block-shieldstand": "Стенд для щита и мечей",
-
-  "block-smallverticalweaponstand.name": "Маленький вертикальный стенд для оружия",
+  "block-smallverticalweaponstand-north.name": "Маленький вертикальный стенд для оружия",
 
 
-  "block-rackverticalone-ebony1": "Одиночный Стеллаж Из Чёрного Дерева",
-  "block-rackverticalone-oak1": "Одиночный Стеллаж Из Дуба",
-  "block-rackverticalone-birch1": "Одиночный Стеллаж Из Берёзы",
+  "block-rackvertical*": "Одиночный cтеллаж",
+  
+  "block-rackhorizontal*": "Двойной Стеллаж",
 
-  "block-rackverticaloneframecorner-ebony1": "Одиночный Стеллаж Из Чёрного Дерева",
-  "block-rackverticaloneframecorner-oak1": "Одиночный Стеллаж Из Дуба",
-  "block-rackverticaloneframecorner-birch1": "диночный Стеллаж Из Берёзы",
-
-  "block-rackverticaloneframeline-ebony1": "Одиночный Стеллаж Из Чёрного Дерева",
-  "block-rackverticaloneframeline-oak1": "Одиночный Стеллаж Из Дуба",
-  "block-rackverticaloneframeline-birch1": "диночный Стеллаж Из Берёзы",
-
-  "block-rackhorizontal-ebony1": "Двойной Стеллаж Из Чёрного Дерева",
-  "block-rackhorizontal-oak1": "Двойной Стеллаж Из Дуба",
-  "block-rackhorizontal-birch1": "Двойной Стеллаж Из Берёзы",
-
-  "block-rackhorizontalframecorner-ebony1": "Двойной Стеллаж Из Чёрного Дерева",
-  "block-rackhorizontalframecorner-oak1": "Двойной Стеллаж Из Дуба",
-  "block-rackhorizontalframecorner-birch1": "Двойной Стеллаж Из Берёзы",
-
-  "block-rackhorizontalframeline-ebony1": "Двойной Стеллаж Из Чёрного Дерева",
-  "block-rackhorizontalframeline-oak1": "Двойной Стеллаж Из Дуба",
-  "block-rackhorizontalframeline-birch1": "Двойной Стеллаж Из Берёзы",
 
 
   "game:tabname-moreinventorys": "More Inventorys"

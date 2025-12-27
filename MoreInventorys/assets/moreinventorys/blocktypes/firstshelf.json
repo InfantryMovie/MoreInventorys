@@ -4,6 +4,7 @@
   "class": "firstshelfblock",
   "entityClass": "beshelf",
   "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "drawtype": "json",
   "creativeinventory": {
     "general": [ "*-north" ],
     "moreinventorys": [ "*-north" ]
@@ -17,17 +18,14 @@
   "blockmaterial": "Wood",
   "variantgroups": [
     {
-      "code": "planks",
-      "states": [ "ebony1", "oak1", "birch1" ]
+      "code": "wood",
+      "states": [ "acacia1", "birch1", "kapok1", "maple1", "oak1", "pine1", "baldcypress1", "larch1", "redwood1", "ebony1", "walnut1", "purpleheart1" ]
     },
-    {
-      "loadFromProperties": "abstract/horizontalorientation"
-    }
+    { "loadFromProperties": "abstract/horizontalorientation" }
   ],
   "textures": {
-    "ebony1": { "base": "game:block/wood/planks/{planks}" }
+    "wood": { "base": "game:block/wood/planks/{wood}" }
   },
-  "drawtype": "json",
   "shape": { "base": "moreinventorys:firstshelf" },
   "shapebytype": {
     "*-north": {

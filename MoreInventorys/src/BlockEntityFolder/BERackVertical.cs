@@ -214,7 +214,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 int slotsCount = 0;
                 var storageBlock = slot.Itemstack.Block;
-
+                if(storageBlock == null) return false;
                 var isContainerResult = IsValidContainer(slot);
                 var isContainer = isContainerResult.Item1;
                 var quantitySlots = isContainerResult.quantitySlots;

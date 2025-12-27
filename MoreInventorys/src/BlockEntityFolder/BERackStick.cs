@@ -196,6 +196,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
             {
                 //попытка поставить блок с инвентарем на стеллаж
+                if (slot.Itemstack.Block == null) return false;
 
                 int slotsCount = 0;
                 var storageBlock = slot.Itemstack.Block;
