@@ -19,6 +19,6 @@
   "shapeless": false,
   "output": {
     "type": "block",
-    "code": "rackhorizontalframecorner-{planks}1-north"
+    "code": "rackhorizontalframecorner-{planks}-north"
   }
 }

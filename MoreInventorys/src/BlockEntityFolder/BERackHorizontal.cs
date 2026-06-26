@@ -191,7 +191,8 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             string cod = GetValueBeforeDash(slot.Itemstack.Block.Code.Path);
             int? quantitySlots = 0;
-            if (!ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod) && !ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
+            if (!ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod) &&
+                !ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
                 return (false, 0);
 
 
@@ -243,11 +244,43 @@ namespace MoreInventorys.src.BlockEntityFolder
             return input; 
         }
 
+        private bool IsSlotOccupied(int slotIndex)
+        {
+            // Проверяем, не занят ли слот обычным контейнером
+            if (!inventory[slotIndex].Empty) return true;
+
+            // Проверяем, не является ли слот частью двойного сундука
+            // Если слот нечётный (1, 3, 5) - проверяем, не занят ли левый слот двойным сундуком
+            if (slotIndex % 2 == 1) // 1, 3, 5
+            {
+                int leftSlot = slotIndex - 1;
+                // Если левый слот содержит двойной сундук - то текущий слот занят
+                if (inventory.DoubleChestIndex.Contains(leftSlot)) return true;
+            }
+
+            // Если слот чётный (0, 2, 4) - проверяем, не занят ли он сам двойным сундуком
+            if (slotIndex % 2 == 0) // 0, 2, 4
+            {
+                if (inventory.DoubleChestIndex.Contains(slotIndex)) return true;
+            }
+
+            return false;
+        }
+
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
             if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
             {
+
+                // Проверяем, не занят ли слот (учитывая двойные сундуки)
+                if (IsSlotOccupied(blockSel.SelectionBoxIndex))
+                {
+                    // Слот занят - открываем GUI
+                    OpenGui(byPlayer);
+                    return true;
+                }
+
                 //попытка поставить блок с инвентарем на стеллаж
 
                 int slotsCount = 0;
@@ -261,9 +294,33 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 slotsCount = (int)quantitySlots;
                 bool isLegitDoubleChest = true;
+                int targetSlotIndex = blockSel.SelectionBoxIndex;
                 if (storageBlock.BlockId == 8872)
                 {
-                    //попытка поставить двойной сундук, проверка на правые хитбоксы,
+                    // Определяем левый слот для пары
+                    int leftSlot = targetSlotIndex % 2 == 0 ? targetSlotIndex : targetSlotIndex - 1;
+
+                    // Проверяем, что левый слот в пределах допустимых
+                    if (leftSlot >= 0 && leftSlot < MAX_CONTAINER_BLOC_SLOTS - 1)
+                    {
+                        // Проверяем, свободны ли оба слота (и не заняты ли они двойными сундуками)
+                        bool leftFree = inventory[leftSlot].Empty && !inventory.DoubleChestIndex.Contains(leftSlot);
+                        bool rightFree = inventory[leftSlot + 1].Empty && !inventory.DoubleChestIndex.Contains(leftSlot);
+
+                        if (!leftFree || !rightFree)
+                        {
+                            isLegitDoubleChest = false;
+                        }
+                        else
+                        {
+                            targetSlotIndex = leftSlot; // Всегда ставим в левый слот
+                        }
+                    }
+                    else
+                    {
+                        isLegitDoubleChest = false;
+                    }
+                    /*//попытка поставить двойной сундук, проверка на правые хитбоксы,
                     //проверяем свободен ли левый слот, если да, то ставим на левый или не ставим
 
                     switch (blockSel.SelectionBoxIndex)
@@ -291,13 +348,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                         default:
                             isLegitDoubleChest = true;
                             break;
-                    }
+                    }*/
                 }
 
 
-                if (isContainer)
+                if (isContainer && isLegitDoubleChest)
                 {
-                    if (TryPut(slot, blockSel.SelectionBoxIndex, storageBlock, isLegitDoubleChest))
+                    if (TryPut(slot, targetSlotIndex, storageBlock, isLegitDoubleChest))
                     {
                         //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
                         int lastId = inventory[inventory.Count - 1].SlotId;
@@ -310,11 +367,11 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                         if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
                         {
-                            storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                            storageContainers.Add(targetSlotIndex, storageBlock.Code.Path + DateTime.Now.ToString());
                         }
 
 
-                        switch (blockSel.SelectionBoxIndex)
+                        switch (targetSlotIndex)
                         {
                             case 0:
                                 container1 = storageBlock.Code.Path;
@@ -351,9 +408,9 @@ namespace MoreInventorys.src.BlockEntityFolder
                         {
                             //это двойной сундук, занимаем дополнительный слот стеллажа под него
                             inventory.containerBlockSlotsActive++;
-                            inventory.DoubleChestIndex.Add(blockSel.SelectionBoxIndex);
+                            inventory.DoubleChestIndex.Add(targetSlotIndex);
 
-                            var result = AddDoubleChestIndex(blockSel.SelectionBoxIndex);
+                            var result = AddDoubleChestIndex(targetSlotIndex);
 
 
                         }
@@ -366,6 +423,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                         MarkDirty();
                         return true;
                     }
+                }
+                else
+                {
+                    // Контейнер нельзя поставить (не подходит или слоты кончились) - открываем GUI
+                    OpenGui(byPlayer);
+                    return true;
                 }
 
             }
@@ -415,7 +478,25 @@ namespace MoreInventorys.src.BlockEntityFolder
             return true;
         }
 
-        bool TryPut(ItemSlot slot, int blockSelIndex, Block storageContainer, bool isLegitDoubleChest)
+        private void OpenGui(IPlayer byPlayer)
+        {
+            if (Api.Side != EnumAppSide.Client)
+            {
+                byte[] data;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryWriter writer = new BinaryWriter(ms);
+                    TreeAttribute tree = new TreeAttribute();
+                    inventory.ToTreeAttributes(tree);
+                    tree.ToBytes(writer);
+                    data = ms.ToArray();
+                }
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, Pos.X, Pos.Y, Pos.Z, 1000, data);
+                byPlayer.InventoryManager.OpenInventory(inventory);
+            }
+        }
+
+        /*bool TryPut(ItemSlot slot, int blockSelIndex, Block storageContainer, bool isLegitDoubleChest)
         {
             if (!isLegitDoubleChest) return false;
             //int blockIndex = blockSel.SelectionBoxIndex + inventory.containerBlockSlotsActive;
@@ -428,9 +509,26 @@ namespace MoreInventorys.src.BlockEntityFolder
                 return num > 0;
             }
             return false;
+        }*/
+        bool TryPut(ItemSlot slot, int blockSelIndex, Block storageContainer, bool isLegitDoubleChest)
+        {
+            if (!isLegitDoubleChest) return false;
+
+            // Проверяем, не занят ли слот (учитывая двойные сундуки)
+            if (IsSlotOccupied(blockSelIndex)) return false;
+
+            if (inventory[blockSelIndex].Empty)
+            {
+                inventory.IsTryPut = true;
+                int num = slot.TryPutInto(Api.World, inventory[blockSelIndex]);
+                inventory.IsTryPut = false;
+                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+                return num > 0;
+            }
+            return false;
         }
 
-    
+
 
         public bool Open()
         {

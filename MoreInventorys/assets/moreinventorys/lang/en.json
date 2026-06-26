@@ -1,17 +1,20 @@
 {
-  "block.firstshelf*": "Первая Бородатая Полочка!",
-  "block.firstshelf.desc": "На полку можно положить все то, что и на ванильную полку.",
+  "block-firstshelf*": "Shelf for food",
 
-  "block.shieldstand*": "Стенд для щита и мечей",
-  "block.shieldstand.desc": "левый и правый слот только для ванильных мечей, центральный для щита",
+  "block-shieldstand*": "Stand Shield/Sword",
 
-  "block.smallverticalweaponstand": "Маленький вертикальный стенд для оружия",
-  "block.smallverticalweaponstand.desc": "А что по название блока не понятно что он делает ?",
+  "block-smallverticalweaponstand-north.name": "SV Weapon stand",
 
-  "block-rackvertical*": "Rack Vertical",
-  "block-rackvertical-title": "Rack",
-  "block-rackvertical-obony1": "Rack Vertical",
-  "block-rackvertical-obony1-title": "Rack",
+
+  "block-rackvertical-*": "Single rack v1",
+  "block-rackverticalframecorner*": "Single rack v2",
+  "block-rackverticalframeline*": "Single rack v3",
+
+  "block-rackhorizontal-*": "Double rack v1",
+  "block-rackhorizontalframecorner*": "Double rack v2",
+  "block-rackhorizontalframeline*": "Double rack v3",
+
+  "block-rackstick-*": "Stick rack",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

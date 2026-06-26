@@ -19,6 +19,6 @@
   "shapeless": false,
   "output": {
     "type": "block",
-    "code": "rackverticalframeline-{planks}1-north"
+    "code": "rackverticalframeline-{planks}-north"
   }
 }

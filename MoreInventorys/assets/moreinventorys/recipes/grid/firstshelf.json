@@ -18,7 +18,7 @@
   "shapeless": false,
   "output": {
     "type": "block",
-    "code": "firstshelf-{wood}1-north"
+    "code": "firstshelf-{wood}-north"
   }
   
 

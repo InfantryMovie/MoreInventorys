@@ -19,12 +19,12 @@
   "variantgroups": [
     {
       "code": "wood",
-      "states": [ "acacia1", "birch1", "kapok1", "maple1", "oak1", "pine1", "baldcypress1", "larch1", "redwood1", "ebony1", "walnut1", "purpleheart1" ]
+      "states": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ]
     },
     { "loadFromProperties": "abstract/horizontalorientation" }
   ],
   "textures": {
-    "wood": { "base": "game:block/wood/planks/{wood}" }
+    "wood": { "base": "game:block/wood/planks/{wood}1" }
   },
   "shape": { "base": "moreinventorys:firstshelf" },
   "shapebytype": {

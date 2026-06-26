@@ -12,16 +12,47 @@
   "sideopaque": {
     "all": false
   },
-  "blockmaterial": "Wood",
+  "blockmaterial": "Metal",
   "combustibleProps": {
     "burnTemperature": 600,
     "burnDuration": 35
   },
   "variantgroups": [
     {
+      "code": "ingots",
+      "states": [
+        "bismuth",
+        "bismuthbronze",
+        "blackbronze",
+        "brass",
+        "chromium",
+        "copper",
+        "electrum",
+        "gold",
+        "iron",
+        "lead",
+        "meteoriciron",
+        "molybdochalkos",
+        "nickel",
+        "platinum",
+        "silver",
+        "stainlesssteel",
+        "steel",
+        "tin",
+        "tinbronze",
+        "titanium",
+        "uranium",
+        "zinc"
+      ]
+
+    },
+    {
       "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
+  "textures": {
+    "iron": { "base": "game:block/metal/plate/{ingots}" }
+  },
   "collisionselectionboxes": [
     {
       "x1": 0.07500, // Начальный отступ от левой границы
@@ -136,10 +167,10 @@
     }
   },
   "sounds": {
-    "place": "game:block/planks",
-    "hit": "game:block/planks",
-    "break": "game:block/planks",
-    "walk": "game:walk/wood"
+    "place": "game:block/Metal",
+    "hit": "game:block/Metal",
+    "break": "game:block/Metal",
+    "walk": "game:walk/Metal"
   },
   "placementRotationFix": true
 }
