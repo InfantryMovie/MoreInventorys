@@ -94,7 +94,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             if (Api.World.Side == EnumAppSide.Client)
             {
-                UpdateShape();
                 return;
             }
 
@@ -212,6 +211,10 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (isContainer)
                 {
+                    if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                    {
+                        storageContainers.Add(inventory.containerBlockSlotsActive, storageBlock.Code.Path + DateTime.Now.ToString());
+                    }
                     if (TryPut(slot, blockSel, storageBlock))
                     {
                         //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
@@ -223,10 +226,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                             inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
                         }
 
-                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                        {
-                            storageContainers.Add(inventory.containerBlockSlotsActive, storageBlock.Code.Path + DateTime.Now.ToString());
-                        }
+                        
 
                         switch (blockSel.SelectionBoxIndex)
                         {
@@ -389,109 +389,61 @@ namespace MoreInventorys.src.BlockEntityFolder
             base.updateMeshes();
         }
 
-        (int, string) GetOrientationRateForMartices(int containerIndex)
+        int GetOrientationRateForMartices(int containerIndex)
         {
             int orientationRotate = 0;
 
-            if (storageContainers.Count == 0)
+            if (storageContainers.Count == 0 || !storageContainers.ContainsKey(containerIndex))
             {
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "");
+                return orientationRotate;
             }
 
-            if (!storageContainers.ContainsKey(containerIndex)) return (orientationRotate, "");
-
+            // Для корзин - просто поворот, без спец. кодов
             if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
             if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
             if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
 
-            return (orientationRotate, "");
-
+            return orientationRotate; // Всегда возвращаем пустую строку
         }
+
+
 
         protected override float[][] genTransformationMatrices()
         {
             float[][] tfMatrices = new float[4][];
             float scale = 0.9f;
-            float x = 0;
-            float z = 0;
-            float y = 0;
 
-            int orientationRotate = 0;
-            string code = "";
             for (int index = 0; index < 4; index++)
             {
-                orientationRotate = GetOrientationRateForMartices(index).Item1;
-                code = GetOrientationRateForMartices(index).Item2;
+                int orientationRotate = GetOrientationRateForMartices(index);
 
-                if (index == 0)
-                {
+                float x, z, y;
 
-                    x = 1.02f;
-                    z = 0.05f;
-                    y = 0f;
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)// Сначала перемещаем предмет в центр блока
-                       .Translate(x - 1f, y, z) // Двигаем предмет на нужные координаты (x, y, z)
-                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
-                       .Scale(scale, scale, scale)
-                       .Values;
-
-                }
-                if (index == 1)
-                {
-                    x = 2.04f;
-                    z = 0.05f;
-                    y = 0f;
-                    if (code == "chest")
-                    {
-                        z += 1;
-                        x = 1;
-                    }
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
-                }
-                if (index == 2)
+                // Определяем позицию в зависимости от слота
+                if (index == 0 || index == 2) // Левая колонка
                 {
                     x = 1.02f;
                     z = 0.05f;
-                    y = 1f;
-
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
                 }
-
-                if (index == 3)
+                else // Правая колонка (1, 3)
                 {
-                    x = 2.04f;
+                    x = 2.02f; // 1.02 + 1.0 = 2.02 (расстояние между слотами = 1 блок)
                     z = 0.05f;
-                    y = 1f;
-                    if (code == "chest")
-                    {
-                        z += 1;
-                        x = 1;
-                    }
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
                 }
+
+                // Высота: нижний ряд (0,1) или верхний (2,3)
+                y = (index < 2) ? 0f : 1f;
+
+                tfMatrices[index] = new Matrixf()
+                   .Translate(0.5f, 0f, 0.5f)
+                   .RotateYDeg(orientationRotate)
+                   .Translate(x - 1f, y, z)
+                   .Translate(-0.5f, 0f, -0.5f)
+                   .Scale(scale, scale, scale)
+                   .Values;
             }
             return tfMatrices;
         }

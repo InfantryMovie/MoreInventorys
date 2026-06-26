@@ -123,11 +123,11 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         private void OnSlotModified(int slotid)
         {
-
-
+            
+         
             if (Api.World.Side == EnumAppSide.Client)
             {
-                UpdateShape();
+                //UpdateShape();
                 return;
             }
 
@@ -136,6 +136,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         public void UpdateShape()
         {
+
             MarkDirty(Api.Side != EnumAppSide.Server);
         }
 
@@ -354,6 +355,11 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (isContainer && isLegitDoubleChest)
                 {
+                    if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                    {
+                        storageContainers.Add(targetSlotIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                    }
+
                     if (TryPut(slot, targetSlotIndex, storageBlock, isLegitDoubleChest))
                     {
                         //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
@@ -365,10 +371,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                             inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
                         }
 
-                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                        {
-                            storageContainers.Add(targetSlotIndex, storageBlock.Code.Path + DateTime.Now.ToString());
-                        }
+                        
 
 
                         switch (targetSlotIndex)
@@ -496,20 +499,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
-        /*bool TryPut(ItemSlot slot, int blockSelIndex, Block storageContainer, bool isLegitDoubleChest)
-        {
-            if (!isLegitDoubleChest) return false;
-            //int blockIndex = blockSel.SelectionBoxIndex + inventory.containerBlockSlotsActive;
-            if (inventory[blockSelIndex].Empty)
-            {
-                inventory.IsTryPut = true;
-                int num = slot.TryPutInto(Api.World, inventory[blockSelIndex]);
-                inventory.IsTryPut = false;
-                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-                return num > 0;
-            }
-            return false;
-        }*/
         bool TryPut(ItemSlot slot, int blockSelIndex, Block storageContainer, bool isLegitDoubleChest)
         {
             if (!isLegitDoubleChest) return false;
@@ -637,7 +626,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             base.updateMeshes();
         }
-
+        
         (int,string) GetOrientationRateForMartices(int containerIndex)
         {
             int orientationRotate = 0;
@@ -690,10 +679,22 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         }
 
+        private void LogToChat(string message)
+        {
+            if (Api is ICoreClientAPI capi && capi.World.Player != null)
+            {
+                capi.ShowChatMessage(message);
+            }
+        }
+
+        
+
         protected override float[][] genTransformationMatrices()
         {
+            
             float[][] tfMatrices = new float[MAX_CONTAINER_BLOC_SLOTS][];
             float scale = 0.9f;
+            float baseRotateY = block.Shape.rotateY;
             float x = 0;
             float z = 0;
             float y = 0;
@@ -702,6 +703,9 @@ namespace MoreInventorys.src.BlockEntityFolder
             string code = "";
             for (int index = 0; index < MAX_CONTAINER_BLOC_SLOTS; index++)
             {
+                int extraRotate = 0;
+
+
                 var orientationRotateResult = GetOrientationRateForMartices(index);
                 orientationRotate = orientationRotateResult.Item1;
                 code = orientationRotateResult.Item2;
@@ -811,7 +815,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             return tfMatrices;
         }
 
-       
+
 
     }
 }

@@ -66,7 +66,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             if (Api.World.Side == EnumAppSide.Client)
             {
-                UpdateShape();
                 return;
             }
             
