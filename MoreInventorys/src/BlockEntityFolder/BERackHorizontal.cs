@@ -213,8 +213,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 quantitySlots = ModConfigFile.Current.ModedStorageContainersCode[cod];
             }
 
-            /* ПОКА НЕ ЗНАЮ КАК РЕНДЕРИТЬ НУЖНЫЕ ТЕКСТУРЫ, ЯЩИКИ НЕЛЬЗЯ! У НИХ ЗНАК ? ВМЕСТО ТЕКСТУР
-             * if(cod == "crate")
+            // ПОКА НЕ ЗНАЮ КАК РЕНДЕРИТЬ НУЖНЫЕ ТЕКСТУРЫ, ЯЩИКИ НЕЛЬЗЯ! У НИХ ЗНАК ? ВМЕСТО ТЕКСТУР
+            /*if(cod == "crate")
             {
                 //BlockCrate
                 //CrateProperties
@@ -321,35 +321,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                     {
                         isLegitDoubleChest = false;
                     }
-                    /*//попытка поставить двойной сундук, проверка на правые хитбоксы,
-                    //проверяем свободен ли левый слот, если да, то ставим на левый или не ставим
-
-                    switch (blockSel.SelectionBoxIndex)
-                    {
-                        case 1:
-
-                            if (!inventory[0].Empty) isLegitDoubleChest = false;
-
-                            blockSel.SelectionBoxIndex = 0;
-                            break;
-
-                        case 3:
-
-                            if (!inventory[2].Empty) isLegitDoubleChest = false;
-
-                            blockSel.SelectionBoxIndex = 2;
-                            break;
-
-                        case 5:
-
-                            if (!inventory[4].Empty) isLegitDoubleChest = false;
-
-                            blockSel.SelectionBoxIndex = 4;
-                            break;
-                        default:
-                            isLegitDoubleChest = true;
-                            break;
-                    }*/
                 }
 
 
@@ -357,8 +328,17 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
                     {
-                        storageContainers.Add(targetSlotIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                        string containerKey = storageBlock.Code.Path;
+                        string type = slot.Itemstack.Attributes.GetString("type");
+                        if (!string.IsNullOrEmpty(type))
+                        {
+                            containerKey += "-" + type; // Например: "crate-open"
+                        }
+
+                        storageContainers.Add(targetSlotIndex, containerKey + DateTime.Now.ToString());
                     }
+
+                   
 
                     if (TryPut(slot, targetSlotIndex, storageBlock, isLegitDoubleChest))
                     {
@@ -457,6 +437,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             MarkDirty();
             return true;
         }
+
+        
 
         bool AddDoubleChestIndex (int index)
         {

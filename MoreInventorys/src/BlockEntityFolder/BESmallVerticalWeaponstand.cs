@@ -286,7 +286,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 return (orientationRotate, "");
             }
 
-            if (weapon.Contains("axe") && !weapon.Contains("pickaxe"))
+            if (weapon.Contains("axe") && !weapon.Contains("pickaxe") && !weapon.Contains("prospectingpick"))
             {
 
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
@@ -301,6 +301,14 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
                 return (orientationRotate, "pickaxe");
+            }
+            if (weapon.Contains("prospectingpick"))
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, "prospectingpick");
             }
             if (weapon.Contains("shears"))
             {
@@ -735,7 +743,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                    .RotateXDeg(140f)
                    .Values;
                 }
-                else if (code.Contains("axe") && !code.Contains("pickaxe"))
+                else if (code.Contains("axe") && !code.Contains("pickaxe") && !code.Contains("prospectingpick"))
                 {
                     if(code.Contains("axe-battle"))
                     {
@@ -851,6 +859,21 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 }
                 else if (code.Contains("pickaxe"))
+                {
+                    y -= 0.62f;
+                    z -= 0.09f;
+
+                    tfMatrices[index] = new Matrixf()
+                      .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                      .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                      .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                      .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                      .Scale(1f, 1f, 1f)
+                      .RotateZDeg(90f) // поднимает  вертикально
+                      .RotateYDeg(3f) // наклон 
+                      .Values;
+                }
+                else if (code.Contains("prospectingpick"))
                 {
                     y -= 0.62f;
                     z -= 0.09f;

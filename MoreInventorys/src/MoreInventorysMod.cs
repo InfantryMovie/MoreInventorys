@@ -16,9 +16,45 @@ namespace MoreInventorys.src
         public static ModConfigFile Current { get; set; }
 
         //список ванильных поддерживаемых  контейнеров
-        public List<string> VanilaStorageContainersCode { get; set; } = new List<string>();
+        public List<string> VanilaStorageContainersCode { get; set; } = new List<string>
+        {
+            "chest",
+            "trunk",
+            "labeledchest",
+            "storagevessel",
+            "stationarybasket"
+        };
 
-        public List<string> VanilaStorageWeaponsCode { get; set; } = new List<string>();
+        public List<string> VanilaStorageWeaponsCode { get; set; } = new List<string>
+        {
+            "blade",
+            "axe",
+            "pickaxe",
+            "bow",
+            "bugnet",
+            "bullets",
+            "chisel",
+            "cleaver",
+            "club",
+            "firestarter",
+            "hammer",
+            "hoe",
+            "inkandquill",
+            "knife",
+            "oar",
+            "padlock",
+            "plumbandsquare",
+            "prospectingpick",
+            "saw",
+            "scythe",
+            "shears",
+            "shovel",
+            "sling",
+            "solderingiron",
+            "spear",
+            "tongs",
+            "wrench"
+        };
 
         public Dictionary<string, int> ModedStorageWeaponsCode { get; set; } = new Dictionary<string, int>();
 
@@ -39,7 +75,7 @@ namespace MoreInventorys.src
         public override void StartPre(ICoreAPI api)
         {
             ModConfigFile.Current = api.LoadOrCreateConfig<ModConfigFile>("MoreInventorysConfig.json");
-           
+
 
         }
 
@@ -85,7 +121,7 @@ namespace MoreInventorys.src
         {
             clientApi = api;
             clientChannel = api.Network.GetChannel("moreinventorys");
-            
+
         }
 
         public override void StartServerSide(ICoreServerAPI api)
@@ -93,7 +129,7 @@ namespace MoreInventorys.src
             base.StartServerSide(api);
             serverApi = api;
             serverChannel = serverApi.Network.GetChannel("moreinventorys");
-            
+
         }
 
         public override void Dispose()
