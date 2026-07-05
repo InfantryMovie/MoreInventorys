@@ -20,6 +20,7 @@ namespace MoreInventorys.src
         public int SlotId { get; }
         int MaxContainerBlockSlots;
         InventoryDynamic _inv;
+
         public ItemSlotDynamic(InventoryBase inventory, int slotId) : base(inventory)
         {
             this.SlotId = slotId;

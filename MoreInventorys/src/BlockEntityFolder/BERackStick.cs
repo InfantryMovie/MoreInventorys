@@ -255,8 +255,9 @@ namespace MoreInventorys.src.BlockEntityFolder
                         inventory.dynamicSlots += slotsCount;
                         inventory.containerBlockSlotsActive++;
 
-                        AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
-                        Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                        //AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+                        //Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                        MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
                         MarkDirty();
                         return true;
                     }
@@ -277,7 +278,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     tree.ToBytes(writer);
                     data = ms.ToArray();
                 }
-                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, Pos.X, Pos.Y, Pos.Z, 1000, data);
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
             MarkDirty();
@@ -324,7 +325,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 }
                 isOpened = !isOpened;
-                obj.Network.BroadcastBlockEntityPacket(Pos.X, Pos.Y, Pos.Z, 1101, BitConverter.GetBytes(isOpened));
+                obj.Network.BroadcastBlockEntityPacket(new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1101, BitConverter.GetBytes(isOpened));
             }
             if (packetid == 1001 && fromPlayer.InventoryManager != null)
             {

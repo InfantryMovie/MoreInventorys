@@ -98,13 +98,50 @@ namespace MoreInventorys.src.InventoryFolder
 
         public override void FromTreeAttributes(ITreeAttribute treeAttribute)
         {
-
+            // Загружаем слоты
             slots = SlotsFromTreeAttributes(treeAttribute);
+
+            // Загружаем ContainerSlots
+            ContainerSlots = new Dictionary<int, int[]>();
+            var containerSlotsTree = treeAttribute["containerSlots"] as TreeAttribute;
+            if (containerSlotsTree != null)
+            {
+                foreach (var key in containerSlotsTree.Keys)
+                {
+                    if (int.TryParse(key, out int slotId))
+                    {
+                        var arrayAttr = containerSlotsTree[key] as IntArrayAttribute;
+                        if (arrayAttr != null)
+                        {
+                            ContainerSlots[slotId] = arrayAttr.value;
+                        }
+                    }
+                }
+            }
+
+            // Загружаем DoubleChestIndex
+            DoubleChestIndex = new List<int>();
+            var doubleChestTree = treeAttribute["doubleChestIndex"] as IntArrayAttribute;
+            if (doubleChestTree != null)
+            {
+                DoubleChestIndex.AddRange(doubleChestTree.value);
+            }
         }
 
         public override void ToTreeAttributes(ITreeAttribute tree)
         {
             SlotsToTreeAttributes(slots, tree);
+            // Сохраняем ContainerSlots
+            var containerSlotsTree = new TreeAttribute();
+            foreach (var kvp in ContainerSlots)
+            {
+                var slotArray = new IntArrayAttribute(kvp.Value);
+                containerSlotsTree[kvp.Key.ToString()] = slotArray;
+            }
+            tree["containerSlots"] = containerSlotsTree;
+
+            // Сохраняем DoubleChestIndex
+            tree["doubleChestIndex"] = new IntArrayAttribute(DoubleChestIndex?.ToArray() ?? new int[0]);
 
         }
     }

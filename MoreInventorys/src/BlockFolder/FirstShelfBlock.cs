@@ -19,10 +19,15 @@ namespace MoreInventorys.src.BlockFolder
             // Todo: Add interaction help
 
         }
-        public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
+
+        public override bool DoPartialSelection(IWorldAccessor world, BlockPos pos)
         {
             return true;
         }
+        /*public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
+        {
+            return true;
+        }*/
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
             

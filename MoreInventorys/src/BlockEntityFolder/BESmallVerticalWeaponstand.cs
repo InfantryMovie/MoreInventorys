@@ -11,7 +11,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.GameContent;
-using VintagestoryAPI.Math;
+using Vintagestory.API.MathTools;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
@@ -106,7 +106,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             var storageWeapon = slot.Itemstack.Item;
 
-            AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+            //AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
             if (TryPut(slot, blockSel))
             {
                 if (storageWeapon.Code.Path != "" && storageWeapons.Count != MAX_WEAPON_SLOTS)
@@ -149,7 +149,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
 
 
-                Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                //Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
                 MarkDirty();
                 return true;
             }
@@ -211,8 +212,9 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ItemStack stack = inv[blockSel.SelectionBoxIndex].TakeOut(1);
                 if (byPlayer.InventoryManager.TryGiveItemstack(stack))
                 {
-                    AssetLocation sound = stack.Block?.Sounds?.Place;
-                    Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                    //AssetLocation sound = stack.Block?.Sounds?.Place;
+                    //Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                    MoreInventorysMod.PlaySoundBlockAt(Api, stack, byPlayer);
                 }
                 if (stack.StackSize > 0)
                 {

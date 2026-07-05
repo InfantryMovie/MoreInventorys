@@ -17,7 +17,9 @@ namespace MoreInventorys.src.GuiFolder
         //общее кол-во слотов с учетом контейнеров и предметов 
         int DynamicSlots;
         int MaxContainerBlockSlots;
-        
+        private int _selectedContainerSlot = -1; // -1 = ничего не выбрано
+        private List<int> _highlightedSlots = new List<int>();
+
         BlockPos Pos { get; }
         public GuiDialogDynamic(int slots, string dialogTitle, InventoryBase inventory, BlockPos blockEntityPos, ICoreClientAPI capi)
             : base(dialogTitle, inventory, blockEntityPos, capi)
@@ -47,158 +49,292 @@ namespace MoreInventorys.src.GuiFolder
 
         private void SetupDialog()
         {
-            //на случай если у нас есть двойные сундуки, чтобы не рисовать пустые слоты которые дополнительно занимает двойной сундук, убираем эти слоты!
-            List<int> DoubleChestIndex = new List<int>();
-            if (Inventory is InventoryDynamic inv)
-            {
-                if(inv.containerBlockSlotsActive > 0 && inv.Count > MaxContainerBlockSlots)
-                {
-                   if(inv.DoubleChestIndex.Count > 0)
-                   {
-                        DoubleChestIndex = inv.DoubleChestIndex;
-                   }
-                }
-            }
-            int cols = 0;
-            int[] itemSlots = new int[0];
-
-            int[] containerSlots = new int[0];
-            double fixedHeigh = 100;
-
-            if(MaxContainerBlockSlots == 3)
-            {
-                containerSlots = new int[3] {0,1,2};
-
-            }
-            if (MaxContainerBlockSlots == 4)
-            {
-                containerSlots = new int[4] { 0, 1, 2, 3};
-            }
-
-            if (MaxContainerBlockSlots == 6)
-            {
-                if(DoubleChestIndex.Count == 0)
-                {
-                    containerSlots = new int[6] { 0, 1, 2, 3, 4, 5 };
-                }
-                else
-                {
-                    int containerSlotsCount = 6;
-                    containerSlotsCount -= DoubleChestIndex.Count;
-                    List<int> containerSlotsList = new List<int>() { 0, 1, 2, 3, 4, 5 };
-
-                    foreach (var item in DoubleChestIndex)
+             //на случай если у нас есть двойные сундуки, чтобы не рисовать пустые слоты которые дополнительно занимает двойной сундук, убираем эти слоты!
+             List<int> DoubleChestIndex = new List<int>();
+             if (Inventory is InventoryDynamic inv)
+             {
+                 if(inv.containerBlockSlotsActive > 0 && inv.Count > MaxContainerBlockSlots)
+                 {
+                    if(inv.DoubleChestIndex.Count > 0)
                     {
-                        containerSlotsList.Remove(item+1);
+                         DoubleChestIndex = inv.DoubleChestIndex;
                     }
-                    containerSlots = containerSlotsList.ToArray();
-                }
+                 }
+             }
+             int cols = 0;
+             int[] itemSlots = new int[0];
 
-                
+             int[] containerSlots = new int[0];
+             double fixedHeigh = 100;
 
-               
-            }
+             if(MaxContainerBlockSlots == 3)
+             {
+                 containerSlots = new int[3] {0,1,2};
 
-            double fixedWidth = 0;
+             }
+             if (MaxContainerBlockSlots == 4)
+             {
+                 containerSlots = new int[4] { 0, 1, 2, 3};
+             }
 
-            if (DynamicSlots > MaxContainerBlockSlots)
+             if (MaxContainerBlockSlots == 6)
+             {
+                 if(DoubleChestIndex.Count == 0)
+                 {
+                     containerSlots = new int[6] { 0, 1, 2, 3, 4, 5 };
+                 }
+                 else
+                 {
+                     int containerSlotsCount = 6;
+                     containerSlotsCount -= DoubleChestIndex.Count;
+                     List<int> containerSlotsList = new List<int>() { 0, 1, 2, 3, 4, 5 };
+
+                     foreach (var item in DoubleChestIndex)
+                     {
+                         containerSlotsList.Remove(item+1);
+                     }
+                     containerSlots = containerSlotsList.ToArray();
+                 }
+
+
+
+
+             }
+
+             double fixedWidth = 0;
+
+             if (DynamicSlots > MaxContainerBlockSlots)
+             {
+                 //создаем слоты для предметов учитывая что "MaxContainerBlockSlots" слоты для контейнеров
+                 itemSlots = Enumerable.Range(MaxContainerBlockSlots, DynamicSlots - MaxContainerBlockSlots).ToArray();
+                 cols = 9;
+                 fixedWidth = 200;
+             }
+             else
+             {
+                 fixedWidth = 250;
+                 cols = 1;
+             }
+
+
+             int rows = (int)Math.Ceiling((double)DynamicSlots / cols);
+
+             if (rows == 0 && DynamicSlots > 0) rows = 1;
+
+
+             // Получаем текущий слот под мышью
+             ItemSlot hoveredSlot = capi.World.Player.InventoryManager.CurrentHoveredSlot;
+             if (hoveredSlot != null && hoveredSlot.Inventory == base.Inventory)
+             {
+                 capi.Input.TriggerOnMouseLeaveSlot(hoveredSlot);
+             }
+             else
+             {
+                 hoveredSlot = null;
+             }
+
+             double offsetX = 75; // Сдвиг основной сетки с предметами вправо от сетки с контейнерами
+
+
+             // Основной контейнер
+             ElementBounds mainBounds = ElementBounds.Fixed(0.0, 0.0, fixedWidth, fixedHeigh);
+
+             // Левая часть — вертикальные слоты (для контейнеров)
+             ElementBounds containerSlotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.LeftFixed, 0.0, 20.0, 1, MaxContainerBlockSlots);
+
+             ElementBounds slotsBounds = null;
+             if (DynamicSlots > MaxContainerBlockSlots)
+             {
+                 // отрисовываем правую часть только если слотов больше чем контейнеров
+                 slotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, offsetX, 20.0, cols, rows);
+
+             }
+
+             // Подложка
+             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
+             bgBounds.BothSizing = ElementSizing.FitToChildren;
+             bgBounds.WithChildren(mainBounds);
+
+
+             // Общие границы диалога
+             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog
+                 .WithAlignment(EnumDialogArea.RightMiddle)
+                 .WithFixedAlignmentOffset(0.0 - GuiStyle.DialogToScreenPadding, 0.0);
+
+             // Очищаем старые GUI-элементы
+             ClearComposers();
+
+             // Создаём GUI
+             if (slotsBounds != null)
+             {
+
+                 base.SingleComposer = capi.Gui
+                     .CreateCompo("berackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
+                     .AddShadedDialogBG(bgBounds)
+                     .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
+                     .BeginChildElements(bgBounds)
+                     // Добавляем вертикальные слоты слева (для контейнеров)
+                     .AddItemSlotGrid(Inventory, SendInvPacket, 1, containerSlots, containerSlotsBounds, "horizontalcontainerslots")
+                     // Добавляем основную сетку
+                     .AddItemSlotGrid(Inventory, SendInvPacket, cols, itemSlots, slotsBounds, "itemslots")
+
+                     .EndChildElements()
+                     .Compose();
+
+             }
+             else
+             {
+                 base.SingleComposer = capi.Gui
+                 .CreateCompo("berackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
+                 .AddShadedDialogBG(bgBounds)
+                 .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
+                 .BeginChildElements(bgBounds)
+                 // Добавляем вертикальные слоты слева (для контейнеров)
+                 .AddItemSlotGrid(Inventory, SendInvPacket, 1, containerSlots, containerSlotsBounds, "horizontalcontainerslots")
+                 .EndChildElements()
+                 .Compose();
+             }
+
+            //ПРИМЕНЯЕМ СОХРАНЁННОЕ ВЫДЕЛЕНИЕ
+            if (_selectedContainerSlot >= 0)
             {
-                //создаем слоты для предметов учитывая что "MaxContainerBlockSlots" слоты для контейнеров
-                itemSlots = Enumerable.Range(MaxContainerBlockSlots, DynamicSlots - MaxContainerBlockSlots).ToArray();
-                cols = 9;
-                fixedWidth = 200;
-            }
-            else
-            {
-                fixedWidth = 250;
-                cols = 1;
-            }
-
-
-            int rows = (int)Math.Ceiling((double)DynamicSlots / cols);
-
-            if (rows == 0 && DynamicSlots > 0) rows = 1;
-
-
-            // Получаем текущий слот под мышью
-            ItemSlot hoveredSlot = capi.World.Player.InventoryManager.CurrentHoveredSlot;
-            if (hoveredSlot != null && hoveredSlot.Inventory == base.Inventory)
-            {
-                capi.Input.TriggerOnMouseLeaveSlot(hoveredSlot);
-            }
-            else
-            {
-                hoveredSlot = null;
-            }
-
-            double offsetX = 75; // Сдвиг основной сетки с предметами вправо от сетки с контейнерами
-
-
-            // Основной контейнер
-            ElementBounds mainBounds = ElementBounds.Fixed(0.0, 0.0, fixedWidth, fixedHeigh);
-
-            // Левая часть — вертикальные слоты (для контейнеров)
-            ElementBounds containerSlotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.LeftFixed, 0.0, 20.0, 1, MaxContainerBlockSlots);
-
-            ElementBounds slotsBounds = null;
-            if (DynamicSlots > MaxContainerBlockSlots)
-            {
-                // отрисовываем правую часть только если слотов больше чем контейнеров
-                slotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, offsetX, 20.0, cols, rows);
-
-            }
-
-            // Подложка
-            ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
-            bgBounds.BothSizing = ElementSizing.FitToChildren;
-            bgBounds.WithChildren(mainBounds);
-
-
-            // Общие границы диалога
-            ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog
-                .WithAlignment(EnumDialogArea.RightMiddle)
-                .WithFixedAlignmentOffset(0.0 - GuiStyle.DialogToScreenPadding, 0.0);
-
-            // Очищаем старые GUI-элементы
-            ClearComposers();
-
-            // Создаём GUI
-            if (slotsBounds != null)
-            {
-
-                base.SingleComposer = capi.Gui
-                    .CreateCompo("berackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
-                    .AddShadedDialogBG(bgBounds)
-                    .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
-                    .BeginChildElements(bgBounds)
-                    // Добавляем вертикальные слоты слева (для контейнеров)
-                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, containerSlots, containerSlotsBounds, "horizontalcontainerslots")
-                    // Добавляем основную сетку
-                    .AddItemSlotGrid(Inventory, SendInvPacket, cols, itemSlots, slotsBounds, "itemslots")
-
-                    .EndChildElements()
-                    .Compose();
-
-            }
-            else
-            {
-                base.SingleComposer = capi.Gui
-                .CreateCompo("berackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
-                .AddShadedDialogBG(bgBounds)
-                .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
-                .BeginChildElements(bgBounds)
-                // Добавляем вертикальные слоты слева (для контейнеров)
-                .AddItemSlotGrid(Inventory, SendInvPacket, 1, containerSlots, containerSlotsBounds, "horizontalcontainerslots")
-                .EndChildElements()
-                .Compose();
+                ApplyHighlight(_selectedContainerSlot);
             }
 
             // Обновляем позицию курсора, если слот был наведен
             if (hoveredSlot != null)
+             {
+                 base.SingleComposer.OnMouseMove(new MouseEvent(capi.Input.MouseX, capi.Input.MouseY));
+             }
+         }
+
+        //  ОБРАБОТЧИК КЛИКА МЫШИ
+        public override void OnMouseDown(MouseEvent args)
+        {
+            base.OnMouseDown(args);
+
+            if (args.Button != EnumMouseButton.Left) return;
+
+            double mouseX = args.X;
+            double mouseY = args.Y;
+
+            var containerGrid = base.SingleComposer?.GetElement("horizontalcontainerslots") as GuiElementItemSlotGrid;
+            if (containerGrid == null) return;
+
+            var gridBounds = containerGrid.Bounds;
+            if (!gridBounds.PointInside(mouseX, mouseY)) return;
+
+            // Получаем список видимых слотов
+            List<int> visibleSlots = new List<int>();
+            for (int i = 0; i < MaxContainerBlockSlots; i++)
             {
-                base.SingleComposer.OnMouseMove(new MouseEvent(capi.Input.MouseX, capi.Input.MouseY));
+                if (i % 2 == 1 && Inventory is InventoryDynamic inv && inv.DoubleChestIndex.Contains(i - 1))
+                    continue;
+                visibleSlots.Add(i);
+            }
+
+            if (visibleSlots.Count == 0) return;
+
+            double slotHeight = gridBounds.InnerHeight / visibleSlots.Count;
+            double relativeY = mouseY - gridBounds.absY;
+            int visibleIndex = (int)(relativeY / slotHeight);
+
+            if (visibleIndex >= 0 && visibleIndex < visibleSlots.Count)
+            {
+                // Проверяем, есть ли контейнер в этом слоте
+                int actualSlotId = visibleSlots[visibleIndex];
+                if (!Inventory[actualSlotId].Empty)
+                {
+                    // 🔥 Ключ в ContainerSlots = visibleIndex (порядковый номер контейнера)
+                    HandleContainerSlotClick(visibleIndex);
+                }
             }
         }
+
+        private int[] GetVisibleContainerSlots()
+        {
+            List<int> visibleSlots = new List<int>();
+
+            for (int i = 0; i < MaxContainerBlockSlots; i++)
+            {
+                // Пропускаем правые слоты двойных сундуков
+                if (i % 2 == 1)
+                {
+                    int leftSlot = i - 1;
+                    if (Inventory is InventoryDynamic inv && inv.DoubleChestIndex.Contains(leftSlot))
+                    {
+                        continue; // Пропускаем правый слот двойного сундука
+                    }
+                }
+                visibleSlots.Add(i);
+            }
+
+            return visibleSlots.ToArray();
+        }
+
+
+        private void HandleContainerSlotClick(int slotId)
+        {
+            // Если кликнули по тому же слоту - снимаем выделение
+            if (_selectedContainerSlot == slotId)
+            {
+                ClearHighlight();
+                return;
+            }
+
+            // Выделяем слоты этого контейнера
+            ApplyHighlight(slotId);
+            _selectedContainerSlot = slotId;
+        }
+
+        private void ApplyHighlight(int containerSlotId)
+        {
+            ClearHighlight();
+
+            if (Inventory is InventoryDynamic inv)
+            {
+                // 🔥 containerSlotId теперь = visibleIndex (0, 1, 2...)
+                if (inv.ContainerSlots.ContainsKey(containerSlotId))
+                {
+                    int[] itemSlots = inv.ContainerSlots[containerSlotId];
+                    _highlightedSlots.AddRange(itemSlots);
+
+                    foreach (int slotId in _highlightedSlots)
+                    {
+                        if (Inventory[slotId] is ItemSlotDynamic slot)
+                        {
+                            slot.HexBackgroundColor = "#4CAF50";
+                        }
+                    }
+
+                    SetupDialog();
+                }
+            }
+        }
+
+        private void ClearHighlight()
+        {
+            foreach (int slotId in _highlightedSlots)
+            {
+                if (Inventory[slotId] is ItemSlotDynamic slot)
+                {
+                    slot.HexBackgroundColor = null;
+                }
+            }
+
+            _highlightedSlots.Clear();
+            _selectedContainerSlot = -1;
+
+            SetupDialog();
+        }
+
+        public override void OnGuiClosed()
+        {
+            ClearHighlight();
+            base.Inventory.SlotModified -= OnInventorySlotModified;
+            base.OnGuiClosed();
+        }
+
 
         public override void OnKeyPress(KeyEvent args)
         {

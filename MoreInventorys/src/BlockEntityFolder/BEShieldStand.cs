@@ -57,12 +57,14 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             CollectibleObject colObj = slot.Itemstack.Collectible;
 
-            AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+            //AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
+            MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
 
 
             if (TryPut(slot, blockSel))
             {
-                Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                //Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
                 MarkDirty();
                 return true;
             }
@@ -116,8 +118,9 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ItemStack stack = inv[blockSel.SelectionBoxIndex].TakeOut(1);
                 if (byPlayer.InventoryManager.TryGiveItemstack(stack))
                 {
-                    AssetLocation sound = stack.Block?.Sounds?.Place;
-                    Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                    //AssetLocation sound = stack.Block?.Sounds?.Place;
+                    //Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                    MoreInventorysMod.PlaySoundBlockAt(Api, stack, byPlayer);
                 }
                 if (stack.StackSize > 0)
                 {

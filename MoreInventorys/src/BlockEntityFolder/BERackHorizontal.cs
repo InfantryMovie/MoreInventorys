@@ -37,6 +37,8 @@ namespace MoreInventorys.src.BlockEntityFolder
         string container5;
         string container6;
 
+        private int _containerCounter = 0;
+
         int doubleChestIndex1;
         int doubleChestIndex2;
         int doubleChestIndex3;
@@ -296,7 +298,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 slotsCount = (int)quantitySlots;
                 bool isLegitDoubleChest = true;
                 int targetSlotIndex = blockSel.SelectionBoxIndex;
-                if (storageBlock.BlockId == 8872)
+                if (storageBlock.Code.GetName().Contains("trunk"))
                 {
                     // Определяем левый слот для пары
                     int leftSlot = targetSlotIndex % 2 == 0 ? targetSlotIndex : targetSlotIndex - 1;
@@ -348,7 +350,10 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                         lock (inventory.LockContainerSlots)
                         {
-                            inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                            //inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                            inventory.ContainerSlots.Add(_containerCounter, quantitySlotsId);
+                            _containerCounter++;
+
                         }
 
                         
@@ -387,7 +392,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         //увеличиваем слоты стеллажа
                         inventory.AddSlots(slotsCount);
                         inventory.dynamicSlots += slotsCount;
-                        if (storageBlock.BlockId == 8872)
+                        if (storageBlock.Code.GetName().Contains("trunk"))
                         {
                             //это двойной сундук, занимаем дополнительный слот стеллажа под него
                             inventory.containerBlockSlotsActive++;
@@ -399,9 +404,9 @@ namespace MoreInventorys.src.BlockEntityFolder
                         }
                         inventory.containerBlockSlotsActive++;
 
-                        AssetLocation sound = slot.Itemstack?.Block?.Sounds?.Place;
-                        Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
-
+                        //Api.World.PlaySoundAt(inv[i].Itemstack?.Block?.Sounds?.Place ?? GlobalConstants.DefaultBuildSound, byPlayer.Entity, byPlayer);
+                        //Api.World.PlaySoundAt(slot.Itemstack?.Block?.Sounds?.Place ?? GlobalConstants.DefaultBuildSound, byPlayer.Entity, byPlayer);
+                        MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
 
                         MarkDirty();
                         return true;
@@ -431,7 +436,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                     tree.ToBytes(writer);
                     data = ms.ToArray();
                 }
-                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, Pos.X, Pos.Y, Pos.Z, 1000, data);
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
+                //void SendBlockEntityPacket(IServerPlayer player, BlockPos pos, int packetId, byte[] data = null);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
             MarkDirty();
@@ -476,7 +482,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     tree.ToBytes(writer);
                     data = ms.ToArray();
                 }
-                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, Pos.X, Pos.Y, Pos.Z, 1000, data);
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
         }
@@ -528,7 +534,8 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 }
                 isOpened = !isOpened;
-                obj.Network.BroadcastBlockEntityPacket(Pos.X, Pos.Y, Pos.Z, 1101, BitConverter.GetBytes(isOpened));
+                
+                obj.Network.BroadcastBlockEntityPacket(new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1101, BitConverter.GetBytes(isOpened));
             }
             if (packetid == 1001 && fromPlayer.InventoryManager != null)
             {
@@ -567,6 +574,42 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         }
 
+        /* public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
+         {
+             base.FromTreeAttributes(tree, worldAccessForResolve);
+             isOpened = tree.GetBool("isOpened");
+             inventory.dynamicSlots = tree.GetInt("dynamicSlots");
+             inventory.containerBlockSlotsActive = tree.GetInt("containerBlockSlotsActive");
+             container1 = tree.GetString("container1");
+             container2 = tree.GetString("container2");
+             container3 = tree.GetString("container3");
+             container4 = tree.GetString("container4");
+             container5 = tree.GetString("container5");
+             container6 = tree.GetString("container6");
+
+             doubleChestIndex1 = tree.GetInt("doubleChestIndex1");
+             doubleChestIndex2 = tree.GetInt("doubleChestIndex2");
+             doubleChestIndex3 = tree.GetInt("doubleChestIndex3");
+
+             if (isFirstLoad)
+             {
+                 isFirstLoad = false;
+                 bool num = InitializeStorageContainers();
+                 bool num2 = InitializeDoubleChestContainers();
+             }
+
+
+             DummyPositions = new List<BlockPos>();
+             int count = tree.GetInt("dummyCount");
+             for (int i = 0; i < count; i++)
+             {
+                 DummyPositions.Add(new BlockPos(tree.GetInt("dx" + i), tree.GetInt("dy" + i), tree.GetInt("dz" + i)));
+             }
+
+
+             RedrawAfterReceivingTreeAttributes(worldAccessForResolve);
+
+         }*/
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
         {
             base.FromTreeAttributes(tree, worldAccessForResolve);
@@ -584,13 +627,11 @@ namespace MoreInventorys.src.BlockEntityFolder
             doubleChestIndex2 = tree.GetInt("doubleChestIndex2");
             doubleChestIndex3 = tree.GetInt("doubleChestIndex3");
 
-            if (isFirstLoad)
-            {
-                isFirstLoad = false;
-                bool num = InitializeStorageContainers();
-                bool num2 = InitializeDoubleChestContainers();
+             if (isFirstLoad)
+             {
+                 isFirstLoad = false;
+                RebuildStorageContainers();
             }
-
 
             DummyPositions = new List<BlockPos>();
             int count = tree.GetInt("dummyCount");
@@ -599,9 +640,31 @@ namespace MoreInventorys.src.BlockEntityFolder
                 DummyPositions.Add(new BlockPos(tree.GetInt("dx" + i), tree.GetInt("dy" + i), tree.GetInt("dz" + i)));
             }
 
-
             RedrawAfterReceivingTreeAttributes(worldAccessForResolve);
+        }
+        private void RebuildStorageContainers()
+        {
+            storageContainers.Clear();
 
+            // Восстанавливаем из container1-6 строк
+            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
+            {
+                string containerCode = i switch
+                {
+                    0 => container1,
+                    1 => container2,
+                    2 => container3,
+                    3 => container4,
+                    4 => container5,
+                    5 => container6,
+                    _ => ""
+                };
+
+                if (!string.IsNullOrEmpty(containerCode))
+                {
+                    storageContainers[i] = containerCode;
+                }
+            }
         }
 
         public override void updateMeshes()

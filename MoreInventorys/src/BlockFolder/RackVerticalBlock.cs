@@ -17,10 +17,15 @@ namespace MoreInventorys.src.BlockFolder
             base.OnLoaded(api);
 
         }
-        public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
+
+        public override bool DoPartialSelection(IWorldAccessor world, BlockPos pos)
         {
             return true;
         }
+       /* public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
+        {
+            return true;
+        }*/
 
         BlockPos GetRightBlockPos(BlockSelection blockSel, IPlayer byPlayer)
         {

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
-using MoreInventorys.src.BlockFolder;
+﻿using Foundation.Extensions;
 using MoreInventorys.src.BlockEntityFolder;
-using Vintagestory.API.Common;
+using MoreInventorys.src.BlockFolder;
+using System.Collections.Generic;
 using Vintagestory.API.Client;
+using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.Server;
-using Foundation.Extensions;
+using Vintagestory.GameContent;
 
 
 
@@ -137,6 +140,17 @@ namespace MoreInventorys.src
             base.Dispose();
             serverChannel = null;
             clientChannel = null;
+        }
+
+        public static void PlaySoundBlockAt(ICoreAPI api, ItemSlot slot, IPlayer byPlayer)
+        {
+            api.World.PlaySoundAt(slot.Itemstack?.Block?.Sounds?.Place ?? GlobalConstants.DefaultBuildSound, byPlayer.Entity, byPlayer);
+            //вызываем: MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
+        }
+        public static void PlaySoundBlockAt(ICoreAPI api, ItemStack stack, IPlayer byPlayer)
+        {
+            api.World.PlaySoundAt(stack.Block?.Sounds?.Place ?? GlobalConstants.DefaultBuildSound, byPlayer.Entity, byPlayer);
+            //вызываем: MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
         }
     }
 }
