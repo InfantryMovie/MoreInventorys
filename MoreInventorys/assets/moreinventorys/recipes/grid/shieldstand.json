@@ -7,7 +7,7 @@
     },
     "L": {
       "type": "item",
-      "code": "game:leather-plain"
+      "code": "game:leather-normal-plain"
     }
   },
   "width": 3,

@@ -1,0 +1,29 @@
+{
+  "ingredientPattern": "___,INI,PPP",
+  "ingredients": {
+    "P": {
+      "type": "item",
+      "code": "game:plank-*",
+      "allowedVariants": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ],
+      "name": "plank"
+    },
+    "N": {
+      "type": "item",
+      "code": "game:metalnailsandstrips-*"
+    },
+    "I": {
+      "type": "item",
+      "code": "game:ingot-iron"
+    }
+  },
+  "width": 3,
+  "height": 3,
+  "recipeGroup": 1,
+  "shapeless": false,
+  "output": {
+    "type": "block",
+    "code": "smallhorizontleswordstand-{plank}-north"
+  }
+
+
+}
