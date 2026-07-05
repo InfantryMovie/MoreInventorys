@@ -66,17 +66,7 @@ namespace MoreInventorys.src.BlockFolder
             return selPos.AddCopy(roundedDx, 0, roundedDz);
         }
 
-        private string GetFacing(float yaw)
-        {
-            // Приводим угол к диапазону 0-360
-            float degrees = (yaw * 180 / (float)Math.PI + 360) % 360;
-
-            // Определяем направление
-            if (degrees >= 45 && degrees < 135) return "east";
-            if (degrees >= 135 && degrees < 225) return "south";
-            if (degrees >= 225 && degrees < 315) return "west";
-            return "north";
-        }
+        
         /*BlockPos GetRightBlockPos(BlockSelection blockSel, IPlayer byPlayer)
         {
             BlockPos selPos = blockSel.Position;

@@ -41,6 +41,33 @@ namespace MoreInventorys.src.BlockFolder
         BlockPos GetRightBlockPos(BlockSelection blockSel, IPlayer byPlayer)
         {
             BlockPos selPos = blockSel.Position;
+
+            // Получаем угол взгляда в радианах
+            float yaw = byPlayer.Entity.Pos.Yaw;
+
+            // Вычисляем направление ВПРАВО (поворот на -90° для системы координат VintageStory)
+            float rightYaw = yaw - (float)Math.PI / 2;
+
+            // Получаем компоненты направления
+            float dx = (float)Math.Sin(rightYaw);
+            float dz = (float)Math.Cos(rightYaw);
+
+            // Округляем до -1, 0 или 1
+            int roundedDx = dx > 0.5f ? 1 : (dx < -0.5f ? -1 : 0);
+            int roundedDz = dz > 0.5f ? 1 : (dz < -0.5f ? -1 : 0);
+
+            // Если получилось (0,0) из-за округления - берём восток по умолчанию
+            if (roundedDx == 0 && roundedDz == 0)
+            {
+                return selPos.AddCopy(1, 0, 0);
+            }
+
+            return selPos.AddCopy(roundedDx, 0, roundedDz);
+        }
+
+        /*BlockPos GetRightBlockPos(BlockSelection blockSel, IPlayer byPlayer)
+        {
+            BlockPos selPos = blockSel.Position;
             // Получаем угол вращения игрока
             float rotationYaw = byPlayer.Entity.BodyYaw;
 
@@ -54,7 +81,7 @@ namespace MoreInventorys.src.BlockFolder
             // Формируем позицию правого блока
             BlockPos rightBlockpos = new BlockPos(selPos.X + (int)Math.Round(dx), selPos.Y, selPos.Z + (int)Math.Round(dz));
             return rightBlockpos;
-        }
+        }*/
         public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack, BlockSelection blockSel, ref string failureCode)
         {
             BlockPos upperblock1 = blockSel.Position.UpCopy();
