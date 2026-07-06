@@ -1,0 +1,80 @@
+{
+  "code": "micrateclosed",
+  "name": "micrateclosed",
+  "class": "crateclosedblock",
+  "entityClass": "becrateclosed",
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "entityBehaviors": [
+    { "name": "Animatable" }
+  ],
+  "variantgroups": [
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
+  "drawtype": "json",
+  "creativeinventory": {
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
+  },
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "blockmaterial": "Wood",
+  "textures": {
+    "blackbronze1": { "base": "game:block/metal/sheet/blackbronze1" },
+    "acacia-h": { "base": "game:block/wood/bark/dead/acacia-h" },
+    "oak1": { "base": "game:block/wood/planks/oak1" }
+  },
+  "shape": { "base": "moreinventorys:micrateclosed" },
+  "shapebytype": {
+    "*-north": {
+      "base": "micrateclosed",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "micrateclosed",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "micrateclosed",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "micrateclosed",
+      "rotateY": 90
+    }
+  },
+  "combustibleProps": {
+    "burnTemperature": 600,
+    "burnDuration": 35
+  },
+  "materialDensity": 400,
+  "replaceable": 900,
+  "resistance": 1.5,
+  "lightAbsorption": 1,
+  "tags": [ "furniture", "storage" ],
+  "sounds": {
+    "place": "game:block/planks",
+    "hit": "game:block/planks",
+    "break": "game:block/planks",
+    "walk": "game:walk/wood"
+  },
+  "placementRotationFix": true,
+  "guiTransform": {
+    "rotation": {
+      "x": -22.6,
+      "y": -145,
+      "z": 0
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0.9,
+      "z": 0.5
+    },
+    "scale": 0.72
+  }
+}

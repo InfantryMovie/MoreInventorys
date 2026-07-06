@@ -17,6 +17,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
+using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 using Vintagestory.ServerMods;
 
@@ -76,7 +77,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         bool InitializeDoubleChestContainers()
         {
-            if(inventory.DoubleChestIndex.Count > 1) return false;
+            if (inventory.DoubleChestIndex.Count > 1) return false;
 
             if (doubleChestIndex1 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex1);
             if (doubleChestIndex2 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex2);
@@ -87,14 +88,14 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         bool InitializeStorageContainers()
         {
-            if (storageContainers.Count > 0) return false; 
+            if (storageContainers.Count > 0) return false;
 
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++) 
+            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        if (container1 != "") storageContainers.Add(0,container1);
+                        if (container1 != "") storageContainers.Add(0, container1);
                         break;
 
                     case 1:
@@ -125,11 +126,8 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         private void OnSlotModified(int slotid)
         {
-            
-         
             if (Api.World.Side == EnumAppSide.Client)
             {
-                //UpdateShape();
                 return;
             }
 
@@ -138,7 +136,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         public void UpdateShape()
         {
-
             MarkDirty(Api.Side != EnumAppSide.Server);
         }
 
@@ -188,7 +185,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 storageDlg = null;
             }
         }
-        
+
 
         public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
         {
@@ -199,7 +196,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 return (false, 0);
 
 
-            if(ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod))
+            if (ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod))
             {
                 string type = slot.Itemstack.Attributes.GetString("type");
                 if (type != null)
@@ -210,24 +207,10 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             }
 
-            if(ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
+            if (ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
             {
                 quantitySlots = ModConfigFile.Current.ModedStorageContainersCode[cod];
             }
-
-            // ПОКА НЕ ЗНАЮ КАК РЕНДЕРИТЬ НУЖНЫЕ ТЕКСТУРЫ, ЯЩИКИ НЕЛЬЗЯ! У НИХ ЗНАК ? ВМЕСТО ТЕКСТУР
-            /*if(cod == "crate")
-            {
-                //BlockCrate
-                //CrateProperties
-                CrateProperties props = slot.Itemstack.ItemAttributes.AsObject<CrateProperties>(null, slot.Itemstack.Block.Code.Domain);
-                if (props != null)
-                {
-                    string type = slot.Itemstack.Attributes.GetString("type", props.DefaultType);
-                    quantitySlots = props[type].QuantitySlots;
-                }
-            }*/
-
 
             if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
 
@@ -236,15 +219,14 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         string GetValueBeforeDash(string input)
         {
-            //получаем значение до знака "-"
             int indexOfDash = input.IndexOf('-');
 
             if (indexOfDash >= 0)
             {
-                return input.Substring(0, indexOfDash); 
+                return input.Substring(0, indexOfDash);
             }
 
-            return input; 
+            return input;
         }
 
         private bool IsSlotOccupied(int slotIndex)
@@ -253,15 +235,12 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (!inventory[slotIndex].Empty) return true;
 
             // Проверяем, не является ли слот частью двойного сундука
-            // Если слот нечётный (1, 3, 5) - проверяем, не занят ли левый слот двойным сундуком
             if (slotIndex % 2 == 1) // 1, 3, 5
             {
                 int leftSlot = slotIndex - 1;
-                // Если левый слот содержит двойной сундук - то текущий слот занят
                 if (inventory.DoubleChestIndex.Contains(leftSlot)) return true;
             }
 
-            // Если слот чётный (0, 2, 4) - проверяем, не занят ли он сам двойным сундуком
             if (slotIndex % 2 == 0) // 0, 2, 4
             {
                 if (inventory.DoubleChestIndex.Contains(slotIndex)) return true;
@@ -284,8 +263,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                     return true;
                 }
 
-                //попытка поставить блок с инвентарем на стеллаж
-
                 int slotsCount = 0;
                 var storageBlock = slot.Itemstack.Block;
                 if (storageBlock == null) return false;
@@ -300,13 +277,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                 int targetSlotIndex = blockSel.SelectionBoxIndex;
                 if (storageBlock.Code.GetName().Contains("trunk"))
                 {
-                    // Определяем левый слот для пары
                     int leftSlot = targetSlotIndex % 2 == 0 ? targetSlotIndex : targetSlotIndex - 1;
 
-                    // Проверяем, что левый слот в пределах допустимых
                     if (leftSlot >= 0 && leftSlot < MAX_CONTAINER_BLOC_SLOTS - 1)
                     {
-                        // Проверяем, свободны ли оба слота (и не заняты ли они двойными сундуками)
                         bool leftFree = inventory[leftSlot].Empty && !inventory.DoubleChestIndex.Contains(leftSlot);
                         bool rightFree = inventory[leftSlot + 1].Empty && !inventory.DoubleChestIndex.Contains(leftSlot);
 
@@ -316,7 +290,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         }
                         else
                         {
-                            targetSlotIndex = leftSlot; // Всегда ставим в левый слот
+                            targetSlotIndex = leftSlot;
                         }
                     }
                     else
@@ -328,36 +302,31 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (isContainer && isLegitDoubleChest)
                 {
+                    string type = slot.Itemstack.Attributes.GetString("type");
                     if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
                     {
                         string containerKey = storageBlock.Code.Path;
-                        string type = slot.Itemstack.Attributes.GetString("type");
+
                         if (!string.IsNullOrEmpty(type))
                         {
-                            containerKey += "-" + type; // Например: "crate-open"
+                            containerKey += "-" + type;
                         }
 
                         storageContainers.Add(targetSlotIndex, containerKey + DateTime.Now.ToString());
                     }
 
-                   
+
 
                     if (TryPut(slot, targetSlotIndex, storageBlock, isLegitDoubleChest))
                     {
-                        //записываем сколько и какие конкретно дал слоты данный контейнер, нужно для логики дать/забрать контейнер со стеллажа (временно не работает!)
                         int lastId = inventory[inventory.Count - 1].SlotId;
                         int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
 
                         lock (inventory.LockContainerSlots)
                         {
-                            //inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
                             inventory.ContainerSlots.Add(_containerCounter, quantitySlotsId);
                             _containerCounter++;
-
                         }
-
-                        
-
 
                         switch (targetSlotIndex)
                         {
@@ -389,23 +358,17 @@ namespace MoreInventorys.src.BlockEntityFolder
                                 break;
                         }
 
-                        //увеличиваем слоты стеллажа
                         inventory.AddSlots(slotsCount);
                         inventory.dynamicSlots += slotsCount;
                         if (storageBlock.Code.GetName().Contains("trunk"))
                         {
-                            //это двойной сундук, занимаем дополнительный слот стеллажа под него
                             inventory.containerBlockSlotsActive++;
                             inventory.DoubleChestIndex.Add(targetSlotIndex);
 
                             var result = AddDoubleChestIndex(targetSlotIndex);
-
-
                         }
                         inventory.containerBlockSlotsActive++;
 
-                        //Api.World.PlaySoundAt(inv[i].Itemstack?.Block?.Sounds?.Place ?? GlobalConstants.DefaultBuildSound, byPlayer.Entity, byPlayer);
-                        //Api.World.PlaySoundAt(slot.Itemstack?.Block?.Sounds?.Place ?? GlobalConstants.DefaultBuildSound, byPlayer.Entity, byPlayer);
                         MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
 
                         MarkDirty();
@@ -414,16 +377,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
                 else
                 {
-                    // Контейнер нельзя поставить (не подходит или слоты кончились) - открываем GUI
                     OpenGui(byPlayer);
                     return true;
                 }
-
             }
-
-
-
-
 
             if (Api.Side != EnumAppSide.Client)
             {
@@ -437,16 +394,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                     data = ms.ToArray();
                 }
                 ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
-                //void SendBlockEntityPacket(IServerPlayer player, BlockPos pos, int packetId, byte[] data = null);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
             MarkDirty();
             return true;
         }
 
-        
-
-        bool AddDoubleChestIndex (int index)
+        bool AddDoubleChestIndex(int index)
         {
             if (doubleChestIndex1 == -1)
             {
@@ -491,7 +445,6 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             if (!isLegitDoubleChest) return false;
 
-            // Проверяем, не занят ли слот (учитывая двойные сундуки)
             if (IsSlotOccupied(blockSelIndex)) return false;
 
             if (inventory[blockSelIndex].Empty)
@@ -504,8 +457,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             return false;
         }
-
-
 
         public bool Open()
         {
@@ -524,17 +475,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (packetid == 1101)
             {
                 ICoreServerAPI obj = (ICoreServerAPI)Api;
-                if (isOpened)
-                {
-                  
-                }
-                else
-                {
-                    
-
-                }
                 isOpened = !isOpened;
-                
                 obj.Network.BroadcastBlockEntityPacket(new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1101, BitConverter.GetBytes(isOpened));
             }
             if (packetid == 1001 && fromPlayer.InventoryManager != null)
@@ -569,47 +510,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 tree.SetInt("dy" + i, DummyPositions[i].Y);
                 tree.SetInt("dz" + i, DummyPositions[i].Z);
             }
-
-
-
         }
 
-        /* public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
-         {
-             base.FromTreeAttributes(tree, worldAccessForResolve);
-             isOpened = tree.GetBool("isOpened");
-             inventory.dynamicSlots = tree.GetInt("dynamicSlots");
-             inventory.containerBlockSlotsActive = tree.GetInt("containerBlockSlotsActive");
-             container1 = tree.GetString("container1");
-             container2 = tree.GetString("container2");
-             container3 = tree.GetString("container3");
-             container4 = tree.GetString("container4");
-             container5 = tree.GetString("container5");
-             container6 = tree.GetString("container6");
-
-             doubleChestIndex1 = tree.GetInt("doubleChestIndex1");
-             doubleChestIndex2 = tree.GetInt("doubleChestIndex2");
-             doubleChestIndex3 = tree.GetInt("doubleChestIndex3");
-
-             if (isFirstLoad)
-             {
-                 isFirstLoad = false;
-                 bool num = InitializeStorageContainers();
-                 bool num2 = InitializeDoubleChestContainers();
-             }
-
-
-             DummyPositions = new List<BlockPos>();
-             int count = tree.GetInt("dummyCount");
-             for (int i = 0; i < count; i++)
-             {
-                 DummyPositions.Add(new BlockPos(tree.GetInt("dx" + i), tree.GetInt("dy" + i), tree.GetInt("dz" + i)));
-             }
-
-
-             RedrawAfterReceivingTreeAttributes(worldAccessForResolve);
-
-         }*/
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
         {
             base.FromTreeAttributes(tree, worldAccessForResolve);
@@ -627,9 +529,9 @@ namespace MoreInventorys.src.BlockEntityFolder
             doubleChestIndex2 = tree.GetInt("doubleChestIndex2");
             doubleChestIndex3 = tree.GetInt("doubleChestIndex3");
 
-             if (isFirstLoad)
-             {
-                 isFirstLoad = false;
+            if (isFirstLoad)
+            {
+                isFirstLoad = false;
                 RebuildStorageContainers();
             }
 
@@ -642,11 +544,11 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             RedrawAfterReceivingTreeAttributes(worldAccessForResolve);
         }
+
         private void RebuildStorageContainers()
         {
             storageContainers.Clear();
 
-            // Восстанавливаем из container1-6 строк
             for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
             {
                 string containerCode = i switch
@@ -671,23 +573,23 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             base.updateMeshes();
         }
-        
-        (int,string) GetOrientationRateForMartices(int containerIndex)
+
+        (int, string) GetOrientationRateForMartices(int containerIndex)
         {
             int orientationRotate = 0;
 
-            if (storageContainers.Count == 0) 
+            if (storageContainers.Count == 0)
             {
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate,"");
+                return (orientationRotate, "");
             }
 
             if (!storageContainers.ContainsKey(containerIndex)) return (orientationRotate, "");
 
             var container = storageContainers[containerIndex];
-            if(string.IsNullOrEmpty(container))
+            if (string.IsNullOrEmpty(container))
             {
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
@@ -697,7 +599,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             if (container.Contains("trunk"))
             {
-                //двойной сундук
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
@@ -705,41 +606,36 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             else if (container.Contains("chest"))
             {
-                //сундук
+                string type = "normal-generic";
+                int typeStartIndex = container.IndexOf("chest-") + 6;
+                if (typeStartIndex > 5 && typeStartIndex < container.Length)
+                {
+                    string extractedType = container.Substring(typeStartIndex);
+                    int dateIndex = extractedType.IndexOf(' ');
+                    if (dateIndex > 0) extractedType = extractedType.Substring(0, dateIndex);
+                    if (!string.IsNullOrEmpty(extractedType)) type = extractedType;
+                }
+
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 0;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
-                return (orientationRotate, "chest");
+                return (orientationRotate, "chest-" + type);
             }
             else
             {
-
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
             }
 
             return (orientationRotate, "");
-
         }
-
-        private void LogToChat(string message)
-        {
-            if (Api is ICoreClientAPI capi && capi.World.Player != null)
-            {
-                capi.ShowChatMessage(message);
-            }
-        }
-
-        
 
         protected override float[][] genTransformationMatrices()
         {
-            
             float[][] tfMatrices = new float[MAX_CONTAINER_BLOC_SLOTS][];
             float scale = 0.9f;
-            float baseRotateY = block.Shape.rotateY;
             float x = 0;
             float z = 0;
             float y = 0;
@@ -748,9 +644,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             string code = "";
             for (int index = 0; index < MAX_CONTAINER_BLOC_SLOTS; index++)
             {
-                int extraRotate = 0;
-
-
                 var orientationRotateResult = GetOrientationRateForMartices(index);
                 orientationRotate = orientationRotateResult.Item1;
                 code = orientationRotateResult.Item2;
@@ -763,19 +656,18 @@ namespace MoreInventorys.src.BlockEntityFolder
                     if (code == "trunk") z += 0.05f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)// Сначала перемещаем предмет в центр блока
-                       .Translate(x - 1f, y, z) // Двигаем предмет на нужные координаты (x, y, z)
-                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .RotateYDeg(orientationRotate)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
                        .Values;
-
                 }
                 if (index == 1)
                 {
                     x = 2.04f;
                     z = 0.05f;
                     y = 0f;
-                    if(code == "chest")
+                    if (code.Contains("chest"))
                     {
                         z += 1;
                         x = 1;
@@ -802,18 +694,16 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scale, scale, scale)
                        .Values;
                 }
-
                 if (index == 3)
                 {
                     x = 2.04f;
                     z = 0.05f;
                     y = 1f;
-                    if (code == "chest")
+                    if (code.Contains("chest"))
                     {
                         z += 1;
                         x = 1;
                     }
-
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(orientationRotate)
@@ -822,7 +712,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scale, scale, scale)
                        .Values;
                 }
-
                 if (index == 4)
                 {
                     x = 1.02f;
@@ -837,13 +726,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scale, scale, scale)
                        .Values;
                 }
-
                 if (index == 5)
                 {
                     x = 2.04f;
                     z = 0.05f;
                     y = 2f;
-                    if (code == "chest")
+                    if (code.Contains("chest"))
                     {
                         z += 1;
                         x = 1;
@@ -859,8 +747,5 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             return tfMatrices;
         }
-
-
-
     }
 }
