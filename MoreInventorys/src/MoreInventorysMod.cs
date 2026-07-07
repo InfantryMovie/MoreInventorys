@@ -63,7 +63,14 @@ namespace MoreInventorys.src
         public Dictionary<string, int> ModedStorageWeaponsCode { get; set; } = new Dictionary<string, int>();
 
         //словарь модовых поддерживаемых контейнеров ключ: code/ значение: slot.count)
-        public Dictionary<string, int> ModedStorageContainersCode { get; set; } = new Dictionary<string, int> { { "micrateclosed", 16 } };
+        public Dictionary<string, int> ModedStorageContainersCode { get; set; } = new Dictionary<string, int> {
+            { 
+                "micrateclosed", 16
+            },
+            {
+                "mibasketclosed",8
+            }
+        };
 
     }
     public class MoreInventorysMod : ModSystem
@@ -118,6 +125,9 @@ namespace MoreInventorys.src
 
             api.RegisterBlockClass("crateclosedblock", typeof(CrateClosedBlock));
             api.RegisterBlockEntityClass("becrateclosed", typeof(BECrateClosed));
+
+            api.RegisterBlockClass("basketclosedblock", typeof(BasketClosedBlock));
+            api.RegisterBlockEntityClass("bebasketclosed", typeof(BEBasketClosed));
 
 
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен

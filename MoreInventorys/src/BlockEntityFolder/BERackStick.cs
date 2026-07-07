@@ -168,8 +168,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                     int? num = slot.Itemstack.ItemAttributes?["quantitySlots"]?[type]?.AsInt();
                     if (num != null) quantitySlots = (int)num;
                 }
+            } else if (cod.Contains("mibasket"))
+            {
+                quantitySlots = 8;
             }
-
 
             if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
 

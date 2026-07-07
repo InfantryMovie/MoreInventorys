@@ -263,7 +263,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                             inventory.containerBlockSlotsActive++;
                         }
 
-                        //Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
+                        //Api.World.Play
+                        //At(sound != null ? sound : new AssetLocation("sounds/player/build"), byPlayer.Entity, byPlayer, randomizePitch: true, 16f);
                         MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
                         MarkDirty();
                         return true;

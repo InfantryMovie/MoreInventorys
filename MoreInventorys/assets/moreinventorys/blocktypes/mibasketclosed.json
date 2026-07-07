@@ -1,8 +1,8 @@
 {
-  "code": "micrateclosed",
-  "name": "micrateclosed",
-  "class": "crateclosedblock",
-  "entityClass": "becrateclosed",
+  "code": "mibasketclosed",
+  "name": "mibasketclosed",
+  "class": "basketclosedblock",
+  "entityClass": "bebasketclosed",
   "behaviors": [ { "name": "HorizontalOrientable" } ],
   "entityBehaviors": [
     { "name": "Animatable" }
@@ -46,26 +46,27 @@
   },
   "blockmaterial": "Wood",
   "textures": {
-    "blackbronze1": { "base": "game:block/metal/sheet/blackbronze1" },
-    "acacia-h": { "base": "game:block/wood/bark/dead/acacia-h" },
-    "oak1": { "base": "game:block/wood/planks/oak1" }
+    "ceiling": { "base": "game:block/wood/cage/ceiling" },
+    "oak": { "base": "game:block/wood/debarked/oak" },
+    "reeds": { "base": "game:item/resource/reeds" },
+    "tuft-tinted": { "base": "game:item/resource/tuft-tinted" }
   },
-  "shape": { "base": "moreinventorys:micrateclosed" },
+  "shape": { "base": "moreinventorys:mibasketclosed" },
   "shapebytype": {
     "*-north": {
-      "base": "micrateclosed",
+      "base": "mibasketclosed",
       "rotateY": 0
     },
     "*-east": {
-      "base": "micrateclosed",
+      "base": "mibasketclosed",
       "rotateY": 270
     },
     "*-south": {
-      "base": "micrateclosed",
+      "base": "mibasketclosed",
       "rotateY": 180
     },
     "*-west": {
-      "base": "micrateclosed",
+      "base": "mibasketclosed",
       "rotateY": 90
     }
   },
@@ -85,5 +86,5 @@
     "walk": "game:walk/wood"
   },
   "placementRotationFix": true
-  
+
 }
