@@ -1601,7 +1601,29 @@
 				{
 					"frame": 29,
 					"elements": {
-						"top": { "offsetX": 0.1, "offsetY": 0.4, "offsetZ": -0.1, "rotationX": -11.0, "rotationY": 0.0, "rotationZ": 0.0 }
+						"top": { "offsetX": 1.5, "offsetY": 4.9, "offsetZ": -1.5, "rotationX": -83.0, "rotationY": 0.0, "rotationZ": 0.0 }
+					}
+				}
+			]
+		},
+
+		{
+			"name": "close",
+			"code": "close",
+			"quantityframes": 30,
+			"onActivityStopped": "Rewind",
+			"onAnimationEnd": "Stop",
+			"keyframes": [
+				{
+					"frame": 0,
+					"elements": {
+						"top": { "offsetX": 1.5, "offsetY": 4.9, "offsetZ": -1.5, "rotationX": -83.0, "rotationY": 0.0, "rotationZ": 0.0 }
+					}
+				},
+				{
+					"frame": 29,
+					"elements": {
+						"top": { "offsetX": 0.0, "offsetY": 0.0, "offsetZ": 0.0, "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				}
 			]

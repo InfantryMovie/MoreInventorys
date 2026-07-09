@@ -39,6 +39,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             block = api.World.BlockAccessor.GetBlock(Pos);
             base.Initialize(api);
 
+            inv.SlotModified += OnInventorySlotModified;
+
             if (api.Side == EnumAppSide.Client)
             {
                 ICoreClientAPI capi = api as ICoreClientAPI;
@@ -50,6 +52,24 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 animUtil?.InitializeAnimator("micrateclosed", shape, null, new Vec3f(0, block.Shape.rotateY, 0));
             }
+        }
+
+        private void OnInventorySlotModified(int slotid)
+        {
+            // Перерисовываем блок при изменении инвентаря
+            if (Api.Side == EnumAppSide.Client)
+            {
+                MarkDirty(true);
+                // Принудительно обновляем меши
+                updateMeshes();
+                // Перерисовываем блок в мире
+                Api.World.BlockAccessor.MarkBlockDirty(Pos);
+            }
+        }
+
+        public override int DisplayedItems
+        {
+            get { return Math.Min(6, inv.Count); } // Показываем первые 6 предметов
         }
 
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)

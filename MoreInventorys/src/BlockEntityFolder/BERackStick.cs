@@ -159,7 +159,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             int? quantitySlots = 0;
             //if (!ModConfigFile.Current.StorageContainersCode.Contains(cod)) return (false, 0);
 
-            if (cod == "stationarybasket")
+            /*if (cod == "stationarybasket")
             {
                 //BlockGenericTypedContainer
                 string type = slot.Itemstack.Attributes.GetString("type");
@@ -168,7 +168,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                     int? num = slot.Itemstack.ItemAttributes?["quantitySlots"]?[type]?.AsInt();
                     if (num != null) quantitySlots = (int)num;
                 }
-            } else if (cod.Contains("mibasket"))
+            } else*/ 
+            if (cod.Contains("mibasket"))
             {
                 quantitySlots = 8;
             }

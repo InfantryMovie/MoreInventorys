@@ -25,7 +25,7 @@ namespace MoreInventorys.src
             "trunk",
             "labeledchest",
             "storagevessel",
-            "stationarybasket",
+            //"stationarybasket",
             "micrateclosed"
         };
 
