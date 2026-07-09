@@ -16,5 +16,12 @@
 
   "block-rackstick-*": "Stick rack",
 
+  "blockhelp-firstshelf-use": "Use on shelf",
+  "blockhelp-firstshelf-place": "Place on shelf",
+  "blockhelp-firstshelf-take": "Take from shelf",
+  "blockhelp-rackhorizontal-place": "Place on rack",
+  "blockhelp-rackvertical-place": "Place on rack",
+  "blockhelp-rackstick-place": "Place on rac",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }

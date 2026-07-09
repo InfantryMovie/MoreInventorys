@@ -120,6 +120,14 @@
   "block-smallverticalweaponstand-uranium-north": "SV Стенд для оружия/инструментов v.1 (уран)",
   "block-smallverticalweaponstand-zinc-north": "SV Стенд для оружия/инструментов v.1 (цинк)",
 
+  "blockhelp-firstshelf-use": "Использовать на полке",
+  "blockhelp-firstshelf-place": "Положить на полку",
+  "blockhelp-firstshelf-take": "Снять с полки",
+  "blockhelp-rackhorizontal-place": "Поставить в стеллаж",
+  "blockhelp-rackvertical-place": "Поставить в стеллаж",
+  "blockhelp-rackstick-place": "Поставить в стеллаж",
+
+
 
   "game:tabname-moreinventorys": "More Inventorys"
 }
