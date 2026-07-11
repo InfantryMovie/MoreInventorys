@@ -1,4 +1,5 @@
-﻿using MoreInventorys.src.BlockEntityFolder;
+﻿using Microsoft.VisualBasic;
+using MoreInventorys.src.BlockEntityFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,79 @@ namespace MoreInventorys.src.BlockFolder
 {
     internal class RackHorizontalBlock : Block
     {
+        WorldInteraction[]? interactions;
         public override void OnLoaded(ICoreAPI api)
         {
 
             base.OnLoaded(api);
-            // Todo: Add interaction help
 
+            PlacedPriorityInteract = true;
+
+            interactions = ObjectCacheUtil.GetOrCreate(api, "rackhorizontalInteractions", () =>
+            {
+                List<ItemStack> containerStacklist = new List<ItemStack>();
+
+                foreach (var code in ModConfigFile.Current.VanilaStorageContainersCode)
+                {
+                    var block = api.World.GetBlock(new AssetLocation("game:" + code + "-east"));
+                    if (block != null)
+                    {
+                        var stack = new ItemStack(block);
+                        string type = block.Attributes?["defaultType"]?.AsString();
+                        if (!string.IsNullOrEmpty(type))
+                        {
+                            stack.Attributes.SetString("type", type);
+                        }
+                        containerStacklist.Add(stack);
+                    }
+                }
+
+                foreach (var kvp in ModConfigFile.Current.ModedStorageContainersCode)
+                {
+                    var block = api.World.GetBlock(new AssetLocation("moreinventorys:" + kvp.Key + "-east"));
+                    if (block != null)
+                    {
+                        containerStacklist.Add(new ItemStack(block));
+                    }
+                }
+
+                return new WorldInteraction[]
+                {
+                    new WorldInteraction()
+                    {
+                            ActionLangCode = "Поставить в стеллаж", // Текст напрямую
+                            MouseButton = EnumMouseButton.Right,
+                            Itemstacks = containerStacklist.ToArray(),
+                            ShouldApply = (wi, bs, es) =>
+                            {
+                                var be = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BERackHorizontal;
+                                if (be == null) return false;
+                                return be.Inventory[bs.SelectionBoxIndex].Empty;
+                            }}
+                    };
+                });
+
+        }
+
+        public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
+        {
+            base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
+            dsc.AppendLine();
+            dsc.AppendLine(Lang.Get("moreinventorys:block-rackhorizontal-desc"));
+        }
+
+
+        public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
+        {
+            var worldInteractions = base.GetPlacedBlockInteractionHelp(world, selection, forPlayer);
+
+            var resp = world.Claims.TestAccess(forPlayer, selection.Position, EnumBlockAccessFlags.Use);
+            if (resp == EnumWorldAccessResponse.Granted && interactions != null)
+            {
+                return worldInteractions?.Concat(interactions).ToArray() ?? interactions;
+            }
+
+            return worldInteractions ?? new WorldInteraction[0];
         }
 
         public override bool DoPartialSelection(IWorldAccessor world, BlockPos pos)
@@ -65,25 +133,7 @@ namespace MoreInventorys.src.BlockFolder
 
             return selPos.AddCopy(roundedDx, 0, roundedDz);
         }
-
         
-        /*BlockPos GetRightBlockPos(BlockSelection blockSel, IPlayer byPlayer)
-        {
-            BlockPos selPos = blockSel.Position;
-            // Получаем угол вращения игрока
-            float rotationYaw = byPlayer.Entity.BodyYaw;
-
-            // Коэффициенты смещения вправо и вперёд
-            float deltaX = (float)Math.Cos(rotationYaw);
-            float deltaZ = (float)Math.Sin(rotationYaw);
-
-            float dx = deltaZ;
-            float dz = +deltaX;
-
-            // Формируем позицию правого блока
-            BlockPos rightBlockpos = new BlockPos(selPos.X + (int)Math.Round(dx), selPos.Y, selPos.Z + (int)Math.Round(dz));
-            return rightBlockpos;
-        }*/
         public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack, BlockSelection blockSel, ref string failureCode)
         {
             BlockPos upperPart1 = blockSel.Position.UpCopy();

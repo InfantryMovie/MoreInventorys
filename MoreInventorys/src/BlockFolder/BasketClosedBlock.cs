@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MoreInventorys.src.BlockEntityFolder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MoreInventorys.src.BlockEntityFolder;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace MoreInventorys.src.BlockFolder
@@ -23,6 +24,13 @@ namespace MoreInventorys.src.BlockFolder
         public override bool DoPartialSelection(IWorldAccessor world, BlockPos pos)
         {
             return true;
+        }
+
+        public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
+        {
+            base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
+            dsc.AppendLine();
+            dsc.AppendLine(Lang.Get("moreinventorys:block-mibasketclosed-north-desc"));
         }
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)

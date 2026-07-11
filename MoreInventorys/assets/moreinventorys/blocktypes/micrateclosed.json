@@ -9,9 +9,16 @@
   ],
   "variantgroups": [
     {
+      "code": "planks",
+      "states": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ]
+    },
+    {
       "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
+  "textures": {
+    "oak1": { "base": "game:block/wood/planks/{planks}1" }
+  },
   "guiTransform": {
     "rotation": {
       "x": -17,
@@ -45,11 +52,6 @@
     "all": false
   },
   "blockmaterial": "Wood",
-  "textures": {
-    "blackbronze1": { "base": "game:block/metal/sheet/blackbronze1" },
-    "acacia-h": { "base": "game:block/wood/bark/dead/acacia-h" },
-    "oak1": { "base": "game:block/wood/planks/oak1" }
-  },
   "shape": { "base": "moreinventorys:micrateclosed" },
   "shapebytype": {
     "*-north": {
@@ -73,6 +75,9 @@
     "burnTemperature": 600,
     "burnDuration": 35
   },
+  "attributes": {
+    "capacity": 16
+  },
   "materialDensity": 400,
   "replaceable": 900,
   "resistance": 1.5,
@@ -85,5 +90,5 @@
     "walk": "game:walk/wood"
   },
   "placementRotationFix": true
-  
+
 }

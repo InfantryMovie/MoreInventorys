@@ -119,13 +119,15 @@
   "block-smallverticalweaponstand-titanium-north": "SV Стенд для оружия/инструментов v.1 (титан)",
   "block-smallverticalweaponstand-uranium-north": "SV Стенд для оружия/инструментов v.1 (уран)",
   "block-smallverticalweaponstand-zinc-north": "SV Стенд для оружия/инструментов v.1 (цинк)",
+  "block-micrateclosed-north": "Закрытый ящик",
+  "block-mibasketclosed-north": "Корзина из рагоза",
 
-  "blockhelp-firstshelf-use": "Использовать на полке",
-  "blockhelp-firstshelf-place": "Положить на полку",
-  "blockhelp-firstshelf-take": "Снять с полки",
-  "blockhelp-rackhorizontal-place": "Поставить в стеллаж",
-  "blockhelp-rackvertical-place": "Поставить в стеллаж",
-  "blockhelp-rackstick-place": "Поставить в стеллаж",
+  "block-micrateclosed-north-desc": "Может хранить предметы",
+  "block-mibasketclosed-north-desc": "Может хранить предметы",
+
+  "block-rackhorizontal-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
+  "block-rackvertical-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
+  "block-rackstick-desc": "Начальный стеллаж из палок, поставь на него корзину из рагоза (не ванильную)",
 
 
 

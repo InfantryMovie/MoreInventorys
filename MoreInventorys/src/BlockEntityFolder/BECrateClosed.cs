@@ -20,7 +20,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override string InventoryClassName => "micrateclosed";
 
         public override string AttributeTransformCode => "oncrateclosedTransform";
-
+        public override int DisplayedItems => 0;
         Block block;
         GuiDialogCrateClosed storageDlg;
 
@@ -54,23 +54,20 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
+
+
+
+
         private void OnInventorySlotModified(int slotid)
         {
-            // Перерисовываем блок при изменении инвентаря
             if (Api.Side == EnumAppSide.Client)
             {
                 MarkDirty(true);
-                // Принудительно обновляем меши
                 updateMeshes();
-                // Перерисовываем блок в мире
                 Api.World.BlockAccessor.MarkBlockDirty(Pos);
             }
         }
 
-        public override int DisplayedItems
-        {
-            get { return Math.Min(6, inv.Count); } // Показываем первые 6 предметов
-        }
 
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
@@ -254,5 +251,9 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             return new float[0][];
         }
+
+        
+
+
     }
 }

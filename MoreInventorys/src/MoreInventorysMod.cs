@@ -24,9 +24,8 @@ namespace MoreInventorys.src
             "chest",
             "trunk",
             "labeledchest",
-            "storagevessel",
+            "storagevessel"
             //"stationarybasket",
-            "micrateclosed"
         };
 
         public List<string> VanilaStorageWeaponsCode { get; set; } = new List<string>

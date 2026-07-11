@@ -10,8 +10,8 @@
 		"fertmedium": [16,16]
 	},
 	"textures": {
-		"blackbronze1": "block/metal/sheet/blackbronze1",
-		"acacia-h": "block/wood/bark/dead/acacia-h",
+		"blackbronze1": "game:block/metal/sheet/blackbronze1",
+		"acacia-h": "game:block/wood/bark/dead/acacia-h",
 		"oak1": "block/wood/planks/oak1"
 	},
 	"elements": [

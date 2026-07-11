@@ -18,7 +18,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         InventoryGeneric inv;
         public override InventoryBase Inventory => inv;
         public override string InventoryClassName => "mibasketclosed";
-
+        public override int DisplayedItems => 0;
         public override string AttributeTransformCode => "onbasketclosedTransform";
 
         Block block;

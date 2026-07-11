@@ -4,19 +4,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Util;
 
 namespace MoreInventorys.src.BlockFolder
 {
     internal class RackStickBlock : Block
     {
+        WorldInteraction[]? interactions;
         public override void OnLoaded(ICoreAPI api)
         {
 
             base.OnLoaded(api);
-            // Todo: Add interaction help
 
+            PlacedPriorityInteract = true;
+
+            interactions = ObjectCacheUtil.GetOrCreate(api, "rackStickInteractions", () =>
+            {
+                List<ItemStack> containerStacklist = new List<ItemStack>();
+
+                foreach (var kvp in ModConfigFile.Current.ModedStorageContainersCode)
+                {
+                    if (kvp.Key != "mibasketclosed") continue;
+                    var block = api.World.GetBlock(new AssetLocation("moreinventorys:" + kvp.Key + "-east"));
+                    if (block != null)
+                    {
+                        containerStacklist.Add(new ItemStack(block));
+                    }
+                }
+
+                return new WorldInteraction[]
+                {
+                    new WorldInteraction()
+                    {
+                            ActionLangCode = "Поставить в стеллаж", // Текст напрямую
+                            MouseButton = EnumMouseButton.Right,
+                            Itemstacks = containerStacklist.ToArray(),
+                            ShouldApply = (wi, bs, es) =>
+                            {
+                                var be = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BERackStick;
+                                if (be == null) return false;
+                                return be.Inventory[bs.SelectionBoxIndex].Empty;
+                            }}
+                    };
+            });
+
+        }
+
+        public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
+        {
+            base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
+            dsc.AppendLine();
+            dsc.AppendLine(Lang.Get("moreinventorys:block-rackstick-desc"));
         }
 
         public override bool DoPartialSelection(IWorldAccessor world, BlockPos pos)
@@ -24,10 +66,18 @@ namespace MoreInventorys.src.BlockFolder
             return true;
         }
 
-        /*public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
+        public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
         {
-            return true;
-        }*/
+            var worldInteractions = base.GetPlacedBlockInteractionHelp(world, selection, forPlayer);
+
+            var resp = world.Claims.TestAccess(forPlayer, selection.Position, EnumBlockAccessFlags.Use);
+            if (resp == EnumWorldAccessResponse.Granted && interactions != null)
+            {
+                return worldInteractions?.Concat(interactions).ToArray() ?? interactions;
+            }
+
+            return worldInteractions ?? new WorldInteraction[0];
+        }
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
