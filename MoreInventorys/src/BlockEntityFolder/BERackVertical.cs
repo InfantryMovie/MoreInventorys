@@ -421,6 +421,20 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
                 return (orientationRotate, "chest");
             }
+            else if (container.Contains("micrateclosed"))
+            {
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, "micrateclosed");
+            }
+            else if (container.Contains("mibasketclosed"))
+            {
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, "mibasketclosed");
+            }
             else
             {
 
@@ -436,9 +450,10 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             float[][] tfMatrices = new float[3][];
             float scale = 0.9f;
-            float x = 0;
-            float z = 0;
-            float y = 0;
+            float x = 0; //Лево/Право
+            float z = 0; //Глубина
+            float y = 0; //вверх/вниз
+
 
             int orientationRotate = 0;
             string code = "";
@@ -454,6 +469,11 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 1.02f;
                     z = 0.05f;
                     y = 0f;
+                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    {
+                        z -= 0.01f;
+                        x += 0.03f;
+                    }
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(orientationRotate)// Сначала перемещаем предмет в центр блока
@@ -467,7 +487,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     x = 1.02f;
                     z = 0.05f; 
-                    y = 1f; 
+                    y = 1f;
+                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    {
+                        z -= 0.01f;
+                        x += 0.03f;
+                    }
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(orientationRotate)
@@ -480,7 +505,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     x = 1.02f;
                     z = 0.05f;
-                    y = 2f; 
+                    y = 2f;
+                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    {
+                        z -= 0.01f;
+                        x += 0.03f;
+                    }
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(orientationRotate)

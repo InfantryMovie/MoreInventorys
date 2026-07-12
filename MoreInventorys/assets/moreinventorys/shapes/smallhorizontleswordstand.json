@@ -1,6 +1,6 @@
 {
 	"editor": {
-		"collapsedPaths": "Root/Plate/steps2,Root/Plate/steps1,Root/Plate/Cube1,Root/Plate/steps4,Root/Plate/steps3,Root/Plate/steps5,Root/Cube8,Root/Plate/left,Root/Plate/right",
+		"collapsedPaths": "Root/Cube8,Root/Plate/steps2,Root/Plate/steps1,Root/Plate/Cube1,Root/Plate/steps4,Root/Plate/steps3,Root/Plate/right,Root/Plate/steps5",
 		"allAngles": false,
 		"entityTextureMode": false
 	},
@@ -58,7 +58,7 @@
 								{
 									"name": "curner7",
 									"from": [ 1.0E-4, 2.0, 5.9 ],
-									"to": [ 1.0001, 3.0, 8.4 ],
+									"to": [ 1.0301, 3.0, 8.4 ],
 									"rotationOrigin": [ 0.0, 2.0, 9.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -89,7 +89,7 @@
 								{
 									"name": "curner8",
 									"from": [ 1.0E-4, 3.0, 4.5 ],
-									"to": [ 1.0001, 4.0, 6.5 ],
+									"to": [ 1.0301, 4.0, 6.5 ],
 									"rotationOrigin": [ 0.0, 3.0, 8.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -120,7 +120,7 @@
 								{
 									"name": "curner9",
 									"from": [ 1.0E-4, 3.0, 2.5 ],
-									"to": [ 1.0001, 4.0, 5.0 ],
+									"to": [ 1.0301, 4.0, 5.0 ],
 									"rotationOrigin": [ 0.0, 3.0, 6.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -151,7 +151,7 @@
 								{
 									"name": "curner10",
 									"from": [ 1.0E-4, 3.0, 0.5 ],
-									"to": [ 1.0001, 4.0, 3.5 ],
+									"to": [ 1.0301, 4.0, 3.5 ],
 									"rotationOrigin": [ 0.0, 3.0, 4.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -182,7 +182,7 @@
 								{
 									"name": "curner11",
 									"from": [ 1.0E-4, 3.0, 0.5 ],
-									"to": [ 1.0001, 4.0, 4.0 ],
+									"to": [ 1.0301, 4.0, 4.0 ],
 									"rotationOrigin": [ 0.0, 3.0, 4.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -227,7 +227,7 @@
 								{
 									"name": "curner12",
 									"from": [ 1.0E-4, 3.0, -0.5 ],
-									"to": [ 1.0001, 4.0, 3.5 ],
+									"to": [ 1.0301, 4.0, 3.5 ],
 									"rotationOrigin": [ 0.0, 3.0, 3.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -288,7 +288,7 @@
 								{
 									"name": "curner13",
 									"from": [ 1.0E-4, 2.0, 5.9 ],
-									"to": [ 1.0001, 3.0, 8.4 ],
+									"to": [ 1.0301, 3.0, 8.4 ],
 									"rotationOrigin": [ 0.0, 2.0, 9.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -319,7 +319,7 @@
 								{
 									"name": "curner14",
 									"from": [ 1.0E-4, 3.0, 4.5 ],
-									"to": [ 1.0001, 4.0, 6.5 ],
+									"to": [ 1.0301, 4.0, 6.5 ],
 									"rotationOrigin": [ 0.0, 3.0, 8.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -350,7 +350,7 @@
 								{
 									"name": "curner15",
 									"from": [ 1.0E-4, 3.0, 2.5 ],
-									"to": [ 1.0001, 4.0, 5.0 ],
+									"to": [ 1.0301, 4.0, 5.0 ],
 									"rotationOrigin": [ 0.0, 3.0, 6.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -381,7 +381,7 @@
 								{
 									"name": "curner16",
 									"from": [ 1.0E-4, 3.0, 0.5 ],
-									"to": [ 1.0001, 4.0, 3.5 ],
+									"to": [ 1.0301, 4.0, 3.5 ],
 									"rotationOrigin": [ 0.0, 3.0, 4.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -412,7 +412,7 @@
 								{
 									"name": "curner17",
 									"from": [ 1.0E-4, 3.0, 0.5 ],
-									"to": [ 1.0001, 4.0, 4.0 ],
+									"to": [ 1.0301, 4.0, 4.0 ],
 									"rotationOrigin": [ 0.0, 3.0, 4.0 ],
 									"rotationX": -50.0,
 									"faces": {
@@ -457,7 +457,7 @@
 								{
 									"name": "curner18",
 									"from": [ 1.0E-4, 3.0, -0.5 ],
-									"to": [ 1.0001, 4.0, 3.5 ],
+									"to": [ 1.0301, 4.0, 3.5 ],
 									"rotationOrigin": [ 0.0, 3.0, 3.0 ],
 									"rotationX": -50.0,
 									"faces": {
