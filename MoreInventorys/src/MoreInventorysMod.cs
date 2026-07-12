@@ -128,6 +128,9 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("basketclosedblock", typeof(BasketClosedBlock));
             api.RegisterBlockEntityClass("bebasketclosed", typeof(BEBasketClosed));
 
+            api.RegisterBlockClass("rackhorizontalwood2x3block", typeof(RackHorizontalWood2x3Block));
+            api.RegisterBlockEntityClass("berackhorizontalwood2x3", typeof(BERackHorizontalWood2x3));
+
 
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
             api.Logger.Notification("<-----------------Mod 'More Inventorys' успешно загружен!----------------->");

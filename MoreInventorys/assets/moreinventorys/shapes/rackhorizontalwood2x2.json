@@ -9,8 +9,8 @@
 	"textureSizes": {
 	},
 	"textures": {
-		"reedrope": "block/cloth/reedrope",
-		"aged": "block/wood/debarked/aged"
+		"reedrope": "game:block/cloth/reedrope",
+		"aged": "game:block/wood/debarked/aged"
 	},
 	"elements": [
 		{
