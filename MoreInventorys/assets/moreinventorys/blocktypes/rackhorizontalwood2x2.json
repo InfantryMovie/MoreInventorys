@@ -1,0 +1,120 @@
+{
+  "code": "rackhorizontalwood2x2",
+  "class": "rackhorizontalwood2x2block",
+  "name": "RackHorizontalWood2x2",
+  "entityClass": "berackhorizontalwood2x2",
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "creativeinventory": {
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
+  },
+  "allowOverlap": true,
+
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "blockmaterial": "Wood",
+  "variantgroups": [
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
+  "combustibleProps": {
+    "burnTemperature": 600,
+    "burnDuration": 35
+  },
+
+  "collisionselectionboxes": [
+    {
+      "x1": 0.18, //лево право
+      "y1": 0.25, //высота
+      "z1": 0.05, //глубина 
+      "x2": 0.88,
+      "y2": 0.88,
+      "z2": 0.84,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 1.06,
+      "y1": 0.25,
+      "z1": 0.05,
+      "x2": 1.76,
+      "y2": 0.88,
+      "z2": 0.84,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.18,
+      "y1": 1,
+      "z1": 0.05,
+      "x2": 0.88,
+      "y2": 1.63,
+      "z2": 0.84,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 1.06,
+      "y1": 1,
+      "z1": 0.05,
+      "x2": 1.76,
+      "y2": 1.63,
+      "z2": 0.84,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    }
+  ],
+  "materialDensity": 400,
+  "replaceable": 900,
+  "resistance": 1.5,
+  "lightAbsorption": 1,
+  "tags": [ "storage" ],
+  "shape": { "base": "moreinventorys:rackhorizontalwood2x2" },
+  "shapebytype": {
+    "*-north": {
+      "base": "rackhorizontalwood2x2",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "rackhorizontalwood2x2",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "rackhorizontalwood2x2",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "rackhorizontalwood2x2",
+      "rotateY": 90
+    }
+  },
+  "sounds": {
+    "place": "game:block/planks",
+    "hit": "game:block/planks",
+    "break": "game:block/planks",
+    "walk": "game:walk/wood"
+  },
+  "placementRotationFix": true
+
+}

@@ -1,4 +1,5 @@
-﻿using MoreInventorys.src.BlockEntityFolder;
+﻿using Microsoft.VisualBasic;
+using MoreInventorys.src.BlockEntityFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
 namespace MoreInventorys.src.BlockFolder
 {
-    internal class RackStickBlock : Block
+    internal class RackHorizontalWood2x2Block : Block
     {
         WorldInteraction[]? interactions;
         public override void OnLoaded(ICoreAPI api)
@@ -22,13 +25,27 @@ namespace MoreInventorys.src.BlockFolder
 
             PlacedPriorityInteract = true;
 
-            interactions = ObjectCacheUtil.GetOrCreate(api, "rackStickInteractions", () =>
+            interactions = ObjectCacheUtil.GetOrCreate(api, "rackhorizontalwood2x2Interactions", () =>
             {
                 List<ItemStack> containerStacklist = new List<ItemStack>();
 
+                foreach (var code in ModConfigFile.Current.VanilaStorageContainersCode)
+                {
+                    var block = api.World.GetBlock(new AssetLocation("game:" + code + "-east"));
+                    if (block != null)
+                    {
+                        var stack = new ItemStack(block);
+                        string type = block.Attributes?["defaultType"]?.AsString();
+                        if (!string.IsNullOrEmpty(type))
+                        {
+                            stack.Attributes.SetString("type", type);
+                        }
+                        containerStacklist.Add(stack);
+                    }
+                }
+
                 foreach (var kvp in ModConfigFile.Current.ModedStorageContainersCode)
                 {
-                    if (kvp.Key != "mibasketclosed") continue;
                     var block = api.World.GetBlock(new AssetLocation("moreinventorys:" + kvp.Key + "-east"));
                     if (block != null)
                     {
@@ -45,12 +62,12 @@ namespace MoreInventorys.src.BlockFolder
                             Itemstacks = containerStacklist.ToArray(),
                             ShouldApply = (wi, bs, es) =>
                             {
-                                var be = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BERackStick;
+                                var be = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BERackHorizontalWood2x2;
                                 if (be == null) return false;
                                 return be.Inventory[bs.SelectionBoxIndex].Empty;
                             }}
                     };
-            });
+                });
 
         }
 
@@ -58,13 +75,9 @@ namespace MoreInventorys.src.BlockFolder
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
             dsc.AppendLine();
-            dsc.AppendLine(Lang.Get("moreinventorys:block-rackstick-desc"));
+            dsc.AppendLine(Lang.Get("moreinventorys:block-rackhorizontalwood2x2-desc"));
         }
 
-        public override bool DoPartialSelection(IWorldAccessor world, BlockPos pos)
-        {
-            return true;
-        }
 
         public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
         {
@@ -79,9 +92,15 @@ namespace MoreInventorys.src.BlockFolder
             return worldInteractions ?? new WorldInteraction[0];
         }
 
+        public override bool DoPartialSelection(IWorldAccessor world, BlockPos pos)
+        {
+            return true;
+        }
+
+
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-            if (world.BlockAccessor.GetBlockEntity(blockSel.Position) is BERackStick be)
+            if (world.BlockAccessor.GetBlockEntity(blockSel.Position) is BERackHorizontalWood2x2 be)
             {
                 return be.OnBlockInteract(byPlayer, blockSel);
             }
@@ -114,33 +133,31 @@ namespace MoreInventorys.src.BlockFolder
 
             return selPos.AddCopy(roundedDx, 0, roundedDz);
         }
-
+        
         public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack, BlockSelection blockSel, ref string failureCode)
         {
-            BlockPos upperblock1 = blockSel.Position.UpCopy();
-            BlockPos rightBlock1 = GetRightBlockPos(blockSel, byPlayer);
-            BlockPos rightBlockUp1 = rightBlock1.UpCopy();
+            BlockPos upperPart1 = blockSel.Position.UpCopy();
+            BlockPos rightBlockpos = GetRightBlockPos(blockSel, byPlayer);
+            BlockPos rightUp1 = rightBlockpos.UpCopy();
 
-            if (world.BlockAccessor.GetBlockId(upperblock1) != 0 
-                || world.BlockAccessor.GetBlockId(rightBlock1) != 0
-                || world.BlockAccessor.GetBlockId(rightBlockUp1) != 0) return false;
+            if (world.BlockAccessor.GetBlockId(upperPart1) != 0 || world.BlockAccessor.GetBlockId(rightBlockpos) != 0 || world.BlockAccessor.GetBlockId(rightUp1) != 0) return false;
 
 
             bool ret = base.TryPlaceBlock(world, byPlayer, itemstack, blockSel, ref failureCode);
             if (!ret) return false;
 
             var be = world.BlockAccessor.GetBlockEntity(blockSel.Position);
-            if (be is BERackStick rackBe)
+            if (be is BERackHorizontalWood2x2 rackBe)
             {
                 rackBe.DummyPositions.Clear();
-                rackBe.DummyPositions.Add(upperblock1);
-                rackBe.DummyPositions.Add(rightBlock1);
-                rackBe.DummyPositions.Add(rightBlockUp1);
+                rackBe.DummyPositions.Add(upperPart1);
+                rackBe.DummyPositions.Add(rightBlockpos);
+                rackBe.DummyPositions.Add(rightUp1);
             }
 
-            SetDummyBlock(world, upperblock1, blockSel.Position);
-            SetDummyBlock(world, rightBlock1, blockSel.Position);
-            SetDummyBlock(world, rightBlockUp1, blockSel.Position);
+            SetDummyBlock(world, upperPart1, blockSel.Position);
+            SetDummyBlock(world, rightBlockpos, blockSel.Position);
+            SetDummyBlock(world, rightUp1, blockSel.Position);
 
             return ret;
         }
@@ -158,13 +175,13 @@ namespace MoreInventorys.src.BlockFolder
                     dummyBe.MainBlockPos = mainPos;
                     dummyBe.MarkDirty(true);
                 }
-            }, 1); 
+            }, 1);
         }
 
         public override void OnBlockRemoved(IWorldAccessor world, BlockPos pos)
         {
 
-            var be = world.BlockAccessor.GetBlockEntity(pos) as BERackStick;
+            var be = world.BlockAccessor.GetBlockEntity(pos) as BERackHorizontalWood2x2;
             if (be != null)
             {
                 foreach (var dummy in be.DummyPositions)
@@ -175,7 +192,7 @@ namespace MoreInventorys.src.BlockFolder
 
             base.OnBlockRemoved(world, pos);
         }
-
+        
 
     }
 }
