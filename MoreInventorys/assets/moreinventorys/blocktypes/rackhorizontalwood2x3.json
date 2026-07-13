@@ -8,6 +8,19 @@
     "general": [ "*-north" ],
     "moreinventorys": [ "*-north" ]
   },
+  "guiTransform": {
+    "translation": {
+      "x": -4,
+      "y": 13,
+      "z": 0
+    },
+    "rotation": {
+      "x": -23,
+      "y": -51,
+      "z": 0
+    },
+    "scale": 0.56
+  },
   "allowOverlap": true,
 
   "sidesolid": {

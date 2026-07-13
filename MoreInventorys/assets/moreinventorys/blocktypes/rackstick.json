@@ -7,6 +7,14 @@
     "general": [ "*-north" ],
     "moreinventorys": [ "*-north" ]
   },
+  "guiTransform": {
+    "translation": {
+      "x": -7,
+      "y": 10,
+      "z": 0
+    },
+    "scale": 0.68
+  },
   "allowOverlap": true,
 
   "sidesolid": {

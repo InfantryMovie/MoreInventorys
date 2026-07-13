@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MoreInventorys.src.BlockEntityFolder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MoreInventorys.src.BlockEntityFolder;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace MoreInventorys.src.BlockFolder
@@ -30,6 +31,14 @@ namespace MoreInventorys.src.BlockFolder
             if (be != null) return be.OnInteract(byPlayer, blockSel);
 
             return base.OnBlockInteractStart(world, byPlayer, blockSel);
+        }
+
+        public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
+        {
+            base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
+            dsc.AppendLine("Слотов для хранения: 6");
+            dsc.AppendLine();
+            dsc.AppendLine(Lang.Get("moreinventorys:block-smallverticalweaponstand-desc"));
         }
     }
 }

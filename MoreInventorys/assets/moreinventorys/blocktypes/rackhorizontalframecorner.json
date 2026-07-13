@@ -8,6 +8,14 @@
     "moreinventorys": [ "*-north" ]
   },
   "allowOverlap": true,
+  "guiTransform": {
+    "translation": {
+      "x": -4,
+      "y": 12,
+      "z": 0
+    },
+    "scale": 0.52
+  },
 
   "sidesolid": {
     "all": false

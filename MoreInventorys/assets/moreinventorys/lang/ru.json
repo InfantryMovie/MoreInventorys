@@ -51,6 +51,9 @@
   "block-rackhorizontalframeline-walnut-north": "Двойной Стеллаж 2х3 (грецкий орех)",
   "block-rackhorizontalframeline-purpleheart-north": "Двойной Стеллаж 2х3 (пурпурное дерево)",
 
+  "block-rackhorizontalwood2x2-north": "Двойной Стеллаж 2х2 (деревянный)",
+  "block-rackhorizontalwood2x3-north": "Двойной Стеллаж 2х3 (деревянный)",
+
   "block-rackstick-north": "Стеллаж из палок 2х1",
 
   "block-rackvertical-acacia-north": "Стеллаж 1х3 (акация)",
@@ -144,12 +147,20 @@
 
   "block-mibasketclosed-north": "Корзина из рагоза",
 
-  "block-micrateclosed-north-desc": "Может хранить предметы",
-  "block-mibasketclosed-north-desc": "Может хранить предметы",
+  "block-micrateclosed-desc": "Может хранить предметы",
+  "block-mibasketclosed-desc": "Может хранить предметы",
 
   "block-rackhorizontal-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
   "block-rackvertical-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
   "block-rackstick-desc": "Начальный стеллаж из палок, поставь на него корзину из рагоза (не ванильную)",
+
+  "block-rackhorizontalwood2x2-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
+  "block-rackhorizontalwood2x3-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
+
+  "block-shieldstand-desc": "Левый и правый слоты для мечей, центральный для щита",
+  "block-smallhorizontleswordstand-desc": "Стойка для мечей",
+  "block-smallverticalweaponstand-desc": "Стойка для оружия и инструментов",
+  "block-firstshelf-desc": "Полка для хранения продуктов",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

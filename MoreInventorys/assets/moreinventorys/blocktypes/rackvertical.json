@@ -15,6 +15,14 @@
   "sideopaque": {
     "all": false
   },
+  "guiTransform": {
+    "translation": {
+      "x": 0,
+      "y": 11,
+      "z": 0
+    },
+    "scale": 0.5
+  },
   "blockmaterial": "Wood",
   "variantgroups": [
     {

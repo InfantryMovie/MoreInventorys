@@ -17,6 +17,14 @@
     "burnTemperature": 600,
     "burnDuration": 35
   },
+  "guiTransform": {
+    "origin": {
+      "x": 0.75,
+      "y": 0.4,
+      "z": 0.5
+    },
+    "scale": 1.18
+  },
   "variantgroups": [
     {
       "code": "ingots",
