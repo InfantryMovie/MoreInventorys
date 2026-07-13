@@ -29,7 +29,8 @@ namespace MoreInventorys.src.BlockFolder
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-            dsc.AppendLine("Слотов для хранения: 16");
+            dsc.AppendLine(Lang.Get("moreinventorys:block-micrateclosed-desc-storage"));
+
 
         }
 

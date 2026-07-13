@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
@@ -147,7 +148,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (storageDlg == null)
                 {
-                    storageDlg = new GuiDialogCrateClosed("Basket", (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI, slotCount);
+                    storageDlg = new GuiDialogCrateClosed(Lang.Get("moreinventorys:block-mibasketclosed-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI, slotCount);
 
                     // Подписываемся на событие закрытия GUI
                     storageDlg.OnClosed += delegate

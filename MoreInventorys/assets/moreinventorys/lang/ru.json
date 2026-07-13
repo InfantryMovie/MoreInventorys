@@ -12,6 +12,7 @@
   "block-firstshelf-walnut-north": "Продуктовая полка v.1 (грецкий орех)",
   "block-firstshelf-purpleheart-north": "Продуктовая полка v.1 (пурпурное дерево)",
 
+  "block-rackhorizontal-north": "Двойной Стеллаж 2х3",
   "block-rackhorizontal-acacia-north": "Двойной Стеллаж 2х3 (акация)",
   "block-rackhorizontal-birch-north": "Двойной Стеллаж 2х3 (береза)",
   "block-rackhorizontal-kapok-north": "Двойной Стеллаж 2х3 (капок)",
@@ -56,6 +57,8 @@
 
   "block-rackstick-north": "Стеллаж из палок 2х1",
 
+
+  "block-rackvertical-north": "Стеллаж 1х3",
   "block-rackvertical-acacia-north": "Стеллаж 1х3 (акация)",
   "block-rackvertical-birch-north": "Стеллаж 1х3 (береза)",
   "block-rackvertical-kapok-north": "Стеллаж 1х3 (капок)",
@@ -132,6 +135,7 @@
   "block-smallverticalweaponstand-uranium-north": "SV Стенд для оружия/инструментов v.1 (уран)",
   "block-smallverticalweaponstand-zinc-north": "SV Стенд для оружия/инструментов v.1 (цинк)",
 
+  "block-micrateclosed-north": "Закрытый ящик",
   "block-micrateclosed-acacia-north": "Закрытый ящик (акация)",
   "block-micrateclosed-birch-north": "Закрытый ящик (береза)",
   "block-micrateclosed-kapok-north": "Закрытый ящик (капок)",
@@ -161,6 +165,18 @@
   "block-smallhorizontleswordstand-desc": "Стойка для мечей",
   "block-smallverticalweaponstand-desc": "Стойка для оружия и инструментов",
   "block-firstshelf-desc": "Полка для хранения продуктов",
+
+  "block-micrateclosed-desc-storage": "Слотов для хранения: 16",
+  "block-firstshelf-desc-storage": "Слотов для хранения: 4",
+  "block-mibasketclosed-desc-storage": "Слотов для хранения: 8",
+  "block-rackhorizontal-desc-storage": "Слотов для контейнеров: 6",
+  "block-rackhorizontalwood2x2-desc-storage": "Слотов для контейнеров: 4",
+  "block-rackhorizontalwood2x3-desc-storage": "Слотов для контейнеров: 6",
+  "block-rackstick-desc-storage": "Слотов для контейнеров: 4",
+  "block-rackvertical-desc-storage": "Слотов для контейнеров: 3",
+  "block-shieldstand-desc-storage": "Слотов для хранения: 3",
+  "block-smallhorizontleswordstand-desc-storage": "Слотов для хранения: 5",
+  "block-smallverticalweaponstand-desc-storage": "Слотов для хранения: 6",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

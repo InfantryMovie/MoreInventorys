@@ -36,7 +36,7 @@ namespace MoreInventorys.src.BlockFolder
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-            dsc.AppendLine("Слотов для хранения: 5");
+            dsc.AppendLine(Lang.Get("moreinventorys:block-smallhorizontleswordstand-desc-storage"));
             dsc.AppendLine();
             dsc.AppendLine(Lang.Get("moreinventorys:block-smallhorizontleswordstand-desc"));
         }

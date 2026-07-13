@@ -29,7 +29,7 @@ namespace MoreInventorys.src.BlockFolder
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-            dsc.AppendLine("Слотов для хранения: 8");
+            dsc.AppendLine(Lang.Get("moreinventorys:block-mibasketclosed-desc-storage"));
         }
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)

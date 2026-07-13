@@ -1,16 +1,17 @@
 {
-  "ingredientPattern": "PHP,PNP,P_P",
+  "ingredientPattern": "PHP,PRP,P_P",
   "ingredients": {
     "P": {
       "type": "item",
       "code": "game:plank-*",
-      "name": "planks",
       "allowedVariants": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ],
-      "quantity": 2
+      "quantity": 4
     },
-    "N": {
+    "R": {
       "type": "item",
-      "code": "game:metalnailsandstrips-*"
+      "code": "game:*",
+      "allowedVariants": [ "cattailtops", "papyrustops" ],
+      "quantity": 4
     },
     "H": {
       "type": "item",
@@ -24,6 +25,6 @@
   "shapeless": false,
   "output": {
     "type": "block",
-    "code": "rackvertical-{planks}-north"
+    "code": "rackhorizontalwood2x3-north"
   }
 }

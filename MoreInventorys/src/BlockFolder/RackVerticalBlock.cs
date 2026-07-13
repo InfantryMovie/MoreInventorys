@@ -72,7 +72,7 @@ namespace MoreInventorys.src.BlockFolder
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-            dsc.AppendLine("Слотов для контейнеров: 3");
+            dsc.AppendLine(Lang.Get("moreinventorys:block-rackvertical-desc-storage"));
             dsc.AppendLine();
             dsc.AppendLine(Lang.Get("moreinventorys:block-rackvertical-desc"));
         }

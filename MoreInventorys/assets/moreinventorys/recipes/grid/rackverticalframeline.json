@@ -1,5 +1,5 @@
 {
-  "ingredientPattern": "P_P,P_P,PNP",
+  "ingredientPattern": "PHP,P_P,PNP",
   "ingredients": {
     "P": {
       "type": "item",
@@ -11,6 +11,12 @@
     "N": {
       "type": "item",
       "code": "game:metalnailsandstrips-*",
+      "quantity": 1
+    },
+    "H": {
+      "type": "item",
+      "code": "game:hammer-*",
+      "isTool": true,
       "quantity": 1
     }
   },

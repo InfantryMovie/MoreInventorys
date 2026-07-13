@@ -1,5 +1,5 @@
 {
-  "ingredientPattern": "___,INI,PPP",
+  "ingredientPattern": "_H_,INI,PPP",
   "ingredients": {
     "P": {
       "type": "item",
@@ -14,6 +14,12 @@
     "I": {
       "type": "item",
       "code": "game:ingot-iron"
+    },
+    "H": {
+      "type": "item",
+      "code": "game:hammer-*",
+      "isTool": true,
+      "quantity": 1
     }
   },
   "width": 3,
