@@ -69,7 +69,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (itemstack == null) return false;
 
             if (itemstack.Collectible.Tool == null) return false;
-
+            if (itemstack.Collectible.Code.Path.Contains("blade-sabre-ruined")) return false;
             if (itemstack.Collectible.Code.Path.Contains("blade") || itemstack.Collectible.Tool == EnumTool.Sword) return true;
 
             return false;
@@ -119,22 +119,120 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             for (int index = 0; index < slotCount; index++)
             {
-                //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса
-                float x = 1.7f;
-                float z = 1.38f - (index * 0.11f); //глубина
-                float y =  0.45f + (index * 0.08f); //высота
+                float x = 0f; //Лева/Право
+                float z = 0f; //Глубина
+                float y = 0f; //Высота
 
-                tfMatrices[index] = new Matrixf()
-                   .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
-                   .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
-                   .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
-                   .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
-                   .Scale(1f, 0.85f, 0.85f)
-                   //.RotateZDeg(90f) // поднимает  вертикально
-                   //.RotateYDeg(5f) // наклон 
-                   .RotateYDeg(180f)
-                   .RotateXDeg(50f)
-                   .Values;
+                var weapon = inv[index];
+                var code = weapon.Itemstack?.Item?.Code.ToString();
+                //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса
+
+                if (string.IsNullOrEmpty(code)) continue;
+
+                if(code.Contains("flax"))
+                {
+                    x = 1.7f;
+                    z = 1.38f - (index * 0.11f); //глубина
+                    y = 0.45f + (index * 0.08f); //высота
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 0.85f, 0.85f)
+                       //.RotateZDeg(90f) // поднимает  вертикально
+                       //.RotateYDeg(5f) // наклон 
+                       .RotateYDeg(180f)
+                       .RotateXDeg(50f)
+                       .Values;
+                } 
+                else if (code.Contains("blade-arming-ruined") )
+                {
+                    x = 1.9f;
+                    z = 1.38f - (index * 0.11f); //глубина
+                    y = 0.52f + (index * 0.08f); //высота
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 0.85f, 0.85f)
+                       //.RotateZDeg(90f) // поднимает  вертикально
+                       //.RotateYDeg(5f) // наклон 
+                       .RotateYDeg(180f)
+                       .RotateXDeg(50f)
+                       .Values;
+                }
+                else if (code.Contains("blade-scrap-scrap") || code.Contains("blade-forlorn"))
+                {
+                    x = 1.9f;
+                    z = 1.36f - (index * 0.11f); //глубина
+                    y = 0.5f + (index * 0.08f); //высота
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 0.85f, 0.85f)
+                       //.RotateZDeg(90f) // поднимает  вертикально
+                       //.RotateYDeg(5f) // наклон 
+                       .RotateYDeg(180f)
+                       .RotateXDeg(50f)
+                       .Values;
+                }
+                else if (code.Contains("blade-gladius-ruined"))
+                {
+                    x = 1.9f;
+                    z = 1.36f - (index * 0.11f); //глубина
+                    y = 0.5f + (index * 0.08f); //высота
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 0.85f, 0.85f)
+                       //.RotateZDeg(90f) // поднимает  вертикально
+                       //.RotateYDeg(5f) // наклон 
+                       .RotateYDeg(180f)
+                       .RotateXDeg(50f)
+                       .Values;
+                }
+                else if (code.Contains("blade-claymore-ruined"))
+                {
+                    x = 2.18f;
+                    z = 1.36f - (index * 0.11f); //глубина
+                    y = 0.5f + (index * 0.08f); //высота
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 0.85f, 0.85f)
+                       //.RotateZDeg(90f) // поднимает  вертикально
+                       //.RotateYDeg(5f) // наклон 
+                       .RotateYDeg(180f)
+                       .RotateXDeg(50f)
+                       .Values;
+                }
+                else
+                {
+                    x = 1.7f;
+                    z = 1.38f - (index * 0.11f); //глубина
+                    y = 0.45f + (index * 0.08f); //высота
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 0.85f, 0.85f)
+                       //.RotateZDeg(90f) // поднимает  вертикально
+                       //.RotateYDeg(5f) // наклон 
+                       .RotateYDeg(180f)
+                       .RotateXDeg(50f)
+                       .Values;
+                }
+
+              
             }
 
             return tfMatrices;
