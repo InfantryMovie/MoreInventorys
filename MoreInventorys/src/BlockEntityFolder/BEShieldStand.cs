@@ -143,11 +143,16 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             for (int index = 0; index < slotCount; index++)
             {
+
+                var invSlot = inv[index];
+                var code = invSlot.Itemstack?.Item?.Code.ToString();
+                if (code == null) continue;
+
                 //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса //float x = (index * 0.15f) + 0.67f;
                 float x = 0f; //ширина
                 float z = 0f; //глубина
                 float y = 0f; //высота
-                ItemSlot slot = inv[index];
+                float scale = 0.7f;
 
                 switch (index)
                 {
@@ -161,43 +166,162 @@ namespace MoreInventorys.src.BlockEntityFolder
                            .RotateYDeg(block.Shape.rotateY) // Поворачиваем предмет по оси Y (если сам блок повернут)
                            .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
                            .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
-                           .Scale(0.9f, 0.9f, 0.9f)
+                           .Scale(1f, 1f, 1f)
                            .RotateZDeg(45f)
                            .Values;
                         break;
 
                     //sword1
                     case 1:
-                        x = 0.29f;
-                        z = 0.46f;
-                        y = 0.25f;
-                        tfMatrices[index] = new Matrixf()
-                          .Translate(0.5f, 0f, 0.5f)
-                           .RotateYDeg(block.Shape.rotateY)
-                           .Translate(x - 0.5f, y, z - 0.4f)
-                           .Translate(-0.5f, 0f, -0.5f)
-                           .Scale(0.7f, 0.7f, 0.7f)
-                           .RotateZDeg(-90f)
-                           .RotateXDeg(90f)
-                           .RotateYDeg(155f)
-                           .Values;
+
+                        if (code.Contains("falx"))
+                        {
+                            x = 0.29f;
+                            z = 0.46f;
+                            y = 0.25f;
+                            tfMatrices[index] = new Matrixf()
+                              .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(-91.6f)
+                               .RotateXDeg(90f)
+                               .RotateYDeg(155f)
+                               .Values;
+ 
+                        }
+                        else if (code.Contains("blade-scrap-scrap")) {
+                            x = 0.29f;
+                            z = 0.48f;
+                            y = 0.25f;
+                            tfMatrices[index] = new Matrixf()
+                              .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(-91.6f)
+                               .RotateXDeg(90f)
+                               .RotateYDeg(155f)
+                               .Values;
+                            
+                        }
+                        else if (code.Contains("blade-forlorn"))
+                        {
+                            x = 0.29f;
+                            z = 0.5f;
+                            y = 0.25f;
+                            tfMatrices[index] = new Matrixf()
+                              .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(-91.6f)
+                               .RotateXDeg(90f)
+                               .RotateYDeg(155f)
+                               .Values;
+                            /*
+                             * 
+                             * .RotateZDeg(235f)
+                               .RotateXDeg(-90f)
+                               .RotateY(90f)
+                             * */
+
+                        }
+                        else
+                        {
+                            x = 0.29f;
+                            z = 0.46f;
+                            y = 0.25f;
+                            tfMatrices[index] = new Matrixf()
+                              .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(-91.6f)
+                               .RotateXDeg(90f)
+                               .RotateYDeg(155f)
+                               .Values;
+                        }
+
                         break;
 
                     //sword2
                     case 2:
-                        x = 1.73f;
-                        z = 0.56f;
-                        y = 0.27f;
-                        tfMatrices[index] = new Matrixf()
-                           .Translate(0.5f, 0f, 0.5f)
-                           .RotateYDeg(block.Shape.rotateY)
-                           .Translate(x - 0.5f, y, z - 0.4f)
-                           .Translate(-0.5f, 0f, -0.5f)
-                           .Scale(0.7f, 0.7f, 0.7f)
-                           .RotateZDeg(235f)
-                           .RotateXDeg(-90f)
-                           .RotateY(90f)
-                           .Values;
+                        if (code.Contains("falx"))
+                        {
+                            x = 1.73f;
+                            z = 0.56f;
+                            y = 0.27f;
+                            tfMatrices[index] = new Matrixf()
+                               .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(235f)
+                               .RotateXDeg(-90f)
+                               .RotateY(90f)
+                               .Values;
+
+                        }
+                        else if (code.Contains("blade-scrap-scrap"))
+                        {
+                            x = 1.73f;
+                            z = 0.49f;
+                            y = 0.27f;
+                            tfMatrices[index] = new Matrixf()
+                               .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(235f)
+                               .RotateXDeg(-90f)
+                               .RotateY(90f)
+                               .Values;
+
+                        }
+                        else if (code.Contains("blade-forlorn"))
+                        {
+                            x = 1.73f;
+                            z = 0.50f;
+                            y = 0.27f;
+                            tfMatrices[index] = new Matrixf()
+                               .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(235f)
+                               .RotateXDeg(-90f)
+                               .RotateY(90f)
+                               .Values;
+
+     
+
+                        }
+
+                        else
+                        {
+                            x = 1.73f;
+                            z = 0.56f;
+                            y = 0.27f;
+                            tfMatrices[index] = new Matrixf()
+                               .Translate(0.5f, 0f, 0.5f)
+                               .RotateYDeg(block.Shape.rotateY)
+                               .Translate(x - 0.5f, y, z - 0.4f)
+                               .Translate(-0.5f, 0f, -0.5f)
+                               .Scale(scale, scale, scale)
+                               .RotateZDeg(235f)
+                               .RotateXDeg(-90f)
+                               .RotateY(90f)
+                               .Values;
+                        }
+
                         break;
 
                     default:
