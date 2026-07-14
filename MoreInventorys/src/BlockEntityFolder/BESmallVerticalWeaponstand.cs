@@ -10,8 +10,9 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
 using Vintagestory.API.MathTools;
+using Vintagestory.GameContent;
+using Vintagestory.ServerMods;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
@@ -377,7 +378,33 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
                 return (orientationRotate, weapon);
             }
-            if (weapon.Contains("blade") && !weapon.Contains("blade-forlonr") && !weapon.Contains("blade-longsword-admin"))
+            if (weapon.Contains("blade") && !weapon.Contains("blade-forlonr") && !weapon.Contains("blade-longsword-admin")
+                && !weapon.Contains("blade-gladius-ruined") && !weapon.Contains("blade-arming-ruined") && !weapon.Contains("blade-claymore-ruined")
+                && !weapon.Contains("blade-sabre-ruined"))
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, weapon);
+            }
+            if (weapon.Contains("blade-sabre-ruined"))
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, weapon);
+            }
+            if (weapon.Contains("blade-claymore-ruined"))
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, weapon);
+            }
+            if (weapon.Contains("blade-arming-ruined"))
             {
 
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
@@ -433,13 +460,21 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
                 return (orientationRotate, "cleaver");
             }
-            if (weapon.Contains("club"))
+            if (weapon.Contains("club") && !weapon.Contains("club-generic-wood"))
             {
 
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
                 if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
                 return (orientationRotate, "club");
+            }
+            if (weapon.Contains("club-generic-wood"))
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, weapon);
             }
             if (weapon.Contains("oar"))
             {
@@ -513,7 +548,23 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
                 return (orientationRotate, weapon);
             }
+            if (weapon.Contains("tongs"))
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, weapon);
+            }
             if (weapon.Contains("soldering"))
+            {
+
+                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
+                return (orientationRotate, weapon);
+            }
+            if (weapon.Contains("blade-gladius-ruined"))
             {
 
                 if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
@@ -538,6 +589,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             float[][] tfMatrices = new float[slotCount][];
             int orientationRotate = 0;
             string code = "";
+            string[] hoesMetall = {"hoe-copper", "hoe-gold", "hoe-silver", "hoe-iron", "hoe-steel", "hoe-tinbronze", "hoe-bismuthbronze", 
+                "hoe-blackbronze", "hoe-meteoriciron" };
             for (int index = 0; index < slotCount; index++)
             {
                 var orientationRotateResult = GetOrientationRateForMartices(index);
@@ -557,22 +610,35 @@ namespace MoreInventorys.src.BlockEntityFolder
                     z -= 0.11f;
                 }
 
-                if (code.Contains("bow"))
-                {
-                    y -= 0.20f;
-                    z -= 0.11f;
-                    x -= 0.05f;
-                }
+                
 
-
-
-                if (code.Contains("hoe"))
+                /*if (code.Contains("hoe"))
                 {
                     y -= 0.20f;
                     z -= 0.095f;
+                }*/
+                if (code.Contains("hoe"))
+                {
+                    bool anyMatch = false;
+                    foreach (var hm in hoesMetall)
+                    {
+                        if (code.Contains(hm))
+                        {
+                            anyMatch = true;
+                            y -= 0.20f;
+                            z -= 0.095f;
+                        }
+                    }
+
+                    if(!anyMatch)
+                    {
+                        y -= 0.55f;
+                        z -= 0.095f;
+                        
+                    }
+   
                 }
 
-                
 
                 if (code.Contains("hammer"))
                 {
@@ -615,6 +681,21 @@ namespace MoreInventorys.src.BlockEntityFolder
                    .RotateYDeg(180f) // наклон 
                    .Values;
                 }
+                else if (code.Contains("bow"))
+                {
+                    y -= 0.29f;
+                    z -= 0.02f;
+                    x -= 0.05f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 1f, 1f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(15f) // наклон 
+                       .Values;
+                }
                 else if (code.StartsWith("spear"))
                 {
                     if (code.Contains("spear-generic-hacking"))
@@ -635,11 +716,30 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z -= 0.11f;
                         x -= 0.031f;
                     }
-                    else if (code.Contains("ruined"))
+                    else if (code.Contains("ruined") && !code.Contains("spear-fork-ruined")) 
                     {
                         y += 0.35f;
                         z -= 0.11f;
                         x -= 0.046f;
+                    }
+                    else if (code.Contains("spear-fork-ruined")) 
+                    {
+                        y += 0.84f;
+                        z -= 0.11f;
+                        x -= 0.046f;
+                    }
+                    else if (code.Contains("spear-generic-erel"))
+                    {
+                        y += 0.64f;
+                        z -= 0.15f;
+                        x -= 0.046f;
+                    }
+                    else if (code.Contains("spear-generic-copper") || code.Contains("spear-generic-iron") || code.Contains("spear-generic-meteoriciron") ||
+                        code.Contains("spear-generic-steel") || code.Contains("spear-generic-blackbronze") || code.Contains("spear-generic-bismuthbronze"))
+                    {
+                        y += 0.4f;
+                        z -= 0.11f;
+                        x += 0f;
                     }
                     else
                     {
@@ -761,7 +861,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 else if (code.Contains("wrench"))
                 {
                     y -= 0.78f;
-                    z -= 0.20f;
+                    z -= 0.1f;
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
@@ -807,10 +907,27 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .RotateXDeg(90f)
                        .Values;
                 }
-                else if (code.Contains("club"))
+                else if (code.Contains("club") && !code.Contains("club-generic-wood")) 
                 {
                     y -= 0.65f;
                     z += 0.4f;
+                    x -= 0.445f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(0.75f, 0.75f, 0.75f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(2f) // наклон 
+                       .RotateXDeg(90f)
+                       .Values;
+                }
+                else if (code.Contains("club-generic-wood")) 
+                {
+                    y -= 0.65f;
+                    z += 0.02f;
                     x -= 0.445f;
 
                     tfMatrices[index] = new Matrixf()
@@ -922,6 +1039,70 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(0.9f, 0.9f, 0.9f)
                        .RotateZDeg(90f) // поднимает  вертикально
                        .RotateYDeg(195f) // наклон 
+                       .Values;
+                    }
+                    else if (code.Contains("blade-gladius-ruined"))
+                    {
+                        y = 1.84f;
+                        z = 1.01f;
+                        x -= 0.045f;
+
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 1f, 1f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(195f) // наклон 
+                       .Values;
+                    }
+                    else if (code.Contains("blade-arming-ruined"))
+                    {
+                        y = 2.44f;
+                        z = 0.93f;
+                        x -= 0.045f;
+
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 1f, 1f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(195f) // наклон 
+                       .Values;
+                    }
+                    else if (code.Contains("blade-claymore-ruined"))
+                    {
+                        y = 3.1f;
+                        z = 0.67f;
+                        x -= 0.045f;
+
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 1f, 1f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(195f) // наклон 
+                       .Values;
+                    }
+                    else if (code.Contains("blade-sabre-ruined"))
+                    {
+                        y = 2.1f;
+                        z = 0.7f;
+                        x -= 0.067f;
+
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 1f, 1f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(215f) // наклон 
                        .Values;
                     }
                     else
@@ -1119,6 +1300,21 @@ namespace MoreInventorys.src.BlockEntityFolder
                       .RotateYDeg(5f) // наклон 
                       .RotateXDeg(90f)
                       .Values;
+                }
+                else if (code.Contains("tongs"))
+                {
+                    y += 0.62f;
+                    z += 0.8f;
+                    x += 0.45f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 1f, 1f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(180f) // наклон 
+                       .Values;
                 }
                 else
                 {
