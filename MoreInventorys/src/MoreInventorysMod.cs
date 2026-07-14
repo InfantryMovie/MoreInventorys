@@ -56,7 +56,11 @@ namespace MoreInventorys.src
             "solderingiron",
             "spear",
             "tongs",
-            "wrench"
+            "wrench",
+            "tongsmetal",
+            "crowbar",
+            "snowshovel",
+            "fishingpole"
         };
 
         public Dictionary<string, int> ModedStorageWeaponsCode { get; set; } = new Dictionary<string, int>();

@@ -288,290 +288,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
                 return (orientationRotate, "");
             }
-
-            if (weapon.Contains("axe") && !weapon.Contains("pickaxe") && !weapon.Contains("prospectingpick"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("pickaxe"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "pickaxe");
-            }
-            if (weapon.Contains("prospectingpick"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "prospectingpick");
-            }
-            if (weapon.Contains("shears"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "shears");
-            }
-            if (weapon.Contains("knife") && !weapon.Contains("knife-dagger-ruined") && !weapon.Contains("knife-khanjar-ruined")
-                && !weapon.Contains("knife-baselard-ruined") && !weapon.Contains("knife-stiletto-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "knife");
-            }
-            if (weapon.Contains("knife-dagger-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "knife-dagger-ruined");
-            }
-            if (weapon.Contains("knife-khanjar-ruined")) 
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "knife-khanjar-ruined");
-            }
-            if (weapon.Contains("knife-baselard-ruined")) 
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "knife-baselard-ruined");
-            }
-            if (weapon.Contains("knife-stiletto-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "knife-stiletto-ruined");
-            }
-            if (weapon.Contains("bugnet"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "bugnet");
-            }
-            if (weapon.Contains("spear"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("blade") && !weapon.Contains("blade-forlonr") && !weapon.Contains("blade-longsword-admin")
-                && !weapon.Contains("blade-gladius-ruined") && !weapon.Contains("blade-arming-ruined") && !weapon.Contains("blade-claymore-ruined")
-                && !weapon.Contains("blade-sabre-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("blade-sabre-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("blade-claymore-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("blade-arming-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("blade-forlonr"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("blade-longsword-admin"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("shovel"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("firestarter"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("hoe"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("cleaver"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "cleaver");
-            }
-            if (weapon.Contains("club") && !weapon.Contains("club-generic-wood"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "club");
-            }
-            if (weapon.Contains("club-generic-wood"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("oar"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "oar");
-            }
-            if (weapon.Contains("hammer"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "hammer");
-            }
-            if (weapon.Contains("saw"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "saw");
-            }
-            if (weapon.Contains("chisel"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "chisel");
-            }
-            if (weapon.Contains("wrench"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "wrench");
-            }
-            if (weapon.Contains("scythe"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "scythe");
-            }
-            if (weapon.Contains("sling"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "sling");
-            }
-            if (weapon.Contains("plumband"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "plumband");
-            }
-            if (weapon.Contains("bow"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("tongs"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("soldering"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
-            if (weapon.Contains("blade-gladius-ruined"))
-            {
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, weapon);
-            }
             else
             {
 
@@ -580,7 +296,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
             }
 
-            return (orientationRotate, "");
+            return (orientationRotate, weapon);
 
         }
 
@@ -604,13 +320,25 @@ namespace MoreInventorys.src.BlockEntityFolder
                 float itemHeight = 0.1f;
                 float y = itemHeight + 0.55f; //высота
 
-                if (code.Contains("shovel"))
+                if (code.Contains("shovel") && !code.Contains("snowshovel"))
                 {
                     y -= 0.20f;
                     z -= 0.11f;
                 }
 
-                
+                if (code.Contains("snowshovel"))
+                {
+                    y -= 0.37f;
+                    z -= 0.11f;
+                }
+
+                if (code.Contains("fishingpole"))
+                {
+                    y -= 0.69f;
+                    z -= 0.11f;
+                }
+
+
 
                 /*if (code.Contains("hoe"))
                 {
@@ -907,7 +635,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .RotateXDeg(90f)
                        .Values;
                 }
-                else if (code.Contains("club") && !code.Contains("club-generic-wood")) 
+                else if (code.Contains("club") && !code.Contains("club-generic-wood") && !code.Contains("club-warhammer-ruined")) 
                 {
                     y -= 0.65f;
                     z += 0.4f;
@@ -929,6 +657,23 @@ namespace MoreInventorys.src.BlockEntityFolder
                     y -= 0.65f;
                     z += 0.02f;
                     x -= 0.445f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(0.75f, 0.75f, 0.75f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(2f) // наклон 
+                       .RotateXDeg(90f)
+                       .Values;
+                }
+                else if (code.Contains("club-warhammer-ruined"))
+                {
+                    y += 0.15f;
+                    z += 0.47f;
+                    x -= 0.87f;
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
@@ -1270,6 +1015,41 @@ namespace MoreInventorys.src.BlockEntityFolder
                       .RotateYDeg(3f) // наклон 
                       .Values;
                 }
+                else if (code.Contains("crowbar-steel") || code.Contains("crowbar-iron") || code.Contains("crowbar-meteoriciron"))
+                {
+                    y -= 0.69f;
+                    z += 0.37f;
+                    x -= 0.54f;
+
+                    tfMatrices[index] = new Matrixf()
+                      .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                      .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                      .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                      .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                      .Scale(1f, 1f, 1f)
+                      .RotateZDeg(90f) // поднимает  вертикально
+                      .RotateYDeg(5f) // наклон 
+                      .RotateXDeg(90f) // наклон 
+                      .Values;
+                }
+                else if (code.Contains("crowbar-copper") || code.Contains("crowbar-gold") || code.Contains("crowbar-silver")
+                    || code.Contains("crowbar-tinbronze") || code.Contains("crowbar-bismuthbronze") || code.Contains("crowbar-blackbronze"))
+                {
+                    y -= 0.69f;
+                    z += 0.45f;
+                    x -= 0.54f;
+
+                    tfMatrices[index] = new Matrixf()
+                      .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                      .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                      .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                      .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                      .Scale(1f, 1f, 1f)
+                      .RotateZDeg(90f) // поднимает  вертикально
+                      .RotateYDeg(5f) // наклон 
+                      .RotateXDeg(90f) // наклон 
+                      .Values;
+                }
                 else if (code.Contains("prospectingpick"))
                 {
                     y -= 0.62f;
@@ -1301,11 +1081,26 @@ namespace MoreInventorys.src.BlockEntityFolder
                       .RotateXDeg(90f)
                       .Values;
                 }
-                else if (code.Contains("tongs"))
+                else if (code.Contains("tongs") &&!code.Contains("tongsmetal"))
                 {
                     y += 0.62f;
                     z += 0.8f;
                     x += 0.45f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                       .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                       .Scale(1f, 1f, 1f)
+                       .RotateZDeg(90f) // поднимает  вертикально
+                       .RotateYDeg(180f) // наклон 
+                       .Values;
+                }
+                else if (code.Contains("tongsmetal"))
+                {
+                    y += 0.62f;
+                    z += 0.8f;
+                    x -= 0.05f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
                        .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
