@@ -434,9 +434,9 @@ namespace MoreInventorys.src.BlockEntityFolder
                     }
                     else if (code.Contains("spear-generic-ornate"))
                     {
-                        y += 0.35f;
-                        z -= 0.11f;
-                        x -= 0.013f;
+                        y += 0.4f;
+                        z += 0.32f;
+                        x -= 0.55f;
                     }
                     else if (code.Contains("spear-scrap"))
                     {
@@ -463,11 +463,11 @@ namespace MoreInventorys.src.BlockEntityFolder
                         x -= 0.046f;
                     }
                     else if (code.Contains("spear-generic-copper") || code.Contains("spear-generic-iron") || code.Contains("spear-generic-meteoriciron") ||
-                        code.Contains("spear-generic-steel") || code.Contains("spear-generic-blackbronze") || code.Contains("spear-generic-bismuthbronze"))
+                        code.Contains("spear-generic-steel") || code.Contains("spear-generic-blackbronze") || code.Contains("spear-generic-bismuthbronze") || code.Contains("spear-generic-tinbronze"))
                     {
                         y += 0.4f;
-                        z -= 0.11f;
-                        x += 0f;
+                        z += 0.32f;
+                        x -= 0.55f;
                     }
                     else
                     {
@@ -476,7 +476,24 @@ namespace MoreInventorys.src.BlockEntityFolder
                         
                     }
 
-                    tfMatrices[index] = new Matrixf()
+                    if(code.Contains("spear-generic-copper") || code.Contains("spear-generic-iron") || code.Contains("spear-generic-meteoriciron") ||
+                        code.Contains("spear-generic-steel") || code.Contains("spear-generic-blackbronze") || code.Contains("spear-generic-tinbronze") || code.Contains("spear-generic-bismuthbronze") || code.Contains("spear-generic-ornate"))
+                    {
+                       tfMatrices[index] = new Matrixf()
+                      .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
+                      .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
+                      .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
+                      .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
+                      .Scale(1f, 1f, 1f)
+                      .RotateZDeg(90f) // поднимает  вертикально
+                      .RotateYDeg(3f) // наклон 
+                      .RotateXDeg(90f)
+                      .Values;
+                    }
+                    else
+                    {
+
+                       tfMatrices[index] = new Matrixf()
                       .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
                       .RotateYDeg(orientationRotate) // Поворачиваем предмет по оси Y (если сам блок повернут)
                       .Translate(x - 0.5f, y, z - 0.4f) // Двигаем предмет на нужные координаты (x, y, z)
@@ -485,6 +502,9 @@ namespace MoreInventorys.src.BlockEntityFolder
                       .RotateZDeg(90f) // поднимает  вертикально
                       .RotateYDeg(3f) // наклон 
                       .Values;
+                    }
+
+                    
 
                 }
                 else if (code.Contains("saw"))
@@ -605,8 +625,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 else if (code.Contains("scythe"))
                 {
                     y -= 0.10f;
-                    z -= 0.01f;
-                    x -= 0.01f;
+                    z += 0.77f;
+                    x -= 0.085f;
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f) // Сначала перемещаем предмет в центр блока
@@ -615,7 +635,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Translate(-0.5f, 0f, -0.5f) // Возвращаем в локальную систему координат блока
                        .Scale(0.75f, 0.75f, 0.75f)
                        .RotateZDeg(90f) // поднимает  вертикально
-                       .RotateYDeg(5f) // наклон 
+                       .RotateYDeg(5f)
+                       .RotateXDeg(180f)
                        .Values;
                 }
                 else if (code.Contains("cleaver"))

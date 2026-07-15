@@ -290,7 +290,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (index is 0 or 4 && shelvableType is EnumShelvableLayout.SingleCenter) x = 0.5f;
                 if (index is 0 or 2 or 4 or 6 && shelvableType is EnumShelvableLayout.Halves or EnumShelvableLayout.SingleCenter) z = 0.4f;
-                y -= 0.05f;
+                y -= 0.06f;
                 tfMatrices[index] =
                     new Matrixf()
                     .Translate(0.5f, 0, 0.5f)
