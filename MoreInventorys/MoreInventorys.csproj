@@ -1,87 +1,87 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>bin\$(Configuration)\Mods\mod</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>bin\$(Configuration)\Mods\mod</OutputPath>
+	</PropertyGroup>
 
-<ItemGroup>
-  <Content Include="assets\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Compile Remove="assets\moreinventorys\blockentities\**" />
-  <Content Remove="assets\moreinventorys\blockentities\**" />
-  <EmbeddedResource Remove="assets\moreinventorys\blockentities\**" />
-  <None Remove="assets\moreinventorys\blockentities\**" />
-  <None Remove="assets\moreinventorys\blocktypes\dummyforrackhorizontal.json" />
-  <None Remove="assets\moreinventorys\blocktypes\rackhorizontalframecorner.json" />
-  <None Remove="assets\moreinventorys\blocktypes\rackhorizontalframeline.json" />
-  <None Remove="assets\moreinventorys\blocktypes\rackstick.json" />
-  <None Remove="assets\moreinventorys\blocktypes\rackverticalframecorner.json" />
-  <None Remove="assets\moreinventorys\blocktypes\rackverticalframeline.json" />
-  <None Remove="assets\moreinventorys\blocktypes\shieldstand.json" />
-  <None Remove="assets\moreinventorys\block\textures\shelf-bottom.png" />
-  <None Remove="assets\moreinventorys\block\textures\shelf-top.png" />
-  <None Remove="assets\moreinventorys\recipes\grid\rackverticalframecorner.json" />
-  <None Remove="assets\moreinventorys\recipes\grid\rackverticalframeline.json" />
-  <None Remove="assets\moreinventorys\recipes\grid\smallverticalweaponstand.json" />
-  <Content Include="modinfo.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-</ItemGroup>
+	<ItemGroup>
+		<Content Include="assets\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Compile Remove="assets\moreinventorys\blockentities\**" />
+		<Content Remove="assets\moreinventorys\blockentities\**" />
+		<EmbeddedResource Remove="assets\moreinventorys\blockentities\**" />
+		<None Remove="assets\moreinventorys\blockentities\**" />
+		<None Remove="assets\moreinventorys\blocktypes\dummyforrackhorizontal.json" />
+		<None Remove="assets\moreinventorys\blocktypes\rackhorizontalframecorner.json" />
+		<None Remove="assets\moreinventorys\blocktypes\rackhorizontalframeline.json" />
+		<None Remove="assets\moreinventorys\blocktypes\rackstick.json" />
+		<None Remove="assets\moreinventorys\blocktypes\rackverticalframecorner.json" />
+		<None Remove="assets\moreinventorys\blocktypes\rackverticalframeline.json" />
+		<None Remove="assets\moreinventorys\blocktypes\shieldstand.json" />
+		<None Remove="assets\moreinventorys\block\textures\shelf-bottom.png" />
+		<None Remove="assets\moreinventorys\block\textures\shelf-top.png" />
+		<None Remove="assets\moreinventorys\recipes\grid\rackverticalframecorner.json" />
+		<None Remove="assets\moreinventorys\recipes\grid\rackverticalframeline.json" />
+		<None Remove="assets\moreinventorys\recipes\grid\smallverticalweaponstand.json" />
+		<Content Include="modinfo.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-<ItemGroup>
-  <Folder Include="assets\moreinventorys\itemtypes\" />
-  <Folder Include="assets\moreinventorys\sounds\" />
-  <Folder Include="assets\moreinventorys\textures\block\" />
-</ItemGroup>
+	<ItemGroup>
+		<Folder Include="assets\moreinventorys\itemtypes\" />
+		<Folder Include="assets\moreinventorys\sounds\" />
+		<Folder Include="assets\moreinventorys\textures\block\" />
+	</ItemGroup>
 
-<ItemGroup>
-  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
-<ItemGroup>
-  <Reference Include="Vintagestory">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\Vintagestory.dll</HintPath>
-    <Private>False</Private>
-  </Reference>
-  <Reference Include="VintagestoryAPI">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryAPI.dll</HintPath>
-    <Private>False</Private>
-  </Reference>
-  <Reference Include="VintagestoryLib">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryLib.dll</HintPath>
-    <Private>False</Private>
-  </Reference>
-  <Reference Include="VintagestoryServer">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryServer.dll</HintPath>
-    <Private>False</Private>
-  </Reference>
-  <Reference Include="VSCreativeMod">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSCreativeMod.dll</HintPath>
-    <Private>False</Private>
-  </Reference>
-  <Reference Include="VSEssentials">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSEssentials.dll</HintPath>
-    <Private>False</Private>
-  </Reference>
-  <Reference Include="VSSurvivalMod">
-    <HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSSurvivalMod.dll</HintPath>
-    <Private>False</Private>
-  </Reference>
-</ItemGroup>
+	<ItemGroup>
+		<Reference Include="Vintagestory">
+			<HintPath>..\..\..\..\..\..\Game\Vintagestory\Vintagestory.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="VintagestoryAPI">
+			<HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryAPI.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="VintagestoryLib">
+			<HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryLib.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="VintagestoryServer">
+			<HintPath>..\..\..\..\..\..\Game\Vintagestory\VintagestoryServer.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="VSCreativeMod">
+			<HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSCreativeMod.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="VSEssentials">
+			<HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSEssentials.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="VSSurvivalMod">
+			<HintPath>..\..\..\..\..\..\Game\Vintagestory\Mods\VSSurvivalMod.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
 
-<ItemGroup>
-  <Content Update="assets\moreinventorys\recipes\grid\rackverticalframecorner.json">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-</ItemGroup>
+	<ItemGroup>
+		<Content Update="assets\moreinventorys\recipes\grid\rackverticalframecorner.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-<ItemGroup>
-  <Content Update="assets\moreinventorys\recipes\grid\smallverticalweaponstand.json">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-</ItemGroup>
+	<ItemGroup>
+		<Content Update="assets\moreinventorys\recipes\grid\smallverticalweaponstand.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>
