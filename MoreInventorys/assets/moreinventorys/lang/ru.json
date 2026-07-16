@@ -177,6 +177,7 @@
   "block-shieldstand-desc-storage": "Слотов для хранения: 3",
   "block-smallhorizontleswordstand-desc-storage": "Слотов для хранения: 5",
   "block-smallverticalweaponstand-desc-storage": "Слотов для хранения: 6",
+  "block-rack-action-place": "Поставить в стеллаж",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }
