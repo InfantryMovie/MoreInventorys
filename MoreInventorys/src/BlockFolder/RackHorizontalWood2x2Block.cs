@@ -57,7 +57,7 @@ namespace MoreInventorys.src.BlockFolder
                 {
                     new WorldInteraction()
                     {
-                           ActionLangCode = Lang.Get("moreinventorys:block-rack-action-place"),
+                            ActionLangCode = Lang.Get("moreinventorys:block-rack-action-place"), // Текст напрямую
                             MouseButton = EnumMouseButton.Right,
                             Itemstacks = containerStacklist.ToArray(),
                             ShouldApply = (wi, bs, es) =>

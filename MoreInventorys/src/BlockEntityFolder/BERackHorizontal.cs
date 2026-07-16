@@ -25,6 +25,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 {
     internal class BERackHorizontal : BlockEntityDisplay
     {
+        private const int PACKET_SYNC_STATE = 2000;
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
 
         //словарь с контейнерами на стеллажах, для корректного отображения на полках
@@ -73,70 +74,95 @@ namespace MoreInventorys.src.BlockEntityFolder
             block = api.World.BlockAccessor.GetBlock(Pos);
             base.Initialize(api);
 
+            // При инициализации на сервере отправляем состояние всем
+            if (api.Side == EnumAppSide.Server && !(api is ICoreClientAPI))
+            {
+                // Небольшая задержка для полной инициализации
+                api.Event.RegisterCallback(dt => {
+                    BroadcastStateToNearbyPlayers();
+                }, 100);
+            }
+
         }
 
-        bool InitializeDoubleChestContainers()
+       
+
+        private void BroadcastStateToNearbyPlayers()
         {
-            if (inventory.DoubleChestIndex.Count > 1) return false;
+            if (Api.Side != EnumAppSide.Server) return;
+            if (Api is ICoreClientAPI) return;
+            
 
-            if (doubleChestIndex1 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex1);
-            if (doubleChestIndex2 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex2);
-            if (doubleChestIndex3 > -1) inventory.DoubleChestIndex.Add(doubleChestIndex3);
-
-            return true;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryWriter writer = new BinaryWriter(ms);
+                TreeAttribute tree = new TreeAttribute();
+                ToTreeAttributes(tree);
+                tree.ToBytes(writer);
+                byte[] data = ms.ToArray();
+               
+                // Отправляем только игрокам, у которых загружен этот чанк
+                ((ICoreServerAPI)Api).Network.BroadcastBlockEntityPacket(
+                    Pos,
+                    PACKET_SYNC_STATE,
+                    data,
+                    null 
+                );
+            }
         }
 
-        bool InitializeStorageContainers()
+        public override void OnBlockPlaced(ItemStack byItemStack = null)
         {
-            if (storageContainers.Count > 0) return false;
+            base.OnBlockPlaced(byItemStack);
 
+            // При размещении блока отправляем состояние всем игрокам
+            if (Api?.Side == EnumAppSide.Server && !(Api is ICoreClientAPI))
+            {
+                Api.Event.RegisterCallback(dt => {
+                    BroadcastStateToNearbyPlayers();
+                }, 100);
+            }
+        }
+
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            // Здесь можно добавить очистку если нужно
+        }
+
+        public void UpdateAllMeshes()
+        {
             for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
             {
-                switch (i)
-                {
-                    case 0:
-                        if (container1 != "") storageContainers.Add(0, container1);
-                        break;
-
-                    case 1:
-                        if (container2 != "") storageContainers.Add(1, container2);
-                        break;
-
-                    case 2:
-                        if (container3 != "") storageContainers.Add(2, container3);
-                        break;
-
-                    case 3:
-                        if (container4 != "") storageContainers.Add(3, container4);
-                        break;
-
-                    case 4:
-                        if (container5 != "") storageContainers.Add(4, container5);
-                        break;
-
-                    case 5:
-                        if (container6 != "") storageContainers.Add(5, container6);
-                        break;
-                    default:
-                        break;
-                }
+                updateMesh(i);
             }
-            return true;
+            MarkDirty(true);
         }
 
         private void OnSlotModified(int slotid)
         {
-            if (Api.World.Side == EnumAppSide.Client)
+            if (Api.World.Side == EnumAppSide.Client) return;
+
+            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
             {
-                return;
+                updateMesh(i);
             }
+            MarkDirty(true);
 
             UpdateShape();
         }
 
         public void UpdateShape()
         {
-            MarkDirty(Api.Side != EnumAppSide.Server);
+            if (Api.Side == EnumAppSide.Server && !(Api is ICoreClientAPI))
+            {
+                BroadcastStateToNearbyPlayers();
+            }
+            else if (Api.Side == EnumAppSide.Client)
+            {
+                updateMeshes();
+                MarkDirty(true);
+            }
         }
 
 
@@ -185,8 +211,31 @@ namespace MoreInventorys.src.BlockEntityFolder
                 storageDlg?.Dispose();
                 storageDlg = null;
             }
+            if (packetid == PACKET_SYNC_STATE)
+            {
+                using MemoryStream ms = new MemoryStream(data);
+                BinaryReader reader = new BinaryReader(ms);
+                TreeAttribute tree = new TreeAttribute();
+                tree.FromBytes(reader);
+
+                Inventory.FromTreeAttributes(tree);
+                Inventory.ResolveBlocksOrItems();
+
+                FromTreeAttributes(tree, Api.World);
+
+                RebuildStorageContainers();
+
+                if (Api.Side == EnumAppSide.Client)
+                {
+                    // ✅ Обновляем все меши
+                    UpdateAllMeshes();
+                    MarkDirty(true);
+                }
+            }
         }
 
+
+  
 
         public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
         {
@@ -372,7 +421,14 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                         MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
 
-                        MarkDirty();
+                        UpdateAllMeshes();
+
+                        UpdateShape();
+
+                        if (Api.Side == EnumAppSide.Server)
+                        {
+                            SendStateToPlayer(byPlayer);
+                        }
                         return true;
                     }
                 }
@@ -397,8 +453,32 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
+           
+
             MarkDirty();
             return true;
+        }
+
+        private void SendStateToPlayer(IPlayer player)
+        {
+            if (Api.Side != EnumAppSide.Server) return;
+            if (Api is ICoreClientAPI) return;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryWriter writer = new BinaryWriter(ms);
+                TreeAttribute tree = new TreeAttribute();
+                ToTreeAttributes(tree);
+                tree.ToBytes(writer);
+                byte[] data = ms.ToArray();
+
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket(
+                    (IServerPlayer)player,
+                    Pos,
+                    PACKET_SYNC_STATE,
+                    data
+                );
+            }
         }
 
         bool AddDoubleChestIndex(int index)
@@ -420,6 +500,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 doubleChestIndex3 = index;
                 return true;
             }
+
+
 
             return true;
         }
@@ -454,6 +536,11 @@ namespace MoreInventorys.src.BlockEntityFolder
                 int num = slot.TryPutInto(Api.World, inventory[blockSelIndex]);
                 inventory.IsTryPut = false;
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+                /*if (num > 0)
+                {
+                    UpdateShape(); 
+                    return true;
+                }*/
                 return num > 0;
             }
             return false;
@@ -482,6 +569,13 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (packetid == 1001 && fromPlayer.InventoryManager != null)
             {
                 fromPlayer.InventoryManager.CloseInventory(Inventory);
+                if (Api.Side == EnumAppSide.Server)
+                {
+                    // ❗ Отправляем состояние этому игроку
+                    SendStateToPlayer(fromPlayer);
+                    // И всем остальным тоже
+                    BroadcastStateToNearbyPlayers();
+                }
             }
         }
 
@@ -489,6 +583,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override void ToTreeAttributes(ITreeAttribute tree)
         {
             base.ToTreeAttributes(tree);
+
             tree.SetBool("isOpened", isOpened);
             tree.SetInt("dynamicSlots", inventory.dynamicSlots);
             tree.SetInt("containerBlockSlotsActive", inventory.containerBlockSlotsActive);
@@ -581,6 +676,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         (int, string) GetOrientationRateForMartices(int containerIndex)
         {
+
             int orientationRotate = 0;
 
             if (storageContainers.Count == 0)
