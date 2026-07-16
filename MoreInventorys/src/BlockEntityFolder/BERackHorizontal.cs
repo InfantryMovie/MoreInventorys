@@ -25,6 +25,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 {
     internal class BERackHorizontal : BlockEntityDisplay
     {
+        private const int PACKET_SYNC_STATE = 2000;
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
 
         //словарь с контейнерами на стеллажах, для корректного отображения на полках
@@ -73,9 +74,18 @@ namespace MoreInventorys.src.BlockEntityFolder
             block = api.World.BlockAccessor.GetBlock(Pos);
             base.Initialize(api);
 
+            // При инициализации на сервере отправляем состояние всем
+            if (api.Side == EnumAppSide.Server && !(api is ICoreClientAPI))
+            {
+                // Небольшая задержка для полной инициализации
+                api.Event.RegisterCallback(dt => {
+                    BroadcastStateToNearbyPlayers();
+                }, 100);
+            }
+
         }
 
-        bool InitializeDoubleChestContainers()
+        /*bool InitializeDoubleChestContainers()
         {
             if (inventory.DoubleChestIndex.Count > 1) return false;
 
@@ -122,21 +132,67 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
             }
             return true;
+        }*/
+
+        private void BroadcastStateToNearbyPlayers()
+        {
+            if (Api.Side != EnumAppSide.Server) return;
+            if (Api is ICoreClientAPI) return;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryWriter writer = new BinaryWriter(ms);
+                TreeAttribute tree = new TreeAttribute();
+                ToTreeAttributes(tree);
+                tree.ToBytes(writer);
+                byte[] data = ms.ToArray();
+
+                // Отправляем только игрокам, у которых загружен этот чанк
+                ((ICoreServerAPI)Api).Network.BroadcastBlockEntityPacket(
+                    Pos,
+                    PACKET_SYNC_STATE,
+                    data,
+                    null 
+                );
+            }
         }
+
+        public override void OnBlockPlaced(ItemStack byItemStack = null)
+        {
+            base.OnBlockPlaced(byItemStack);
+
+            // При размещении блока отправляем состояние всем игрокам
+            if (Api?.Side == EnumAppSide.Server && !(Api is ICoreClientAPI))
+            {
+                Api.Event.RegisterCallback(dt => {
+                    BroadcastStateToNearbyPlayers();
+                }, 100);
+            }
+        }
+
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            // Здесь можно добавить очистку если нужно
+        }
+
 
         private void OnSlotModified(int slotid)
         {
-            if (Api.World.Side == EnumAppSide.Client)
-            {
-                return;
-            }
+            if (Api.World.Side == EnumAppSide.Client) return;
 
-            UpdateShape();
+            //UpdateShape();
+            MarkDirty(true);
         }
 
         public void UpdateShape()
         {
-            MarkDirty(Api.Side != EnumAppSide.Server);
+            //MarkDirty(Api.Side != EnumAppSide.Server);
+
+            if (Api.Side == EnumAppSide.Server && !(Api is ICoreClientAPI))
+            {
+                BroadcastStateToNearbyPlayers();
+            }
         }
 
 
@@ -185,8 +241,25 @@ namespace MoreInventorys.src.BlockEntityFolder
                 storageDlg?.Dispose();
                 storageDlg = null;
             }
+            if (packetid == PACKET_SYNC_STATE)
+            {
+                using MemoryStream ms = new MemoryStream(data);
+                BinaryReader reader = new BinaryReader(ms);
+                TreeAttribute tree = new TreeAttribute();
+                tree.FromBytes(reader);
+                FromTreeAttributes(tree, Api.World);
+
+                // Обновляем визуал
+                if (Api.Side == EnumAppSide.Client)
+                {
+                    updateMeshes();
+                    MarkDirty(true);
+                }
+            }
         }
 
+
+  
 
         public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
         {
@@ -373,6 +446,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                         MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
 
                         MarkDirty();
+                        UpdateShape();
+
+                        if (Api.Side == EnumAppSide.Server)
+                        {
+                            SendStateToPlayer(byPlayer);
+                        }
                         return true;
                     }
                 }
@@ -397,8 +476,32 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
+           
+
             MarkDirty();
             return true;
+        }
+
+        private void SendStateToPlayer(IPlayer player)
+        {
+            if (Api.Side != EnumAppSide.Server) return;
+            if (Api is ICoreClientAPI) return;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryWriter writer = new BinaryWriter(ms);
+                TreeAttribute tree = new TreeAttribute();
+                ToTreeAttributes(tree);
+                tree.ToBytes(writer);
+                byte[] data = ms.ToArray();
+
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket(
+                    (IServerPlayer)player,
+                    Pos,
+                    PACKET_SYNC_STATE,
+                    data
+                );
+            }
         }
 
         bool AddDoubleChestIndex(int index)
@@ -420,6 +523,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 doubleChestIndex3 = index;
                 return true;
             }
+
+
 
             return true;
         }
@@ -454,6 +559,11 @@ namespace MoreInventorys.src.BlockEntityFolder
                 int num = slot.TryPutInto(Api.World, inventory[blockSelIndex]);
                 inventory.IsTryPut = false;
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+                /*if (num > 0)
+                {
+                    UpdateShape(); 
+                    return true;
+                }*/
                 return num > 0;
             }
             return false;
@@ -482,6 +592,10 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (packetid == 1001 && fromPlayer.InventoryManager != null)
             {
                 fromPlayer.InventoryManager.CloseInventory(Inventory);
+                if (Api.Side == EnumAppSide.Server)
+                {
+                    UpdateShape();
+                }
             }
         }
 

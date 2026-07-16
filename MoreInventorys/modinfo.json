@@ -7,7 +7,7 @@
   ],
   "description": "This mod adds more beautifuls and practicle inventorys to the game.",
   "version": "1.22.3-0.0.2",
-  "dependency": {
+  "dependencies": {
     "game": "1.22.3"
   }
 }

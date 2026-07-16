@@ -39,7 +39,6 @@ namespace MoreInventorys.src
             "chisel",
             "cleaver",
             "club",
-            "firestarter",
             "hammer",
             "hoe",
             "inkandquill",

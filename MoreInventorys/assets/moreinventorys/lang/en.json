@@ -178,5 +178,7 @@
   "block-rackvertical-north": "Rack 1x3",
   "block-rackhorizontal-north": "Double Rack 2x3",
 
+  "block-rack-action-place": "Put it in the rack",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }

@@ -57,7 +57,7 @@ namespace MoreInventorys.src.BlockFolder
                 {
                     new WorldInteraction()
                     {
-                            ActionLangCode = "Поставить в стеллаж", // Текст напрямую
+                            ActionLangCode = Lang.Get("moreinventorys:block-rack-action-place"), // Текст напрямую
                             MouseButton = EnumMouseButton.Right,
                             Itemstacks = containerStacklist.ToArray(),
                             ShouldApply = (wi, bs, es) =>
@@ -70,6 +70,8 @@ namespace MoreInventorys.src.BlockFolder
                 });
 
         }
+
+
 
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
