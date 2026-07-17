@@ -30,14 +30,14 @@ namespace MoreInventorys.src.GuiFolder
                 inventory.SlotModified += OnInventorySlotModified;
                 DynamicSlots = slots;
                 Pos = blockEntityPos;
-                if(inventory is InventoryDynamic inv)
+                if (inventory is InventoryDynamic inv)
                 {
                     MaxContainerBlockSlots = inv.MaxContainerBlockSlots;
 
                 }
                 SetupDialog();
 
-                
+
             }
         }
 
@@ -125,7 +125,22 @@ namespace MoreInventorys.src.GuiFolder
             {
                 //создаем слоты для предметов учитывая что "MaxContainerBlockSlots" слоты для контейнеров
                 itemSlots = Enumerable.Range(MaxContainerBlockSlots, DynamicSlots - MaxContainerBlockSlots).ToArray();
-                cols = 9;
+
+                // Динамическое определение количества колонок в зависимости от количества слотов
+                int totalItemSlots = itemSlots.Length;
+                if (totalItemSlots <= 32)
+                {
+                    cols = 9;
+                }
+                else if (totalItemSlots <= 108)
+                {
+                    cols = 16;
+                }
+                else
+                {
+                    cols = 23;
+                }
+
                 fixedWidth = 200;
 
                 // Вычисляем количество строк
@@ -361,9 +376,9 @@ namespace MoreInventorys.src.GuiFolder
         public override void OnKeyPress(KeyEvent args)
         {
             //клавиша R/К   
-            if(args.KeyCode == 114 || args.KeyCode == 1082 )
+            if (args.KeyCode == 114 || args.KeyCode == 1082)
             {
-               
+
             }
             base.OnKeyPress(args);
         }
