@@ -265,77 +265,112 @@ namespace MoreInventorys.src.BlockEntityFolder
             return input;
         }
 
+        private void OpenGui(IPlayer byPlayer)
+        {
+            if (Api.Side != EnumAppSide.Client)
+            {
+                byte[] data;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryWriter writer = new BinaryWriter(ms);
+                    TreeAttribute tree = new TreeAttribute();
+                    inventory.ToTreeAttributes(tree);
+                    tree.ToBytes(writer);
+                    data = ms.ToArray();
+                }
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
+                byPlayer.InventoryManager.OpenInventory(inventory);
+            }
+        }
+
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
-            if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
+
+            if (inventory[blockSel.SelectionBoxIndex].Empty)
             {
-                if (slot.Itemstack.Block == null) return false;
-
-                int slotsCount = 0;
-                var storageBlock = slot.Itemstack.Block;
-                if (storageBlock.Code == null) return false;
-
-                var isContainerResult = IsValidContainer(slot);
-                var isContainer = isContainerResult.Item1;
-                var quantitySlots = isContainerResult.quantitySlots;
-
-                slotsCount = (int)quantitySlots;
-
-                if (isContainer)
+                if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
                 {
-                    if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                    if (slot.Itemstack.Block == null) return false;
+
+                    int slotsCount = 0;
+                    var storageBlock = slot.Itemstack.Block;
+                    if (storageBlock.Code == null) return false;
+
+                    var isContainerResult = IsValidContainer(slot);
+                    var isContainer = isContainerResult.Item1;
+                    var quantitySlots = isContainerResult.quantitySlots;
+
+                    slotsCount = (int)quantitySlots;
+
+                    if (isContainer)
                     {
-                        storageContainers.Add(inventory.containerBlockSlotsActive, storageBlock.Code.Path + DateTime.Now.ToString());
-                    }
-                    if (TryPut(slot, blockSel, storageBlock))
-                    {
-                        int lastId = inventory[inventory.Count - 1].SlotId;
-                        int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
-
-                        lock (inventory.LockContainerSlots)
+                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
                         {
-                            inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                            int slotIndex = inventory.containerBlockSlotsActive;
+                            if (!storageContainers.ContainsKey(slotIndex))
+                            {
+                                storageContainers.Add(slotIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                            }
+                            else
+                            {
+                                storageContainers[slotIndex] = storageBlock.Code.Path + DateTime.Now.ToString();
+                            }
                         }
-
-                        switch (blockSel.SelectionBoxIndex)
+                        if (TryPut(slot, blockSel, storageBlock))
                         {
-                            case 0:
-                                container1 = storageBlock.Code.Path;
-                                break;
+                            int lastId = inventory[inventory.Count - 1].SlotId;
+                            int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
 
-                            case 1:
-                                container2 = storageBlock.Code.Path;
-                                break;
+                            lock (inventory.LockContainerSlots)
+                            {
+                                inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
+                            }
 
-                            case 2:
-                                container3 = storageBlock.Code.Path;
-                                break;
+                            switch (blockSel.SelectionBoxIndex)
+                            {
+                                case 0:
+                                    container1 = storageBlock.Code.Path;
+                                    break;
 
-                            case 3:
-                                container4 = storageBlock.Code.Path;
-                                break;
+                                case 1:
+                                    container2 = storageBlock.Code.Path;
+                                    break;
 
-                            default:
-                                break;
+                                case 2:
+                                    container3 = storageBlock.Code.Path;
+                                    break;
+
+                                case 3:
+                                    container4 = storageBlock.Code.Path;
+                                    break;
+
+                                default:
+                                    break;
+                            }
+
+                            inventory.AddSlots(slotsCount);
+                            inventory.dynamicSlots += slotsCount;
+                            inventory.containerBlockSlotsActive++;
+
+                            MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
+
+                            UpdateAllMeshes();
+                            UpdateShape();
+
+                            if (Api.Side == EnumAppSide.Server)
+                            {
+                                SendStateToPlayer(byPlayer);
+                            }
+                            return true;
                         }
-
-                        inventory.AddSlots(slotsCount);
-                        inventory.dynamicSlots += slotsCount;
-                        inventory.containerBlockSlotsActive++;
-
-                        MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
-
-                        UpdateAllMeshes();
-                        UpdateShape();
-
-                        if (Api.Side == EnumAppSide.Server)
-                        {
-                            SendStateToPlayer(byPlayer);
-                        }
-                        return true;
                     }
                 }
+            }
+            else
+            {
+                OpenGui(byPlayer);
+                return true;
             }
 
             if (Api.Side != EnumAppSide.Client)
