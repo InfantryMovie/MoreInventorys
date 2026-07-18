@@ -1,0 +1,22 @@
+{
+  "ingredient": {
+    "type": "item",
+    "code": "game:ingot-*",
+    "name": "plate"
+  },
+  "name": "Storage Rail",
+  "output": {
+    "type": "item",
+    "code": "moreinventorys:rackrailcorner-{plate}",
+    "quantity": 4
+  },
+  "pattern": [
+    [
+      "#######",
+      "#______",
+      "___#___",
+      "______#",
+      "#######"
+    ]
+  ]
+}

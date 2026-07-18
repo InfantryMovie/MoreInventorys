@@ -72,6 +72,8 @@
   "block-rackvertical-walnut-north": "Стеллаж 1х3 (грецкий орех)",
   "block-rackvertical-purpleheart-north": "Стеллаж 1х3 (пурпурное дерево)",
 
+  "block-rackverticalone": "Стеллаж 1х3",
+
   "block-rackverticalframecorner-acacia-north": "Стеллаж 1х3 (акация)",
   "block-rackverticalframecorner-birch-north": "Стеллаж 1х3 (береза)",
   "block-rackverticalframecorner-kapok-north": "Стеллаж 1х3 (капок)",
@@ -149,14 +151,14 @@
   "block-micrateclosed-walnut-north": "Закрытый ящик (грецкий орех)",
   "block-micrateclosed-purpleheart-north": "Закрытый ящик (пурпурное дерево)",
 
-  "block-mibasketclosed-north": "Корзина из рагоза",
+  "block-mibasketclosed-north": "Корзина из рогоза",
 
   "block-micrateclosed-desc": "Может хранить предметы",
   "block-mibasketclosed-desc": "Может хранить предметы",
 
   "block-rackhorizontal-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
   "block-rackvertical-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
-  "block-rackstick-desc": "Начальный стеллаж из палок, поставь на него корзину из рагоза (не ванильную)",
+  "block-rackstick-desc": "Начальный стеллаж из палок, поставь на него корзину из рогоза (не ванильную)",
 
   "block-rackhorizontalwood2x2-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
   "block-rackhorizontalwood2x3-desc": "Стеллаж для хранения других инвентарей. Поставь на стеллаж например несколько сундуков и получишь доступ ко всем слотам",
@@ -179,7 +181,39 @@
   "block-smallverticalweaponstand-desc-storage": "Слотов для хранения: 6",
   "block-rack-action-place": "Поставить в стеллаж",
 
-  "block-rack-action-place": "Поставить в стеллаж",
+  "item-rackrail-iron": "Рейка стеллажа (железо)",
+  "item-rackrail-copper": "Рейка стеллажа (медь)",
+  "item-rackrail-tinbronze": "Рейка стеллажа (оловянная бронза)",
+  "item-rackrail-bismuthbronze": "Рейка стеллажа (висмутовая бронза)",
+  "item-rackrail-blackbronze": "Рейка стеллажа (чёрная бронза)",
+  "item-rackrail-gold": "Рейка стеллажа (золото)",
+  "item-rackrail-silver": "Рейка стеллажа (серебро)",
+  "item-rackrail-lead": "Рейка стеллажа (свинец)",
+  "item-rackrail-tin": "Рейка стеллажа (олово)",
+  "item-rackrail-zinc": "Рейка стеллажа (цинк)",
+
+  "item-rackrailcorner-iron": "Рейка стеллажа (железо)",
+  "item-rackrailcorner-copper": "Рейка стеллажа (медь)",
+  "item-rackrailcorner-tinbronze": "Рейка стеллажа (оловянная бронза)",
+  "item-rackrailcorner-bismuthbronze": "Рейка стеллажа (висмутовая бронза)",
+  "item-rackrailcorner-blackbronze": "Рейка стеллажа (чёрная бронза)",
+  "item-rackrailcorner-gold": "Рейка стеллажа (золото)",
+  "item-rackrailcorner-silver": "Рейка стеллажа (серебро)",
+  "item-rackrailcorner-lead": "Рейка стеллажа (свинец)",
+  "item-rackrailcorner-tin": "Рейка стеллажа (олово)",
+  "item-rackrailcorner-zinc": "Рейка стеллажа (цинк)",
+
+  "item-rackrailline-iron": "Рейка стеллажа (железо)",
+  "item-rackrailline-copper": "Рейка стеллажа (медь)",
+  "item-rackrailline-tinbronze": "Рейка стеллажа (оловянная бронза)",
+  "item-rackrailline-bismuthbronze": "Рейка стеллажа (висмутовая бронза)",
+  "item-rackrailline-blackbronze": "Рейка стеллажа (чёрная бронза)",
+  "item-rackrailline-gold": "Рейка стеллажа (золото)",
+  "item-rackrailline-silver": "Рейка стеллажа (серебро)",
+  "item-rackrailline-lead": "Рейка стеллажа (свинец)",
+  "item-rackrailline-tin": "Рейка стеллажа (олово)",
+  "item-rackrailline-zinc": "Рейка стеллажа (цинк)",
+
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

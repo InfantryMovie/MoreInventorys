@@ -1,5 +1,5 @@
 {
-  "ingredientPattern": "PHP,PNP,P_P",
+  "ingredientPattern": "RPR,P_P,RPR",
   "ingredients": {
     "P": {
       "type": "item",
@@ -8,14 +8,10 @@
       "allowedVariants": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ],
       "quantity": 2
     },
-    "N": {
+    "R": {
       "type": "item",
-      "code": "game:metalnailsandstrips-*"
-    },
-    "H": {
-      "type": "item",
-      "code": "game:hammer-*",
-      "isTool": true,
+      "code": "moreinventorys:rackrail-*",
+      "allowedVariants": [ "iron", "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ],
       "quantity": 1
     }
   },

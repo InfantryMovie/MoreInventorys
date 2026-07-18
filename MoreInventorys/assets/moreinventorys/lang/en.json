@@ -55,6 +55,7 @@
   "block-rackhorizontalwood2x3-north": "Double Rack 2x3 (Wooden)",
 
   "block-rackstick-north": "Stick Rack 2x1",
+  "block-rackverticalone": "Rack 1x3",
 
   "block-rackvertical-acacia-north": "Rack 1x3 (Acacia)",
   "block-rackvertical-birch-north": "Rack 1x3 (Birch)",
@@ -179,6 +180,39 @@
   "block-rackhorizontal-north": "Double Rack 2x3",
 
   "block-rack-action-place": "Put it in the rack",
+
+  "item-rackrail-iron": "Rack Rail (iron)",
+  "item-rackrail-copper": "Rack Rail (copper)",
+  "item-rackrail-tinbronze": "Rack Rail (tin bronze)",
+  "item-rackrail-bismuthbronze": "Rack Rail (bismuth bronze)",
+  "item-rackrail-blackbronze": "Rack Rail (black bronze)",
+  "item-rackrail-gold": "Rack Rail (gold)",
+  "item-rackrail-silver": "Rack Rail (silver)",
+  "item-rackrail-lead": "Rack Rail (lead)",
+  "item-rackrail-tin": "Rack Rail (tin)",
+  "item-rackrail-zinc": "Rack Rail (zinc)",
+
+  "item-rackrailcorner-iron": "Rack Rail (iron)",
+  "item-rackrailcorner-copper": "Rack Rail (copper)",
+  "item-rackrailcorner-tinbronze": "Rack Rail (tin bronze)",
+  "item-rackrailcorner-bismuthbronze": "Rack Rail (bismuth bronze)",
+  "item-rackrailcorner-blackbronze": "Rack Rail (black bronze)",
+  "item-rackrailcorner-gold": "Rack Rail (gold)",
+  "item-rackrailcorner-silver": "Rack Rail (silver)",
+  "item-rackrailcorner-lead": "Rack Rail (lead)",
+  "item-rackrailcorner-tin": "Rack Rail (tin)",
+  "item-rackrailcorner-zinc": "Rack Rail (zinc)",
+
+  "item-rackrailline-iron": "Rack Rail (iron)",
+  "item-rackrailline-copper": "Rack Rail (copper)",
+  "item-rackrailline-tinbronze": "Rack Rail (tin bronze)",
+  "item-rackrailline-bismuthbronze": "Rack Rail (bismuth bronze)",
+  "item-rackrailline-blackbronze": "Rack Rail (black bronze)",
+  "item-rackrailline-gold": "Rack Rail (gold)",
+  "item-rackrailline-silver": "Rack Rail (silver)",
+  "item-rackrailline-lead": "Rack Rail (lead)",
+  "item-rackrailline-tin": "Rack Rail (tin)",
+  "item-rackrailline-zinc": "Rack Rail (zinc)",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

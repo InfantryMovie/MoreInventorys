@@ -194,7 +194,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     Open();
                     Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackverticalone-north"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackverticalone"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
@@ -246,7 +246,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             var storageBlock = slot.Itemstack.Block;
             if (storageBlock != null)
             {
-                if (storageBlock.BlockId == 8872) return (false, 0);
+                if (storageBlock.Code.ToString().Contains("trunk")) return (false, 0);
             }
 
             string cod = GetValueBeforeDash(slot.Itemstack.Block.Code.Path);

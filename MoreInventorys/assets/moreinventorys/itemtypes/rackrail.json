@@ -1,0 +1,32 @@
+{
+  "code": "rackrail",
+  "class": "Item",
+  "variantgroups": [
+    {
+      "code": "plate",
+      "states": [ "iron", "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ]
+    }
+  ],
+  "creativeinventory": {
+    "general": [ "*" ],
+    "moreinventorys": [ "*" ]
+  },
+  "guiTransform": {
+    "rotation": {
+      "x": 1,
+      "y": 32,
+      "z": 0
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 1.2,
+      "z": 0.5
+    },
+    "scale": 0.62
+  },
+  "shape": { "base": "moreinventorys:rackrail" },
+  "maxstacksize": 64,
+  "textures": {
+    "iron": { "base": "game:block/metal/plate/{plate}" }
+  }
+}
