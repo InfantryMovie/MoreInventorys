@@ -79,6 +79,28 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
+        public override void OnBlockRemoved()
+        {
+            base.OnBlockRemoved();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
         private void BroadcastStateToNearbyPlayers()
         {
             if (Api.Side != EnumAppSide.Server) return;
@@ -133,6 +155,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             MarkDirty(true);
         }
+
+
 
         private void OnSlotModified(int slotid)
         {

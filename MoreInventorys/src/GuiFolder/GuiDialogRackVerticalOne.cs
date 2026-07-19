@@ -52,7 +52,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             bgBounds.WithChildren(mainBounds);
             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.RightMiddle).WithFixedAlignmentOffset(0.0 - GuiStyle.DialogToScreenPadding, 0.0);
             ClearComposers();
-            base.SingleComposer = capi.Gui.CreateCompo("berackverticaloneslots" + base.BlockEntityPosition, dialogBounds).AddShadedDialogBG(bgBounds).AddDialogTitleBar(DialogTitle, OnTitleBarClose)
+            base.SingleComposer = capi.Gui.CreateCompo("blockentityinventoryberackverticaloneslots" + base.BlockEntityPosition, dialogBounds).AddShadedDialogBG(bgBounds).AddDialogTitleBar(DialogTitle, OnTitleBarClose)
                 .BeginChildElements(bgBounds)
                 .AddItemSlotGrid(base.Inventory, SendInvPacket, 9, slots, slotsBounds)
                 .EndChildElements()

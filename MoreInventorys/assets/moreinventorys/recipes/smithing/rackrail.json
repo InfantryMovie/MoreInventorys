@@ -4,18 +4,18 @@
     "code": "game:ingot-*",
     "name": "plate"
   },
-  "name": "Storage Rail",
+  "name": "Rack Rail",
   "output": {
     "type": "item",
-    "code": "moreinventorys:rackrailcorner-{plate}",
+    "code": "moreinventorys:rackrail-{plate}",
     "quantity": 4
   },
   "pattern": [
     [
       "#######",
-      "#______",
-      "___#___",
-      "______#",
+      "_______",
+      "_______",
+      "_______",
       "#######"
     ]
   ]

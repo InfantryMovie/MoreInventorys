@@ -127,7 +127,23 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override void OnBlockUnloaded()
         {
             base.OnBlockUnloaded();
-            // Здесь можно добавить очистку если нужно
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
+        public override void OnBlockRemoved()
+        {
+            base.OnBlockRemoved();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
         }
 
         public void UpdateAllMeshes()

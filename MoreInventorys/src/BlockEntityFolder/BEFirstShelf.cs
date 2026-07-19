@@ -41,6 +41,24 @@ namespace MoreInventorys.src.BlockEntityFolder
             inv.OnAcquireTransitionSpeed += Inv_OnAcquireTransitionSpeed;
         }
 
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            if (inv != null)
+            {
+                inv.OnAcquireTransitionSpeed -= Inv_OnAcquireTransitionSpeed;
+            }
+        }
+
+        public override void OnBlockRemoved()
+        {
+            base.OnBlockRemoved();
+            if (inv != null)
+            {
+                inv.OnAcquireTransitionSpeed -= Inv_OnAcquireTransitionSpeed;
+            }
+        }
+
 
 
 

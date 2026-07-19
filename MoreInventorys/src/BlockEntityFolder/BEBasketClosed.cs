@@ -53,6 +53,14 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
+
+
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            storageDlg = null;
+        }
+
         internal bool OnInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
             if (Api.Side == EnumAppSide.Server)

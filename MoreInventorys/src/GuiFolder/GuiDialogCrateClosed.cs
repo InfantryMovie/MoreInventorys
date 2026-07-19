@@ -69,7 +69,7 @@ namespace MoreInventorys.src.GuiFolder
             ClearComposers();
 
             base.SingleComposer = capi.Gui
-                .CreateCompo("crateclosedslots" + base.BlockEntityPosition, dialogBounds)
+                .CreateCompo("blockentityinventorycrateclosedslots" + base.BlockEntityPosition, dialogBounds)
                 .AddShadedDialogBG(bgBounds)
                 .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
                 .BeginChildElements(bgBounds)

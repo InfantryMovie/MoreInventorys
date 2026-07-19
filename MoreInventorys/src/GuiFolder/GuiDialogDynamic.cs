@@ -211,7 +211,7 @@ namespace MoreInventorys.src.GuiFolder
             if (slotsBounds != null)
             {
                 base.SingleComposer = capi.Gui
-                    .CreateCompo("berackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
+                    .CreateCompo("blockentityinventoryberackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
                     .AddShadedDialogBG(bgBounds)
                     .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
                     .BeginChildElements(bgBounds)
@@ -223,7 +223,7 @@ namespace MoreInventorys.src.GuiFolder
             else
             {
                 base.SingleComposer = capi.Gui
-                .CreateCompo("berackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
+                .CreateCompo("blockentityinventoryberackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
                 .AddShadedDialogBG(bgBounds)
                 .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
                 .BeginChildElements(bgBounds)

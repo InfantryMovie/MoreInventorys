@@ -55,7 +55,24 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            if (inv != null)
+            {
+                inv.SlotModified -= OnInventorySlotModified;
+            }
+            storageDlg = null;
+        }
 
+        public override void OnBlockRemoved()
+        {
+            base.OnBlockRemoved();
+            if (inv != null)
+            {
+                inv.SlotModified -= OnInventorySlotModified;
+            }
+        }
 
 
 

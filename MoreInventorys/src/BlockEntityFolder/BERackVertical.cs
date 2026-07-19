@@ -148,6 +148,28 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
+        public override void OnBlockRemoved()
+        {
+            base.OnBlockRemoved();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
         bool InitializeStorageContainers()
         {
             if (storageContainers.Count > 0) return false;

@@ -673,6 +673,28 @@ namespace MoreInventorys.src.BlockEntityFolder
             return (orientationRotate, "");
         }
 
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
+        public override void OnBlockRemoved()
+        {
+            base.OnBlockRemoved();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
         protected override float[][] genTransformationMatrices()
         {
             float[][] tfMatrices = new float[MAX_CONTAINER_BLOC_SLOTS][];
