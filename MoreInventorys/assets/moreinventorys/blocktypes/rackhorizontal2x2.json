@@ -1,0 +1,134 @@
+{
+  "code": "rackhorizontal2x2",
+  "class": "rackhorizontal2x2block",
+  "name": "RackHorizontal2x2",
+  "entityClass": "berackhorizontal2x2",
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "creativeinventory": {
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
+  },
+  "allowOverlap": true,
+
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "blockmaterial": "Wood",
+  "variantgroups": [
+    {
+      "code": "planks",
+      "states": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ]
+    },
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
+  "textures": {
+    "ebony1": { "base": "game:block/wood/planks/{planks}1" }
+  },
+  "combustibleProps": {
+    "burnTemperature": 600,
+    "burnDuration": 35
+  },
+  "guiTransform": {
+    "translation": {
+      "x": -4,
+      "y": 12,
+      "z": 0
+    },
+    "scale": 0.52
+  },
+  "collisionselectionboxes": [
+    {
+      "x1": 0.06,
+      "y1": 0.06,
+      "z1": 0.06,
+      "x2": 0.94,
+      "y2": 0.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 1.06,
+      "y1": 0.06,
+      "z1": 0.06,
+      "x2": 1.94,
+      "y2": 0.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.06,
+      "y1": 1,
+      "z1": 0.06,
+      "x2": 0.94,
+      "y2": 1.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 1.06,
+      "y1": 1,
+      "z1": 0.06,
+      "x2": 1.94,
+      "y2": 1.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    }
+  ],
+  "materialDensity": 400,
+  "replaceable": 900,
+  "resistance": 1.5,
+  "lightAbsorption": 1,
+  "tags": [ "storage" ],
+  "shape": { "base": "moreinventorys:rackhorizontal2x2" },
+  "shapebytype": {
+    "*-north": {
+      "base": "rackhorizontal2x2",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "rackhorizontal2x2",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "rackhorizontal2x2",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "rackhorizontal2x2",
+      "rotateY": 90
+    }
+  },
+  "sounds": {
+    "place": "game:block/planks",
+    "hit": "game:block/planks",
+    "break": "game:block/planks",
+    "walk": "game:walk/wood"
+  },
+  "placementRotationFix": true
+
+}

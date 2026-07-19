@@ -1,0 +1,25 @@
+{
+  "ingredientPattern": "RPR,_P_,RPR",
+  "ingredients": {
+    "P": {
+      "type": "item",
+      "code": "game:plank-*",
+      "name": "planks",
+      "allowedVariants": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ],
+      "quantity": 2
+    },
+    "R": {
+      "type": "item",
+      "code": "moreinventorys:rackrailcorner-*",
+      "allowedVariants": [ "iron", "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ],
+      "quantity": 1
+    }
+  },
+  "width": 3,
+  "height": 3,
+  "shapeless": false,
+  "output": {
+    "type": "block",
+    "code": "rackhorizontalframecorner2x2-{planks}-north"
+  }
+}

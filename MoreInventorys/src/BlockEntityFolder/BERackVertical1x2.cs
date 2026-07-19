@@ -21,7 +21,7 @@ using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    public class BERackVertical : BlockEntityDisplay
+    public class BERackVertical1x2 : BlockEntityDisplay
     {
         private const int PACKET_SYNC_STATE = 2000;
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
@@ -31,24 +31,23 @@ namespace MoreInventorys.src.BlockEntityFolder
         InventoryDynamic inventory;
 
         public override InventoryBase Inventory => inventory;
-        public override string InventoryClassName => "rackverticalonedynamic";
+        public override string InventoryClassName => "rackvertical1x2onedynamic";
 
         GuiDialogDynamic storageDlg;
 
-        public const int MAX_CONTAINER_BLOC_SLOTS = 3;
+        public const int MAX_CONTAINER_BLOC_SLOTS = 2;
         public static IPlayer fromPlayer;
 
         string container1;
         string container2;
-        string container3;
 
         bool isFirstLoad = true;
 
         public bool isOpened;
 
-        public BERackVertical()
+        public BERackVertical1x2()
         {
-            inventory = new InventoryDynamic("rackverticalone-0", 3, null);
+            inventory = new InventoryDynamic("rackverticalone1x2-0", 2, null);
             storageContainers = new Dictionary<int, string>();
         }
 
@@ -167,32 +166,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             storageDlg = null;
         }
 
-        bool InitializeStorageContainers()
-        {
-            if (storageContainers.Count > 0) return false;
-
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        if (container1 != "") storageContainers.Add(0, container1);
-                        break;
-
-                    case 1:
-                        if (container2 != "") storageContainers.Add(1, container2);
-                        break;
-
-                    case 2:
-                        if (container3 != "") storageContainers.Add(2, container3);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            return true;
-        }
+        
 
         public override void OnReceivedServerPacket(int packetid, byte[] data)
         {
@@ -213,7 +187,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     Open();
                     Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackverticalone"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackverticalone1x2"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
@@ -348,10 +322,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                                 case 1:
                                     container2 = storageBlock.Code.Path;
                                     break;
-
-                                case 2:
-                                    container3 = storageBlock.Code.Path;
-                                    break;
                                 default:
                                     break;
                             }
@@ -450,7 +420,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             tree.SetString("container1", container1);
             tree.SetString("container2", container2);
-            tree.SetString("container3", container3);
 
             tree.SetInt("dummyCount", DummyPositions.Count);
             for (int i = 0; i < DummyPositions.Count; i++)
@@ -470,7 +439,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             container1 = tree.GetString("container1");
             container2 = tree.GetString("container2");
-            container3 = tree.GetString("container3");
 
             if (isFirstLoad)
             {
@@ -498,7 +466,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     0 => container1,
                     1 => container2,
-                    2 => container3,
                     _ => ""
                 };
 
@@ -571,7 +538,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         protected override float[][] genTransformationMatrices()
         {
-            float[][] tfMatrices = new float[3][];
+            float[][] tfMatrices = new float[2][];
             float scale = 0.9f;
             float x = 0;
             float z = 0;
@@ -621,24 +588,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scale, scale, scale)
                        .Values;
                 }
-                if (index == 2)
-                {
-                    x = 1.02f;
-                    z = 0.05f;
-                    y = 2f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
-                    {
-                        z -= 0.01f;
-                        x += 0.03f;
-                    }
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
-                }
+               
             }
             return tfMatrices;
         }

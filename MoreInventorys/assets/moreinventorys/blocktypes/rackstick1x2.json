@@ -1,0 +1,100 @@
+{
+  "code": "rackstick1x2",
+  "class": "rackstick1x2block",
+  "name": "RackStick1x2",
+  "entityClass": "berackstick1x2",
+  "creativeinventory": {
+    "general": [ "*-north" ],
+    "moreinventorys": [ "*-north" ]
+  },
+  "guiTransform": {
+    "translation": {
+      "x": -7,
+      "y": 10,
+      "z": 0
+    },
+    "scale": 0.68
+  },
+  "allowOverlap": true,
+
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "blockmaterial": "Wood",
+  "variantgroups": [
+    {
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
+  "combustibleProps": {
+    "burnTemperature": 600,
+    "burnDuration": 35
+  },
+  "collisionselectionboxes": [
+    {
+      "x1": 0.06,
+      "y1": 0.12,
+      "z1": 0.06,
+      "x2": 0.94,
+      "y2": 0.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.06,
+      "y1": 1,
+      "z1": 0.06,
+      "x2": 0.94,
+      "y2": 1.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    }
+    
+  ],
+  "materialDensity": 400,
+  "replaceable": 1000,
+  "resistance": 1.5,
+  "lightAbsorption": 1,
+  "tags": [ "storage" ],
+  "shape": { "base": "moreinventorys:rackstick1x2" },
+  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "shapebytype": {
+    "*-north": {
+      "base": "rackstick1x2",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "rackstick1x2",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "rackstick1x2",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "rackstick1x2",
+      "rotateY": 90
+    }
+  },
+  "sounds": {
+    "place": "game:block/stickplace",
+    "hit": "game:block/stickhit",
+    "break": "game:block/stickbreak",
+    "walk": "game:walk/wood"
+  },
+  "placementRotationFix": true
+
+}

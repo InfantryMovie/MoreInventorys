@@ -148,7 +148,14 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 var invSlot = inv[index];
                 var code = invSlot.Itemstack?.Item?.Code.ToString();
-                if (code == null) continue;
+                if (code == null)
+                {
+                    tfMatrices[index] = new Matrixf()
+                        .Scale(0f, 0f, 0f)
+                        .Values;
+                    continue;
+                }
+                ;
 
                 //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса //float x = (index * 0.15f) + 0.67f;
                 float x = 0f; //ширина

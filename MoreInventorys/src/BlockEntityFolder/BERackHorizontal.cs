@@ -159,10 +159,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             if (Api.World.Side == EnumAppSide.Client) return;
 
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
-            {
-                updateMesh(i);
-            }
+            updateMesh(slotid);
             MarkDirty(true);
 
             UpdateShape();

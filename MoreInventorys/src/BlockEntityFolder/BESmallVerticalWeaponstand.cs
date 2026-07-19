@@ -136,7 +136,9 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (string.IsNullOrEmpty(code))
                 {
-                    tfMatrices[index] = null;
+                    tfMatrices[index] = new Matrixf()
+                        .Scale(0f, 0f, 0f)
+                        .Values;
                     continue;
                 }
 

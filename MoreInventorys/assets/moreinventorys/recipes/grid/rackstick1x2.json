@@ -1,0 +1,24 @@
+{
+  "ingredientPattern": "WRW,_W_,WRW",
+  "ingredients": {
+    "W": {
+      "type": "item",
+      "code": "game:stick",
+      "quantity": 2
+    },
+    "R": {
+      "type": "item",
+      "code": "game:*",
+      "allowedVariants": [ "cattailtops", "papyrustops" ],
+      "quantity": 2
+    }
+
+  },
+  "width": 3,
+  "height": 3,
+  "shapeless": false,
+  "output": {
+    "type": "block",
+    "code": "rackstick1x2-north"
+  }
+}

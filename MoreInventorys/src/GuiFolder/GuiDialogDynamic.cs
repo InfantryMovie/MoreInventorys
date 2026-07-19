@@ -74,6 +74,10 @@ namespace MoreInventorys.src.GuiFolder
             {
                 containerSlots = new int[3] { 0, 1, 2 };
             }
+            if (MaxContainerBlockSlots == 2)
+            {
+                containerSlots = new int[2] { 0, 1};
+            }
             if (MaxContainerBlockSlots == 4)
             {
                 // Для 2х2 стеллажа (4 слота) - обрабатываем двойные сундуки

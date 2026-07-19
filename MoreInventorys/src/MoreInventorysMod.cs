@@ -119,11 +119,20 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("rackverticalblock", typeof(RackVerticalBlock));
             api.RegisterBlockEntityClass("berackvertical", typeof(BERackVertical));
 
+            api.RegisterBlockClass("rackvertical1x2block", typeof(RackVertical1x2Block));
+            api.RegisterBlockEntityClass("berackvertical1x2", typeof(BERackVertical1x2));
+
             api.RegisterBlockClass("rackhorizontalblock", typeof(RackHorizontalBlock));
             api.RegisterBlockEntityClass("berackhorizontal", typeof(BERackHorizontal));
 
+            api.RegisterBlockClass("rackhorizontal2x2block", typeof(RackHorizontal2x2Block));
+            api.RegisterBlockEntityClass("berackhorizontal2x2", typeof(BERackHorizontal2x2));
+
             api.RegisterBlockClass("rackstickblock", typeof(RackStickBlock));
             api.RegisterBlockEntityClass("berackstick", typeof(BERackStick));
+
+            api.RegisterBlockClass("rackstick1x2block", typeof(RackStick1x2Block));
+            api.RegisterBlockEntityClass("berackstick1x2", typeof(BERackStick1x2));
 
             api.RegisterBlockClass("crateclosedblock", typeof(CrateClosedBlock));
             api.RegisterBlockEntityClass("becrateclosed", typeof(BECrateClosed));

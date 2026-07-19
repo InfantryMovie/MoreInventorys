@@ -1,14 +1,11 @@
-﻿using System;
+﻿using MoreInventorys.src.GuiFolder;
+using MoreInventorys.src.InventoryFolder;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using MoreInventorys.src.GuiFolder;
-using MoreInventorys.src.InventoryFolder;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -16,39 +13,34 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
-using Vintagestory.ServerMods;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    public class BERackVertical : BlockEntityDisplay
+    internal class BERackStick1x2 : BlockEntityDisplay
     {
         private const int PACKET_SYNC_STATE = 2000;
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
-        Dictionary<int, int> containerSlotAddedSlots = new Dictionary<int, int>();
+
         Dictionary<int, string> storageContainers { get; set; }
+
+        string container1;
+        string container2;
+
+        bool isFirstLoad = true;
+
         Block block;
         InventoryDynamic inventory;
 
         public override InventoryBase Inventory => inventory;
-        public override string InventoryClassName => "rackverticalonedynamic";
+        public override string InventoryClassName => "rackstick1x2dynamic";
 
         GuiDialogDynamic storageDlg;
 
-        public const int MAX_CONTAINER_BLOC_SLOTS = 3;
-        public static IPlayer fromPlayer;
-
-        string container1;
-        string container2;
-        string container3;
-
-        bool isFirstLoad = true;
-
+        public const int MAX_CONTAINER_BLOC_SLOTS = 2;
         public bool isOpened;
-
-        public BERackVertical()
+        public BERackStick1x2()
         {
-            inventory = new InventoryDynamic("rackverticalone-0", 3, null);
+            inventory = new InventoryDynamic("rackstick1x2-0", 2, null);
             storageContainers = new Dictionary<int, string>();
         }
 
@@ -113,6 +105,28 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
+        public override void OnBlockUnloaded()
+        {
+            base.OnBlockUnloaded();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
+        public override void OnBlockRemoved()
+        {
+            base.OnBlockRemoved();
+            if (inventory != null)
+            {
+                inventory.SlotModified -= OnSlotModified;
+            }
+
+            storageDlg = null;
+        }
+
         public void UpdateAllMeshes()
         {
             for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
@@ -145,55 +159,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
-        public override void OnBlockUnloaded()
-        {
-            base.OnBlockUnloaded();
-            if (inventory != null)
-            {
-                inventory.SlotModified -= OnSlotModified;
-            }
-
-            storageDlg = null;
-        }
-
-        public override void OnBlockRemoved()
-        {
-            base.OnBlockRemoved();
-            if (inventory != null)
-            {
-                inventory.SlotModified -= OnSlotModified;
-            }
-
-            storageDlg = null;
-        }
-
-        bool InitializeStorageContainers()
-        {
-            if (storageContainers.Count > 0) return false;
-
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        if (container1 != "") storageContainers.Add(0, container1);
-                        break;
-
-                    case 1:
-                        if (container2 != "") storageContainers.Add(1, container2);
-                        break;
-
-                    case 2:
-                        if (container3 != "") storageContainers.Add(2, container3);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            return true;
-        }
-
         public override void OnReceivedServerPacket(int packetid, byte[] data)
         {
             if (packetid == 1101)
@@ -213,7 +178,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     Open();
                     Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackverticalone"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackstick1x2-north"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
                         Open();
@@ -262,30 +227,12 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
         {
-            var storageBlock = slot.Itemstack.Block;
-            if (storageBlock != null)
-            {
-                if (storageBlock.Code.ToString().Contains("trunk")) return (false, 0);
-            }
-
             string cod = GetValueBeforeDash(slot.Itemstack.Block.Code.Path);
             int? quantitySlots = 0;
-            if (!ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod) && !ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
-                return (false, 0);
 
-            if (ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod))
+            if (cod.Contains("mibasket"))
             {
-                string type = slot.Itemstack.Attributes.GetString("type");
-                if (type != null)
-                {
-                    int? num = slot.Itemstack.ItemAttributes?["quantitySlots"]?[type]?.AsInt();
-                    if (num != null) quantitySlots = (int)num;
-                }
-            }
-
-            if (ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
-            {
-                quantitySlots = ModConfigFile.Current.ModedStorageContainersCode[cod];
+                quantitySlots = 8;
             }
 
             if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
@@ -305,26 +252,59 @@ namespace MoreInventorys.src.BlockEntityFolder
             return input;
         }
 
+        private void OpenGui(IPlayer byPlayer)
+        {
+            if (Api.Side != EnumAppSide.Client)
+            {
+                byte[] data;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryWriter writer = new BinaryWriter(ms);
+                    TreeAttribute tree = new TreeAttribute();
+                    inventory.ToTreeAttributes(tree);
+                    tree.ToBytes(writer);
+                    data = ms.ToArray();
+                }
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
+                byPlayer.InventoryManager.OpenInventory(inventory);
+            }
+        }
+
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
-            fromPlayer = byPlayer;
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
-            if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
-            {
-                int slotsCount = 0;
-                var storageBlock = slot.Itemstack.Block;
-                if (storageBlock == null) return false;
-                var isContainerResult = IsValidContainer(slot);
-                var isContainer = isContainerResult.Item1;
-                var quantitySlots = isContainerResult.quantitySlots;
-                if (isContainer)
-                {
-                    slotsCount = (int)quantitySlots;
-                    MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
 
-                    if (TryPut(slot, blockSel, storageBlock))
+            if (inventory[blockSel.SelectionBoxIndex].Empty)
+            {
+                if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
+                {
+                    if (slot.Itemstack.Block == null) return false;
+
+                    int slotsCount = 0;
+                    var storageBlock = slot.Itemstack.Block;
+                    if (storageBlock.Code == null) return false;
+
+                    var isContainerResult = IsValidContainer(slot);
+                    var isContainer = isContainerResult.Item1;
+                    var quantitySlots = isContainerResult.quantitySlots;
+
+                    slotsCount = (int)quantitySlots;
+
+                    if (isContainer)
                     {
-                        if (slotsCount > 0)
+                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                        {
+                            int slotIndex = inventory.containerBlockSlotsActive;
+                            if (!storageContainers.ContainsKey(slotIndex))
+                            {
+                                storageContainers.Add(slotIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                            }
+                            else
+                            {
+                                storageContainers[slotIndex] = storageBlock.Code.Path + DateTime.Now.ToString();
+                            }
+                        }
+                        if (TryPut(slot, blockSel, storageBlock))
                         {
                             int lastId = inventory[inventory.Count - 1].SlotId;
                             int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
@@ -332,11 +312,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                             lock (inventory.LockContainerSlots)
                             {
                                 inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
-                            }
-
-                            if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                            {
-                                storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
                             }
 
                             switch (blockSel.SelectionBoxIndex)
@@ -349,9 +324,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                                     container2 = storageBlock.Code.Path;
                                     break;
 
-                                case 2:
-                                    container3 = storageBlock.Code.Path;
-                                    break;
+
                                 default:
                                     break;
                             }
@@ -359,21 +332,25 @@ namespace MoreInventorys.src.BlockEntityFolder
                             inventory.AddSlots(slotsCount);
                             inventory.dynamicSlots += slotsCount;
                             inventory.containerBlockSlotsActive++;
+
+                            MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
+
+                            UpdateAllMeshes();
+                            UpdateShape();
+
+                            if (Api.Side == EnumAppSide.Server)
+                            {
+                                SendStateToPlayer(byPlayer);
+                            }
+                            return true;
                         }
-
-                        MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
-
-                        UpdateAllMeshes();
-                        UpdateShape();
-
-                        if (Api.Side == EnumAppSide.Server)
-                        {
-                            SendStateToPlayer(byPlayer);
-                        }
-                        return true;
                     }
-                    return false;
                 }
+            }
+            else
+            {
+                OpenGui(byPlayer);
+                return true;
             }
 
             if (Api.Side != EnumAppSide.Client)
@@ -402,7 +379,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                 inventory.IsTryPut = true;
                 int num = slot.TryPutInto(Api.World, inventory[blockIndex]);
                 inventory.IsTryPut = false;
-
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
             }
@@ -450,7 +426,6 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             tree.SetString("container1", container1);
             tree.SetString("container2", container2);
-            tree.SetString("container3", container3);
 
             tree.SetInt("dummyCount", DummyPositions.Count);
             for (int i = 0; i < DummyPositions.Count; i++)
@@ -467,10 +442,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             isOpened = tree.GetBool("isOpened");
             inventory.dynamicSlots = tree.GetInt("dynamicSlots");
             inventory.containerBlockSlotsActive = tree.GetInt("containerBlockSlotsActive");
-
             container1 = tree.GetString("container1");
             container2 = tree.GetString("container2");
-            container3 = tree.GetString("container3");
 
             if (isFirstLoad)
             {
@@ -498,7 +471,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     0 => container1,
                     1 => container2,
-                    2 => container3,
                     _ => ""
                 };
 
@@ -514,131 +486,38 @@ namespace MoreInventorys.src.BlockEntityFolder
             base.updateMeshes();
         }
 
-        (int, string) GetOrientationRateForMartices(int containerIndex)
+        int GetOrientationRateForMartices(int containerIndex)
         {
             int orientationRotate = 0;
 
-            if (storageContainers.Count == 0)
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "");
-            }
+            if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
+            if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
+            if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
 
-            if (!storageContainers.ContainsKey(containerIndex)) return (orientationRotate, "");
-
-            var container = storageContainers[containerIndex];
-            if (string.IsNullOrEmpty(container))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "");
-            }
-
-            if (container.Contains("chest"))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 0;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
-                return (orientationRotate, "chest");
-            }
-            else if (container.Contains("micrateclosed"))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "micrateclosed");
-            }
-            else if (container.Contains("mibasketclosed"))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "mibasketclosed");
-            }
-            else
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-            }
-
-            return (orientationRotate, "");
+            return orientationRotate;
         }
 
         protected override float[][] genTransformationMatrices()
         {
-            float[][] tfMatrices = new float[3][];
+            float[][] tfMatrices = new float[4][];
             float scale = 0.9f;
-            float x = 0;
-            float z = 0;
-            float y = 0;
 
-            int orientationRotate = 0;
-            string code = "";
-            for (int index = 0; index < 3; index++)
+            for (int index = 0; index < 4; index++)
             {
-                var orientationRotateResult = GetOrientationRateForMartices(index);
-                orientationRotate = orientationRotateResult.Item1;
-                code = orientationRotateResult.Item2;
+                int orientationRotate = GetOrientationRateForMartices(index);
 
-                if (index == 0)
-                {
-                    x = 1.02f;
-                    z = 0.05f;
-                    y = 0f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
-                    {
-                        z -= 0.01f;
-                        x += 0.03f;
-                    }
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
-                }
-                if (index == 1)
-                {
-                    x = 1.02f;
-                    z = 0.05f;
-                    y = 1f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
-                    {
-                        z -= 0.01f;
-                        x += 0.03f;
-                    }
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
-                }
-                if (index == 2)
-                {
-                    x = 1.02f;
-                    z = 0.05f;
-                    y = 2f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
-                    {
-                        z -= 0.01f;
-                        x += 0.03f;
-                    }
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
-                       .Translate(x - 1f, y, z)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scale, scale, scale)
-                       .Values;
-                }
+                float x, z, y;
+                x = 1.02f;
+                z = 0.05f;
+                y = index == 0 ? 0f : 1f;
+
+                tfMatrices[index] = new Matrixf()
+                   .Translate(0.5f, 0f, 0.5f)
+                   .RotateYDeg(orientationRotate)
+                   .Translate(x - 1f, y, z)
+                   .Translate(-0.5f, 0f, -0.5f)
+                   .Scale(scale, scale, scale)
+                   .Values;
             }
             return tfMatrices;
         }

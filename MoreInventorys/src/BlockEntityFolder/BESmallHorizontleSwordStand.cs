@@ -127,7 +127,14 @@ namespace MoreInventorys.src.BlockEntityFolder
                 var code = weapon.Itemstack?.Item?.Code.ToString();
                 //float x = (index * 0.15f расстояние между хитбоксами) + 0.65f начальное положение первого хитбокса
 
-                if (string.IsNullOrEmpty(code)) continue;
+                if (string.IsNullOrEmpty(code))
+                {
+                    tfMatrices[index] = new Matrixf()
+                    .Scale(0f, 0f, 0f)
+                    .Values;
+                    continue;
+                }
+                ;
 
                 if(code.Contains("flax"))
                 {
