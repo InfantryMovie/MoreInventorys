@@ -33,6 +33,13 @@ namespace MoreInventorys.src
 
                 switch (inv.MaxContainerBlockSlots)
                 {
+                    case 2:
+                        if (this.SlotId == 0 || this.SlotId == 1)
+                        {
+                            HexBackgroundColor = "#9f9f9f";
+
+                        }
+                        break;
                     case 3:
                         if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2)
                         {
@@ -81,6 +88,9 @@ namespace MoreInventorys.src
 
             switch (MaxContainerBlockSlots)
             {
+                case 2:
+                    if (this.SlotId == 0 || this.SlotId == 1) return false;
+                    break;
                 case 3:
                     if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
                     break;
@@ -106,6 +116,9 @@ namespace MoreInventorys.src
         {
             switch (MaxContainerBlockSlots)
             {
+                case 2:
+                    if (this.SlotId == 0 || this.SlotId == 1) return false;
+                    break;
                 case 3:
                     if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
                     break;
@@ -168,6 +181,9 @@ namespace MoreInventorys.src
             {
                 switch (MaxContainerBlockSlots)
                 {
+                    case 2:
+                        if (this.SlotId == 0 || this.SlotId == 1) return false;
+                        break;
                     case 3:
                         if (this.SlotId == 0 || this.SlotId == 1 || this.SlotId == 2) return false;
                         break;
