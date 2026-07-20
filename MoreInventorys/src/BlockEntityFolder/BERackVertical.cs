@@ -571,7 +571,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         protected override float[][] genTransformationMatrices()
         {
-            float[][] tfMatrices = new float[3][];
+            float[][] tfMatrices = new float[MAX_CONTAINER_BLOC_SLOTS][];
             float scale = 0.9f;
             float x = 0;
             float z = 0;
@@ -579,7 +579,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             int orientationRotate = 0;
             string code = "";
-            for (int index = 0; index < 3; index++)
+            for (int index = 0; index < MAX_CONTAINER_BLOC_SLOTS; index++)
             {
                 var orientationRotateResult = GetOrientationRateForMartices(index);
                 orientationRotate = orientationRotateResult.Item1;
