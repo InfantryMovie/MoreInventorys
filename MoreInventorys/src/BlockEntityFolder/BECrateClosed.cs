@@ -215,7 +215,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 // Закрываем инвентарь у игрока
                 if (storageDlg != null)
                 {
-                    
+
                     (Api.World as IClientWorldAccessor)?.Player.InventoryManager.CloseInventory(Inventory);
                     storageDlg?.TryClose();
                     storageDlg?.Dispose();
@@ -267,10 +267,31 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         protected override float[][] genTransformationMatrices()
         {
-            return new float[0][];
+            float[][] tfMatrices = new float[slotCount][];
+
+            for (int index = 0; index < slotCount; index++)
+            {
+                
+
+                float x = ((index % 4) >= 2) ? 12 / 16f : 4 / 16f;
+                float y = index >= 4 ? 10 / 16f : 2 / 16f;
+                float z = (index % 2 == 0) ? 4 / 16f : 10 / 16f;
+                y -= 0.06f;
+                tfMatrices[index] =
+                    new Matrixf()
+                    .Translate(0.5f, 0, 0.5f)
+                    .RotateYDeg(Block.Shape.rotateY)
+                    .Translate(x - 0.5f, y, z - 0.4f)
+                    .Translate(-0.5f, 0, -0.5f)
+                    .Scale(1f, 1f, 1f)
+                    .Values
+                ;
+            }
+
+            return tfMatrices;
         }
 
-        
+
 
 
     }

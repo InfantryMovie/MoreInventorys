@@ -27,6 +27,37 @@
     },
     "scale": 1.03
   },
+  "collisionselectionboxes": [
+    {
+      "x1": 0.06,
+      "y1": 0.12,
+      "z1": 0.06,
+      "x2": 0.94,
+      "y2": 0.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    },
+    {
+      "x1": 0.06,
+      "y1": 1,
+      "z1": 0.06,
+      "x2": 0.94,
+      "y2": 1.93,
+      "z2": 0.94,
+      "rotateYByType": {
+        "*-north": 0,
+        "*-east": 270,
+        "*-west": 90,
+        "*-south": 180
+      }
+    }
+
+  ],
   "tpHandTransform": {
     "translation": {
       "x": -2.1,
