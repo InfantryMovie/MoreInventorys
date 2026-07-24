@@ -27,8 +27,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         public BEFirstShelf()
         {
             inv = new InventoryGeneric(slotCount, "firstshelfinventory-0", null, (id, inv) => new ItemSlotDisplay(inv, GetSlotType(id)));
-            //inv = new InventoryGeneric(slotCount, "firstshelf-0", null);
-            //inv.AddSlots(slotCount);
+
         }
 
 
