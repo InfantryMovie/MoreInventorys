@@ -299,5 +299,8 @@
   "item-rackrailline-tin": "Rack Rail (tin)",
   "item-rackrailline-zinc": "Rack Rail (zinc)",
 
+  "block-firstshelf-action-place": "Put on shelf",
+  "block-firstshelf-action-unplace": "Take from shelf",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }

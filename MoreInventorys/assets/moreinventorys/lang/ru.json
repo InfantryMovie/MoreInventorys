@@ -300,6 +300,9 @@
   "item-rackrailline-tin": "Рейка стеллажа (олово)",
   "item-rackrailline-zinc": "Рейка стеллажа (цинк)",
 
+  "block-firstshelf-action-place": "Поставить на полку",
+  "block-firstshelf-action-unplace": "Забрать с полки",
+
 
   "game:tabname-moreinventorys": "More Inventorys"
 }
