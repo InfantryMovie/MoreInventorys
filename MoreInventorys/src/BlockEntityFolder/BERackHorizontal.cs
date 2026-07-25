@@ -25,6 +25,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 {
     internal class BERackHorizontal : BlockEntityDisplay
     {
+        public override int DisplayedItems => MAX_CONTAINER_BLOC_SLOTS;
         private const int PACKET_SYNC_STATE = 2000;
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
 
@@ -85,6 +86,8 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         }
 
+
+
        
 
         private void BroadcastStateToNearbyPlayers()
@@ -137,13 +140,23 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         public override void OnBlockRemoved()
         {
-            base.OnBlockRemoved();
+            if (storageDlg != null)
+            {
+                var dlg = storageDlg;
+                storageDlg = null; 
+
+                dlg.TryClose();
+                dlg.Dispose();
+            }
+
             if (inventory != null)
             {
                 inventory.SlotModified -= OnSlotModified;
             }
 
             storageDlg = null;
+
+            base.OnBlockRemoved();
         }
 
         public void UpdateAllMeshes()
@@ -907,5 +920,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             return tfMatrices;
         }
+
+       
     }
 }

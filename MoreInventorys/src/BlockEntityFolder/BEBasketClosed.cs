@@ -53,6 +53,22 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
+        public override void OnBlockRemoved()
+        {
+            
+            if (storageDlg != null)
+            {
+                
+                var dlg = storageDlg;
+                storageDlg = null;
+
+                dlg.TryClose();
+                dlg.Dispose();
+            }
+
+            base.OnBlockRemoved();
+        }
+
 
 
         public override void OnBlockUnloaded()
