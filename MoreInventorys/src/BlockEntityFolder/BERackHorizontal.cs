@@ -57,6 +57,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         //число слотов для инвентарей которые будут установлены на стеллажи
         public const int MAX_CONTAINER_BLOC_SLOTS = 6;
+        public override int DisplayedItems => MAX_CONTAINER_BLOC_SLOTS;
         public bool isOpened;
         public BERackHorizontal()
         {

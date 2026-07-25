@@ -99,5 +99,7 @@ namespace MoreInventorys.src.GuiFolder
             base.Inventory.SlotModified -= OnInventorySlotModified;
             return base.OnEscapePressed();
         }
+
+
     }
 }

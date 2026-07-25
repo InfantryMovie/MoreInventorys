@@ -20,7 +20,7 @@ namespace MoreInventorys.src.BlockEntityFolder
     {
         private const int PACKET_SYNC_STATE = 2000;
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
-
+        public override int DisplayedItems => MAX_CONTAINER_BLOC_SLOTS;
         Dictionary<int, string> storageContainers { get; set; }
 
         string container1;

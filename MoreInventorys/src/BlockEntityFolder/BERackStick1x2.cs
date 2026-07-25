@@ -19,6 +19,7 @@ namespace MoreInventorys.src.BlockEntityFolder
     internal class BERackStick1x2 : BlockEntityDisplay
     {
         private const int PACKET_SYNC_STATE = 2000;
+        public override int DisplayedItems => MAX_CONTAINER_BLOC_SLOTS;
         public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
 
         Dictionary<int, string> storageContainers { get; set; }

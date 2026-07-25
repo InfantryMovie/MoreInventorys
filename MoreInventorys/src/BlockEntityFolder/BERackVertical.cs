@@ -29,6 +29,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         Dictionary<int, string> storageContainers { get; set; }
         Block block;
         InventoryDynamic inventory;
+        public override int DisplayedItems => MAX_CONTAINER_BLOC_SLOTS;
 
         public override InventoryBase Inventory => inventory;
         public override string InventoryClassName => "rackverticalonedynamic";
