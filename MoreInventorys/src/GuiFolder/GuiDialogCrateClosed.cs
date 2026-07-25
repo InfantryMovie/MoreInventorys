@@ -9,28 +9,28 @@ using Vintagestory.API.MathTools;
 
 namespace MoreInventorys.src.GuiFolder
 {
-    public class GuiDialogCrateClosed : GuiDialogBlockEntity
+    public class GuiDialogCrateClosed : GuiDialogBlockEntityInventory
     {
         private int _slotCount;
 
         public GuiDialogCrateClosed(string dialogTitle, InventoryBase inventory, BlockPos blockEntityPos, ICoreClientAPI capi, int slotCount = 16)
-            : base(dialogTitle, inventory, blockEntityPos, capi)
+    : base(dialogTitle, inventory, blockEntityPos, slotCount >= 16 ? 8 : 4, capi) 
         {
             if (!base.IsDuplicate)
             {
                 _slotCount = slotCount;
                 capi.World.Player.InventoryManager.OpenInventory(base.Inventory);
-                base.Inventory.SlotModified += OnInventorySlotModified;
-                SetupDialog();
+               // base.Inventory.SlotModified += OnInventorySlotModified;
+                
             }
         }
 
-        public void OnInventorySlotModified(int slotid)
+       /* public void OnInventorySlotModified(int slotid)
         {
             capi.Event.EnqueueMainThreadTask(SetupDialog, "setupcratecloseddlg");
-        }
+        }*/
 
-        private void SetupDialog()
+        /*private void SetupDialog()
         {
             // Определяем количество колонок
             int cols = _slotCount >= 16 ? 8 : 4;
@@ -81,14 +81,14 @@ namespace MoreInventorys.src.GuiFolder
             {
                 base.SingleComposer.OnMouseMove(new MouseEvent(capi.Input.MouseX, capi.Input.MouseY));
             }
-        }
+        }*/
 
         private void SendInvPacket(object p)
         {
             capi.Network.SendBlockEntityPacket(base.BlockEntityPosition.X, base.BlockEntityPosition.Y, base.BlockEntityPosition.Z, p);
         }
 
-        private void OnTitleBarClose()
+        /*private void OnTitleBarClose()
         {
             TryClose();
             base.Inventory.SlotModified -= OnInventorySlotModified;
@@ -98,6 +98,6 @@ namespace MoreInventorys.src.GuiFolder
         {
             base.Inventory.SlotModified -= OnInventorySlotModified;
             return base.OnEscapePressed();
-        }
+        }*/
     }
 }

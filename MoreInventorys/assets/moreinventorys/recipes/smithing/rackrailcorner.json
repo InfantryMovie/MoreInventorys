@@ -2,9 +2,11 @@
   "ingredient": {
     "type": "item",
     "code": "game:ingot-*",
-    "name": "plate"
+    "name": "plate",
+    "allowedVariants": [ "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ]
   },
   "name": "Rack Rail",
+  "code": "rackrailcorner-{plate}",
   "output": {
     "type": "item",
     "code": "moreinventorys:rackrailcorner-{plate}",

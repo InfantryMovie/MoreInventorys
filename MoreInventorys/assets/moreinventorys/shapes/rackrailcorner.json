@@ -9,7 +9,7 @@
 	"textureSizes": {
 	},
 	"textures": {
-		"iron": "block/metal/plate/iron"
+		"iron": "game:block/metal/plate/iron"
 	},
 	"elements": [
 		{

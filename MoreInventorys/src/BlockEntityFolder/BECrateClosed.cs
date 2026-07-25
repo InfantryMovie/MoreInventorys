@@ -1,4 +1,5 @@
 ﻿using MoreInventorys.src.GuiFolder;
+using MoreInventorys.src.InventoryFolder;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,9 +24,10 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override string AttributeTransformCode => "oncrateclosedTransform";
         public override int DisplayedItems => 0;
         Block block;
-        GuiDialogCrateClosed storageDlg;
+        GuiDialogDynamic storageDlg;
 
         static int slotCount = 16;
+        IPlayer byPlayer;
 
         private BlockEntityAnimationUtil animUtil => GetBehavior<BEBehaviorAnimatable>()?.animUtil;
         private bool _isOpen = false;
@@ -116,6 +118,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     ((ICoreServerAPI)Api).Network.BroadcastBlockEntityPacket(Pos, 1102);
                 }
                 MarkDirty(true);
+                this.byPlayer = byPlayer;
                 OpenGui(byPlayer);
             }
             return true;
@@ -196,12 +199,12 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (storageDlg == null)
                 {
-                    storageDlg = new GuiDialogCrateClosed(Lang.Get("moreinventorys:block-micrateclosed-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI, slotCount);
+                    Open();
+                    storageDlg = new GuiDialogDynamic(slotCount, Lang.Get("moreinventorys:block-micrateclosed-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI);
 
-                    // Подписываемся на событие закрытия GUI
                     storageDlg.OnClosed += delegate
                     {
-                        // Отправляем пакет на сервер о закрытии GUI
+                        Open();
                         if (Api.Side == EnumAppSide.Client)
                         {
                             capi.Network.SendBlockEntityPacket(Pos.X, Pos.Y, Pos.Z, 1001);
@@ -238,6 +241,16 @@ namespace MoreInventorys.src.BlockEntityFolder
                 return;
             }
         }
+
+        public bool Open()
+        {
+            if (Api.World.Side == EnumAppSide.Client)
+            {
+                ((ICoreClientAPI)Api).Network.SendBlockEntityPacket(Pos.X, Pos.Y, Pos.Z, 1101);
+            }
+            return true;
+        }
+
 
         public override void OnReceivedClientPacket(IPlayer fromPlayer, int packetid, byte[] data)
         {

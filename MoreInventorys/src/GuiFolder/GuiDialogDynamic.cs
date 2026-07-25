@@ -1,6 +1,7 @@
 ﻿using MoreInventorys.src.BlockEntityFolder;
 using MoreInventorys.src.InventoryFolder;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace MoreInventorys.src.GuiFolder
         int MaxContainerBlockSlots;
         private int _selectedContainerSlot = -1; // -1 = ничего не выбрано
         private List<int> _highlightedSlots = new List<int>();
+        bool isRack;
 
         BlockPos Pos { get; }
         public GuiDialogDynamic(int slots, string dialogTitle, InventoryBase inventory, BlockPos blockEntityPos, ICoreClientAPI capi)
@@ -26,6 +28,7 @@ namespace MoreInventorys.src.GuiFolder
         {
             if (!base.IsDuplicate)
             {
+                isRack = false;
                 capi.World.Player.InventoryManager.OpenInventory(base.Inventory);
                 inventory.SlotModified += OnInventorySlotModified;
                 DynamicSlots = slots;
@@ -33,6 +36,7 @@ namespace MoreInventorys.src.GuiFolder
                 if (inventory is InventoryDynamic inv)
                 {
                     MaxContainerBlockSlots = inv.MaxContainerBlockSlots;
+                    isRack = true;
 
                 }
                 SetupDialog();
@@ -134,7 +138,7 @@ namespace MoreInventorys.src.GuiFolder
                 int totalItemSlots = itemSlots.Length;
                 if (totalItemSlots <= 32)
                 {
-                    cols = 9;
+                    cols = 8;
                 }
                 else if (totalItemSlots <= 108)
                 {
@@ -180,8 +184,9 @@ namespace MoreInventorys.src.GuiFolder
             {
                 hoveredSlot = null;
             }
+            double offsetX = 0f;
+            if (isRack) offsetX = 75f; // 75 Сдвиг основной сетки с предметами вправо от сетки с контейнерами
 
-            double offsetX = 75; // Сдвиг основной сетки с предметами вправо от сетки с контейнерами
 
             // Основной контейнер
             ElementBounds mainBounds = ElementBounds.Fixed(0.0, 0.0, fixedWidth, fixedHeigh);
@@ -212,9 +217,12 @@ namespace MoreInventorys.src.GuiFolder
             ClearComposers();
 
             // Создаём GUI
+
             if (slotsBounds != null)
             {
-                base.SingleComposer = capi.Gui
+                if (isRack)
+                {
+                    base.SingleComposer = capi.Gui
                     .CreateCompo("blockentityinventoryberackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
                     .AddShadedDialogBG(bgBounds)
                     .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
@@ -223,17 +231,44 @@ namespace MoreInventorys.src.GuiFolder
                     .AddItemSlotGrid(Inventory, SendInvPacket, cols, itemSlots, slotsBounds, "itemslots")
                     .EndChildElements()
                     .Compose();
+                }
+                else
+                {
+                    base.SingleComposer = capi.Gui
+                    .CreateCompo("blockentityinventoryberackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
+                    .AddShadedDialogBG(bgBounds)
+                    .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
+                    .BeginChildElements(bgBounds)
+                    .AddItemSlotGrid(Inventory, SendInvPacket, cols, itemSlots, slotsBounds, "itemslots")
+                    .EndChildElements()
+                    .Compose();
+                }
+                
             }
             else
             {
-                base.SingleComposer = capi.Gui
-                .CreateCompo("blockentityinventoryberackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
-                .AddShadedDialogBG(bgBounds)
-                .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
-                .BeginChildElements(bgBounds)
-                .AddItemSlotGrid(Inventory, SendInvPacket, 1, containerSlots, containerSlotsBounds, "horizontalcontainerslots")
-                .EndChildElements()
-                .Compose();
+                if (isRack)
+                {
+                    base.SingleComposer = capi.Gui
+                    .CreateCompo("blockentityinventoryberackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
+                    .AddShadedDialogBG(bgBounds)
+                    .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
+                    .BeginChildElements(bgBounds)
+                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, containerSlots, containerSlotsBounds, "horizontalcontainerslots")
+                    .EndChildElements()
+                    .Compose();
+                }
+                else
+                {
+                    base.SingleComposer = capi.Gui
+                    .CreateCompo("blockentityinventoryberackhorizontalslots" + base.BlockEntityPosition, dialogBounds)
+                    .AddShadedDialogBG(bgBounds)
+                    .AddDialogTitleBar(DialogTitle, OnTitleBarClose)
+                    .BeginChildElements(bgBounds)
+                    .EndChildElements()
+                    .Compose();
+                }
+                
             }
 
             //ПРИМЕНЯЕМ СОХРАНЁННОЕ ВЫДЕЛЕНИЕ
@@ -375,6 +410,8 @@ namespace MoreInventorys.src.GuiFolder
             base.Inventory.SlotModified -= OnInventorySlotModified;
             base.OnGuiClosed();
         }
+
+
 
 
         public override void OnKeyPress(KeyEvent args)
