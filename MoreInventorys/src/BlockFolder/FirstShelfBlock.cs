@@ -61,7 +61,7 @@ namespace MoreInventorys.src.BlockFolder
                 {
                     new WorldInteraction()
                     {
-                        ActionLangCode = "Положить на полку",
+                        ActionLangCode = Lang.Get("moreinventorys:block-firstshelf-action-place"),
                         MouseButton = EnumMouseButton.Right,
                         Itemstacks = sstacks,
                         GetMatchingStacks = (wi, bs, es) =>
@@ -79,7 +79,7 @@ namespace MoreInventorys.src.BlockFolder
                     },
                     new WorldInteraction()
                     {
-                        ActionLangCode = "Положить на полку",
+                        ActionLangCode = Lang.Get("moreinventorys:block-firstshelf-action-place"),
                         HotKeyCode = "shift",
                         MouseButton = EnumMouseButton.Right,
                         Itemstacks = sstacks,
@@ -98,7 +98,7 @@ namespace MoreInventorys.src.BlockFolder
                     },
                     new WorldInteraction()
                     {
-                        ActionLangCode = "Забрать с полки",
+                        ActionLangCode = Lang.Get("moreinventorys:block-firstshelf-action-unplace"),
                         MouseButton = EnumMouseButton.Right,
                         RequireFreeHand = true,
                         ShouldApply = (wi, bs, es) =>
