@@ -142,7 +142,7 @@ namespace MoreInventorys.src.GuiFolder
                 }
                 else if (totalItemSlots <= 108)
                 {
-                    cols = 16;
+                    cols = 12;
                 }
                 else
                 {

@@ -3,7 +3,7 @@
     "type": "item",
     "code": "game:ingot-*",
     "name": "plate",
-    "allowedVariants": [ "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ]
+    "allowedVariants": [ "iron", "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ]
   },
   "name": "Rack Rail",
   "code": "rackrailline-{plate}",

@@ -199,7 +199,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                 if (storageDlg == null)
                 {
-                    Open();
+                    Open(); 
                     storageDlg = new GuiDialogDynamic(slotCount, Lang.Get("moreinventorys:block-micrateclosed-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI);
 
                     storageDlg.OnClosed += delegate
@@ -232,7 +232,6 @@ namespace MoreInventorys.src.BlockEntityFolder
                 // Закрываем инвентарь у игрока
                 if (storageDlg != null)
                 {
-                    
                     (Api.World as IClientWorldAccessor)?.Player.InventoryManager.CloseInventory(Inventory);
                     storageDlg?.TryClose();
                     storageDlg?.Dispose();
