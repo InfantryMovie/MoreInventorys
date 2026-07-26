@@ -3,6 +3,7 @@
   "class": "dummyrv",
   "drawtype": "empty",
   "lightAbsorption": 0,
+  "climbable": true,
   "sidesolid": {
     "all": "false",
     "up": "true"

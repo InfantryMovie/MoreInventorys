@@ -59,10 +59,6 @@
     }
   },
 
-  "combustibleProps": {
-    "burnTemperature": 600,
-    "burnDuration": 35
-  },
   "collisionselectionboxes": [
     {
       "x1": 0,

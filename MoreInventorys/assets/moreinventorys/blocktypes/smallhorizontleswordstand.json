@@ -25,10 +25,6 @@
   "textures": {
     "ebony1": { "base": "game:block/wood/planks/{planks}1" }
   },
-  "combustibleProps": {
-    "burnTemperature": 600,
-    "burnDuration": 35
-  },
   "guiTransform": {
     "rotation": {
       "x": -22.6,

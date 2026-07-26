@@ -13,10 +13,6 @@
     "all": false
   },
   "blockmaterial": "Wood",
-  "combustibleProps": {
-    "burnTemperature": 600,
-    "burnDuration": 35
-  },
   "guiTransform": {
     "origin": {
       "x": 0.75,

@@ -150,6 +150,7 @@
       "rotateY": 90
     }
   },
+  "climbable": true,
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

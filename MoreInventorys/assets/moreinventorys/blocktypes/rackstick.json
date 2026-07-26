@@ -116,6 +116,7 @@
       "rotateY": 90
     }
   },
+  "climbable": true,
   "sounds": {
     "place": "game:block/stickplace",
     "hit": "game:block/stickhit",

@@ -36,10 +36,6 @@
   "textures": {
     "ebony1": { "base": "game:block/wood/planks/{planks}1" }
   },
-  "combustibleProps": {
-    "burnTemperature": 600,
-    "burnDuration": 35
-  },
   "collisionselectionboxes": [
     {
       "x1": 0.06,
@@ -123,6 +119,7 @@
       "rotateY": 90
     }
   },
+  "climbable": true,
   "sounds": {
     "place": "game:block/planks",
     "hit": "game:block/planks",

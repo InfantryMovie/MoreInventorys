@@ -31,10 +31,6 @@
     "all": false
   },
   "blockmaterial": "Wood",
-  "combustibleProps": {
-    "burnTemperature": 600,
-    "burnDuration": 35
-  },
   "collisionselectionboxes": [
     {
       "x1": 0.3, // Начальный отступ от левой границы

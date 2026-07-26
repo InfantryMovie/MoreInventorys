@@ -4,6 +4,7 @@
   "entityclass": "bedummyrh",
   "drawtype": "empty",
   "lightAbsorption": 0,
+  "climbable": true,
   "sidesolid": {
     "all": "false",
     "up": "true"
