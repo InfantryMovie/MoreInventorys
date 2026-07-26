@@ -338,6 +338,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         }
 
                         storageContainers.Add(targetSlotIndex, containerKey + DateTime.Now.ToString());
+                        inventory.ContainerTypes[targetSlotIndex] = storageBlock.Code.Path;
                     }
 
                     if (TryPut(slot, targetSlotIndex, storageBlock, isLegitDoubleChest))
@@ -347,7 +348,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                         lock (inventory.LockContainerSlots)
                         {
-                            inventory.ContainerSlots.Add(_containerCounter, quantitySlotsId);
+                            inventory.ContainerSlots[targetSlotIndex] = quantitySlotsId;
                             _containerCounter++;
                         }
 

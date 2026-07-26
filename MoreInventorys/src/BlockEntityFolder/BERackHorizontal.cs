@@ -85,10 +85,10 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
 
         }
+        
 
 
 
-       
 
         private void BroadcastStateToNearbyPlayers()
         {
@@ -389,6 +389,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         }
 
                         storageContainers.Add(targetSlotIndex, containerKey + DateTime.Now.ToString());
+                        inventory.ContainerTypes[targetSlotIndex] = storageBlock.Code.Path;
                     }
 
 
@@ -400,7 +401,8 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                         lock (inventory.LockContainerSlots)
                         {
-                            inventory.ContainerSlots.Add(_containerCounter, quantitySlotsId);
+                            inventory.ContainerSlots[targetSlotIndex] = quantitySlotsId;
+                            //inventory.ContainerSlots.Add(_containerCounter, quantitySlotsId);
                             _containerCounter++;
                         }
 
@@ -597,7 +599,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 fromPlayer.InventoryManager.CloseInventory(Inventory);
                 if (Api.Side == EnumAppSide.Server)
                 {
-                    // ❗ Отправляем состояние этому игроку
+                    // Отправляем состояние этому игроку
                     SendStateToPlayer(fromPlayer);
                     // И всем остальным тоже
                     BroadcastStateToNearbyPlayers();

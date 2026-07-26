@@ -192,7 +192,8 @@ namespace MoreInventorys.src.GuiFolder
             ElementBounds mainBounds = ElementBounds.Fixed(0.0, 0.0, fixedWidth, fixedHeigh);
 
             // Левая часть — вертикальные слоты (для контейнеров)
-            ElementBounds containerSlotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.LeftFixed, 0.0, 20.0, 1, MaxContainerBlockSlots);
+            int visibleSlotCount = containerSlots.Length;
+            ElementBounds containerSlotsBounds = ElementStdBounds.SlotGrid(EnumDialogArea.LeftFixed, 0.0, 20.0, 1, visibleSlotCount);
 
             ElementBounds slotsBounds = null;
             if (DynamicSlots > MaxContainerBlockSlots)
@@ -285,6 +286,8 @@ namespace MoreInventorys.src.GuiFolder
         }
 
         //  ОБРАБОТЧИК КЛИКА МЫШИ
+        //  ОБРАБОТЧИК КЛИКА МЫШИ
+        //  ОБРАБОТЧИК КЛИКА МЫШИ
         public override void OnMouseDown(MouseEvent args)
         {
             base.OnMouseDown(args);
@@ -309,20 +312,47 @@ namespace MoreInventorys.src.GuiFolder
                 visibleSlots.Add(i);
             }
 
+            //capi.Logger.Debug($"[GUI] visibleSlots: {string.Join(", ", visibleSlots)}");
+
             if (visibleSlots.Count == 0) return;
 
             double slotHeight = gridBounds.InnerHeight / visibleSlots.Count;
             double relativeY = mouseY - gridBounds.absY;
             int visibleIndex = (int)(relativeY / slotHeight);
 
+            //capi.Logger.Debug($"[GUI] mouseY: {mouseY}, gridBounds.absY: {gridBounds.absY}, relativeY: {relativeY}, slotHeight: {slotHeight}, visibleIndex: {visibleIndex}");
+
             if (visibleIndex >= 0 && visibleIndex < visibleSlots.Count)
             {
-                // Проверяем, есть ли контейнер в этом слоте
+                // Получаем реальный ID слота из visibleSlots
                 int actualSlotId = visibleSlots[visibleIndex];
-                if (!Inventory[actualSlotId].Empty)
+                //capi.Logger.Debug($"[GUI] Клик по видимому индексу {visibleIndex} -> реальный слот {actualSlotId}");
+
+                // Проверяем наличие контейнера в этом слоте
+                bool isEmpty = Inventory[actualSlotId].Empty;
+                //capi.Logger.Debug($"[GUI] Слот {actualSlotId} пуст: {isEmpty}");
+
+                if (!isEmpty)
                 {
-                    // 🔥 Ключ в ContainerSlots = visibleIndex (порядковый номер контейнера)
-                    HandleContainerSlotClick(visibleIndex);
+                    // Проверяем, есть ли контейнер в ContainerSlots
+                    if (Inventory is InventoryDynamic inv)
+                    {
+                        bool hasKey = inv.ContainerSlots.ContainsKey(actualSlotId);
+                        //capi.Logger.Debug($"[GUI] ContainerSlots содержит ключ {actualSlotId}: {hasKey}");
+                        if (hasKey)
+                        {
+                            int[] slots = inv.ContainerSlots[actualSlotId];
+                            //capi.Logger.Debug($"[GUI] Слоты для контейнера {actualSlotId}: [{string.Join(", ", slots)}]");
+                        }
+                        else
+                        {
+                            // Показываем все ключи в ContainerSlots
+                            //capi.Logger.Debug($"[GUI] Все ключи в ContainerSlots: [{string.Join(", ", inv.ContainerSlots.Keys)}]");
+                        }
+                    }
+
+                    // Используем реальный slotId для выделения
+                    HandleContainerSlotClick(actualSlotId);
                 }
             }
         }
@@ -351,28 +381,39 @@ namespace MoreInventorys.src.GuiFolder
 
         private void HandleContainerSlotClick(int slotId)
         {
+            //capi.Logger.Debug($"[GUI] HandleContainerSlotClick вызван для slotId: {slotId}, текущий _selectedContainerSlot: {_selectedContainerSlot}");
+
             // Если кликнули по тому же слоту - снимаем выделение
             if (_selectedContainerSlot == slotId)
             {
+                //capi.Logger.Debug($"[GUI] Клик по тому же слоту {slotId}, снимаем выделение");
                 ClearHighlight();
                 return;
             }
 
             // Выделяем слоты этого контейнера
+            //capi.Logger.Debug($"[GUI] Применяем выделение для слота {slotId}");
             ApplyHighlight(slotId);
             _selectedContainerSlot = slotId;
         }
 
         private void ApplyHighlight(int containerSlotId)
         {
+            //capi.Logger.Debug($"[GUI] ApplyHighlight вызван для containerSlotId: {containerSlotId}");
+
             ClearHighlight();
 
             if (Inventory is InventoryDynamic inv)
             {
-                // 🔥 containerSlotId теперь = visibleIndex (0, 1, 2...)
+                // Показываем все ключи в ContainerSlots
+                //capi.Logger.Debug($"[GUI] ContainerSlots ключи: [{string.Join(", ", inv.ContainerSlots.Keys)}]");
+
+                // Проверяем, есть ли контейнер в ContainerSlots по этому ключу
                 if (inv.ContainerSlots.ContainsKey(containerSlotId))
                 {
                     int[] itemSlots = inv.ContainerSlots[containerSlotId];
+                    //capi.Logger.Debug($"[GUI] Найдены слоты для контейнера {containerSlotId}: [{string.Join(", ", itemSlots)}]");
+
                     _highlightedSlots.AddRange(itemSlots);
 
                     foreach (int slotId in _highlightedSlots)
@@ -384,6 +425,11 @@ namespace MoreInventorys.src.GuiFolder
                     }
 
                     SetupDialog();
+                }
+                else
+                {
+                    //capi.Logger.Debug($"[GUI] Ключ {containerSlotId} НЕ НАЙДЕН в ContainerSlots!");
+                    //capi.Logger.Debug($"[GUI] Доступные ключи: [{string.Join(", ", inv.ContainerSlots.Keys)}]");
                 }
             }
         }

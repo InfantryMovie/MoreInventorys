@@ -335,6 +335,12 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     if (TryPut(slot, blockSel, storageBlock))
                     {
+                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                        {
+                            storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                            inventory.ContainerTypes[blockSel.SelectionBoxIndex] = storageBlock.Code.Path;
+                        }
+
                         if (slotsCount > 0)
                         {
                             int lastId = inventory[inventory.Count - 1].SlotId;
@@ -342,12 +348,8 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                             lock (inventory.LockContainerSlots)
                             {
-                                inventory.ContainerSlots.Add(inventory.containerBlockSlotsActive, quantitySlotsId);
-                            }
+                                inventory.ContainerSlots[blockSel.SelectionBoxIndex] = quantitySlotsId;
 
-                            if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                            {
-                                storageContainers.Add(blockSel.SelectionBoxIndex, storageBlock.Code.Path + DateTime.Now.ToString());
                             }
 
                             switch (blockSel.SelectionBoxIndex)
