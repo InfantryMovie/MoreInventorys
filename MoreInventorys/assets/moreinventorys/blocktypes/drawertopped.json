@@ -76,7 +76,7 @@
     "burnDuration": 35
   },
   "attributes": {
-    "capacity": 16
+    "capacity": 12
   },
   "materialDensity": 400,
   "replaceable": 900,

@@ -26,7 +26,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         Block block;
         GuiDialogDynamic storageDlg;
 
-        static int slotCount = 16;
+        static int slotCount = 12;
         IPlayer byPlayer;
 
         private BlockEntityAnimationUtil animUtil => GetBehavior<BEBehaviorAnimatable>()?.animUtil;
