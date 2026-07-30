@@ -80,7 +80,7 @@ namespace MoreInventorys.src.GuiFolder
             }
             if (MaxContainerBlockSlots == 2)
             {
-                containerSlots = new int[2] { 0, 1};
+                containerSlots = new int[2] { 0, 1 };
             }
             if (MaxContainerBlockSlots == 4)
             {
@@ -244,7 +244,7 @@ namespace MoreInventorys.src.GuiFolder
                     .EndChildElements()
                     .Compose();
                 }
-                
+
             }
             else
             {
@@ -269,7 +269,7 @@ namespace MoreInventorys.src.GuiFolder
                     .EndChildElements()
                     .Compose();
                 }
-                
+
             }
 
             //ПРИМЕНЯЕМ СОХРАНЁННОЕ ВЫДЕЛЕНИЕ

@@ -85,7 +85,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
 
         }
-        
+
 
 
 
@@ -94,7 +94,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             if (Api.Side != EnumAppSide.Server) return;
             if (Api is ICoreClientAPI) return;
-            
+
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -103,13 +103,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ToTreeAttributes(tree);
                 tree.ToBytes(writer);
                 byte[] data = ms.ToArray();
-               
+
                 // Отправляем только игрокам, у которых загружен этот чанк
                 ((ICoreServerAPI)Api).Network.BroadcastBlockEntityPacket(
                     Pos,
                     PACKET_SYNC_STATE,
                     data,
-                    null 
+                    null
                 );
             }
         }
@@ -143,7 +143,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (storageDlg != null)
             {
                 var dlg = storageDlg;
-                storageDlg = null; 
+                storageDlg = null;
 
                 dlg.TryClose();
                 dlg.Dispose();
@@ -211,7 +211,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     Open();
                     Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
-                                                                            //Lang.Get("moreinventorys:block-rackhorizontal-desc-storage")
+                    //Lang.Get("moreinventorys:block-rackhorizontal-desc-storage")
                     storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackhorizontal-north"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
                     storageDlg.OnClosed += delegate
                     {
@@ -261,7 +261,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         }
 
 
-  
+
 
         public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
         {
@@ -325,6 +325,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             return false;
         }
 
+        
+
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
@@ -375,9 +377,35 @@ namespace MoreInventorys.src.BlockEntityFolder
                     }
                 }
 
+                //Block crateBlock = null; для подмены
+                //ItemStack originalStack = slot.Itemstack;
 
                 if (isContainer && isLegitDoubleChest)
                 {
+                    bool isChest = storageBlock.Code.Path.Contains("chest") && !storageBlock.Code.Path.Contains("trunk");
+
+                    /*if (isChest) для подмены
+                    {
+                        crateBlock = Api.World.GetBlock(new AssetLocation("moreinventorys:micrateclosed-oak-north"));
+                        if (crateBlock != null)
+                        {
+                            // Сохраняем оригинальный стек игрока
+                            //ItemStack originalStack = slot.Itemstack;
+
+                            // Создаём временный стек с ящиком для установки
+                            ItemStack fakeStack = new ItemStack(crateBlock);
+                            fakeStack.StackSize = 1;
+
+                            // Подменяем слот на время
+                            slot.Itemstack = fakeStack;
+
+                            // Запоминаем, что будем ставить ящик
+                            storageBlock = crateBlock;
+                            quantitySlots = 16;
+                            slotsCount = 16;
+                        }
+                    }*/
+
                     string type = slot.Itemstack.Attributes.GetString("type");
                     if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
                     {
@@ -396,6 +424,17 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     if (TryPut(slot, targetSlotIndex, storageBlock, isLegitDoubleChest))
                     {
+                        /* для подмены
+                         * if (isChest && crateBlock != null)
+                        {
+                            if(originalStack.StackSize > 1)
+                            {
+                                originalStack.StackSize -= 1;
+                                slot.Itemstack = originalStack;
+                            }
+
+                            
+                        }*/
                         int lastId = inventory[inventory.Count - 1].SlotId;
                         int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
 
@@ -481,7 +520,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
                 byPlayer.InventoryManager.OpenInventory(inventory);
             }
-           
+
 
             MarkDirty();
             return true;
@@ -735,7 +774,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             else if (container.Contains("chest"))
             {
-                string type = "normal-generic";
+                string type = "golden";
                 int typeStartIndex = container.IndexOf("chest-") + 6;
                 if (typeStartIndex > 5 && typeStartIndex < container.Length)
                 {
@@ -774,6 +813,8 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             return (orientationRotate, "");
         }
+
+       
 
         protected override float[][] genTransformationMatrices()
         {
@@ -923,6 +964,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             return tfMatrices;
         }
 
-       
+
     }
 }

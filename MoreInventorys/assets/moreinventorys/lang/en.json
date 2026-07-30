@@ -302,5 +302,21 @@
   "block-firstshelf-action-place": "Put on shelf",
   "block-firstshelf-action-unplace": "Take from shelf",
 
+  "block-drawertopped-north": "Drawer and niche cabinet",
+  "block-drawertopped-acacia-north": "Drawer and niche cabinet (acacia)",
+  "block-drawertopped-birch-north": "Drawer and niche cabinet (birch)",
+  "block-drawertopped-kapok-north": "Drawer and niche cabinet (kapok)",
+  "block-drawertopped-maple-north": "Drawer and niche cabinet (maple)",
+  "block-drawertopped-oak-north": "Drawer and niche cabinet (oak)",
+  "block-drawertopped-pine-north": "Drawer and niche cabinet (pine)",
+  "block-drawertopped-baldcypress-north": "Drawer and niche cabinet (bald cypress)",
+  "block-drawertopped-larch-north": "Drawer and niche cabinet (larch)",
+  "block-drawertopped-redwood-north": "Drawer and niche cabinet (redwood)",
+  "block-drawertopped-ebony-north": "Drawer and niche cabinet (ebony)",
+  "block-drawertopped-walnut-north": "Drawer and niche cabinet (walnut)",
+  "block-drawertopped-purpleheart-north": "Drawer and niche cabinet (purpleheart)",
+  "block-drawertopped-desc-storage": "Storage slots: 16",
+  "block-drawertopped-desc": "Can store items",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }
