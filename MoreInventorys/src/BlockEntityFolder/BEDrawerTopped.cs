@@ -42,6 +42,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             block = api.World.BlockAccessor.GetBlock(Pos);
             base.Initialize(api);
 
+
             inv.SlotModified += OnInventorySlotModified;
 
             if (api.Side == EnumAppSide.Client)
@@ -400,9 +401,5 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             return tfMatrices;
         }
-
-        
-
-
     }
 }

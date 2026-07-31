@@ -35,12 +35,16 @@ namespace MoreInventorys.src.BlockFolder
 
         }
 
+
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-
             BEDrawerTopped be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BEDrawerTopped;
 
-            if (be != null) return be.OnInteract(byPlayer, blockSel);
+            if (be != null)
+            {
+                // Просто открываем GUI (ящик)
+                return be.OnInteract(byPlayer, blockSel);
+            }
 
             return base.OnBlockInteractStart(world, byPlayer, blockSel);
         }

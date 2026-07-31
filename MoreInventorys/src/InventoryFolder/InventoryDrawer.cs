@@ -82,10 +82,10 @@ namespace MoreInventorys.src.InventoryFolder
                                code.Contains("oillamp");
 
             bool isOtherAccesItem = code.Contains("inkandquil");
-
+            bool isClutter = code.Contains("clutter");
             // Если это керамика — разрешаем (даже если это Block!)
             if (isCeramic || isClayItem || isOtherAccesItem || isPlant == true ||
-                isEatble == true)
+                isEatble == true /*|| isClutter*/)
             {
                 return true;
             }

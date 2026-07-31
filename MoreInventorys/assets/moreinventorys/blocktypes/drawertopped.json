@@ -3,7 +3,9 @@
   "name": "drawertopped",
   "class": "drawertoppedblock",
   "entityClass": "bedrawertopped",
-  "behaviors": [ { "name": "HorizontalOrientable" } ],
+  "behaviors": [
+    { "name": "HorizontalOrientable" }
+  ],
   "entityBehaviors": [
     { "name": "Animatable" }
   ],
@@ -19,13 +21,14 @@
   "textures": {
     "oak1": { "base": "game:block/wood/planks/{planks}1" }
   },
+
   "guiTransform": {
     "rotation": {
       "x": -17,
-      "y": -124,
+      "y": -158,
       "z": 1
     },
-    "scale": 1.03
+    "scale": 1.14
   },
   "tpHandTransform": {
     "translation": {
@@ -52,7 +55,9 @@
     "all": false
   },
   "blockmaterial": "Wood",
-  "shape": { "base": "moreinventorys:drawertopped" },
+  "shape": {
+    "base": "moreinventorys:drawertopped"
+  },
   "shapebytype": {
     "*-north": {
       "base": "drawertopped",
@@ -76,7 +81,8 @@
     "burnDuration": 35
   },
   "attributes": {
-    "capacity": 12
+    "capacity": 16
+
   },
   "materialDensity": 400,
   "replaceable": 900,
