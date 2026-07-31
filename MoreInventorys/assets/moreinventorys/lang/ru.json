@@ -316,7 +316,7 @@
   "block-drawertopped-walnut-north": "Тумба с ящиком и нишей (грецкий орех)",
   "block-drawertopped-purpleheart-north": "Тумба с ящиком и нишей (пурпурное дерево)",
   "block-drawertopped-desc-storage": "Слотов для хранения: 16",
-  "block-drawertopped-desc": "Может хранить предметы",
+  "block-drawertopped-desc": "Может хранить только предметы, не блоки, не инструменты",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

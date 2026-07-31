@@ -316,7 +316,7 @@
   "block-drawertopped-walnut-north": "Drawer and niche cabinet (walnut)",
   "block-drawertopped-purpleheart-north": "Drawer and niche cabinet (purpleheart)",
   "block-drawertopped-desc-storage": "Storage slots: 16",
-  "block-drawertopped-desc": "Can store items",
+  "block-drawertopped-desc": "Can store only items. Blocks and tools are not allowed.",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

@@ -30,6 +30,7 @@ namespace MoreInventorys.src.BlockFolder
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
             dsc.AppendLine(Lang.Get("moreinventorys:block-drawertopped-desc-storage"));
+            dsc.AppendLine(Lang.Get("moreinventorys:block-drawertopped-desc"));
 
 
         }

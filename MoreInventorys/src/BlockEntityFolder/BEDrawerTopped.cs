@@ -17,16 +17,16 @@ namespace MoreInventorys.src.BlockEntityFolder
 {
     public class BEDrawerTopped : BlockEntityDisplay
     {
-        InventoryGeneric inv;
-        public override InventoryBase Inventory => inv;
+        InventoryDrawer inv;
+        public override InventoryDrawer Inventory => inv;
         public override string InventoryClassName => "drawertopped";
 
         public override string AttributeTransformCode => "oncrateclosedTransform";
-        public override int DisplayedItems => 0;
+        public override int DisplayedItems => 16;
         Block block;
-        GuiDialogDynamic storageDlg;
+        GuiDialogDrawerTopped storageDlg;
 
-        static int slotCount = 12;
+        static int slotCount = 16;
         IPlayer byPlayer;
 
         private BlockEntityAnimationUtil animUtil => GetBehavior<BEBehaviorAnimatable>()?.animUtil;
@@ -34,7 +34,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         public BEDrawerTopped()
         {
-            inv = new InventoryGeneric(slotCount, "drawertopped-0", null);
+            inv = new InventoryDrawer("drawertopped-0", slotCount, null);
         }
 
         public override void Initialize(ICoreAPI api)
@@ -200,7 +200,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (storageDlg == null)
                 {
                     Open(); 
-                    storageDlg = new GuiDialogDynamic(slotCount, Lang.Get("moreinventorys:block-drawertopped-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI);
+                    storageDlg = new GuiDialogDrawerTopped(Lang.Get("moreinventorys:block-drawertopped-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI);
 
                     storageDlg.OnClosed += delegate
                     {
@@ -293,7 +293,112 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         protected override float[][] genTransformationMatrices()
         {
-            return new float[0][];
+            float[][] tfMatrices = new float[slotCount][];
+            float scale = 0.5f;
+            float scaleShelf = 0.001f;
+            float x = 0.8f;
+            float z = 0;
+            float y = 0;
+
+            int orientationRotate = 0;
+            string code = "";
+            for (int index = 0; index < slotCount; index++)
+            {
+                //ВЕРХНЯЯ ПОЛКА
+                if(index <= 1)
+                {
+                    x += 0.3f;
+                    z = 0.05f;
+                    y = 1f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(orientationRotate)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                    if (index == 1) x = 0.8f;
+                }
+                else if (index <= 3)
+                {
+                    x += 0.3f;
+                    z = 0.4f;
+                    y = 1f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(orientationRotate)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+
+                    if (index == 3) x = 0.8f;
+                }
+                else if (index <= 7) //ЯЩИК
+                {
+                    x += 0.3f;
+                    z = 0.1f;
+                    y = 0.55f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(orientationRotate)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scaleShelf, scaleShelf, scaleShelf)
+                       .Values;
+                    if (index == 7) x = 0.8f;
+                }
+                else if (index <= 11) //ЯЩИК
+                {
+                    x += 0.3f;
+                    z = 0.4f;
+                    y = 0.55f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(orientationRotate)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scaleShelf, scaleShelf, scaleShelf)
+                       .Values;
+                    if (index == 11) x = 0.8f;
+                }
+                else if (index <= 13) //НИЖНЯЯ ПОЛКА
+                {
+                    x += 0.3f;
+                    z = 0.05f;
+                    y = 0.12f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(orientationRotate)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                    if (index == 13) x = 0.8f;
+                }
+                else if (index <= 15) //НИЖНЯЯ ПОЛКА
+                {
+                    x += 0.3f;
+                    z = 0.4f;
+                    y = 0.12f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(orientationRotate)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                }
+                
+                
+            }
+            return tfMatrices;
         }
 
         

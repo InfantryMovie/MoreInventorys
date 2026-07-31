@@ -1,6 +1,6 @@
 {
 	"editor": {
-		"collapsedPaths": "Root/Pillar10,Root/origin2/surface2,Root/Pillar7,Root/origin,Root/Shelf2,Root/origin2,Root/Shelf1,Root/origin2/supportS3,Root/Pillar12,Root/origin2/supportS4,Root/TableCentred,Root/origin2/supportN3,Root/лавка,Root/origin2/supportN4,Root/TableUp,Root/origin/supportS1,Root/origin/surface,Root/origin/supportS2,Root/Pillar5,Root/origin/supportN1,Root/origin/supportN2",
+		"collapsedPaths": "Root/Pillar10,Root/origin2/surface2,Root/Pillar7,Root/origin,Root/Shelf2,Root/origin2,Root/Shelf1,Root/origin2/supportS3,Root/Pillar12,Root/origin2/supportS4,Root/origin2/supportN3,Root/лавка,Root/origin2/supportN4,Root/TableUp,Root/origin/supportS1,Root/origin/surface,Root/origin/supportS2,Root/Pillar5,Root/origin/supportN1,Root/origin/supportN2",
 		"allAngles": true,
 		"entityTextureMode": false
 	},
@@ -115,8 +115,8 @@
 			"children": [
 				{
 					"name": "TableCentred2",
-					"from": [ 0.0, 0.0, 8.0 ],
-					"to": [ 13.99, 1.0, 13.99 ],
+					"from": [ 0.0, 0.0, 7.99 ],
+					"to": [ 13.99, 1.0, 13.98 ],
 					"rotationOrigin": [ 17.999, 0.0, 22.999 ],
 					"faces": {
 						"north": { "texture": "#oak1", "uv": [ 16.0, 6.0, 1.0, 2.0 ], "autoUv": false },
