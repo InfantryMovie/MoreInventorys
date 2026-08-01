@@ -314,7 +314,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
+                       .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
@@ -329,7 +329,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
+                       .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
@@ -345,7 +345,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
+                       .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scaleShelf, scaleShelf, scaleShelf)
@@ -360,7 +360,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
+                       .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scaleShelf, scaleShelf, scaleShelf)
@@ -375,7 +375,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
+                       .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
@@ -390,7 +390,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(orientationRotate)
+                       .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
