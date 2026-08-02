@@ -334,5 +334,21 @@
   "block-openshelfdoorcabinet-desc-storage": "Storage slots: 16",
   "block-openshelfdoorcabinet-desc": "Can store only items. Blocks and tools are not allowed.",
 
+  "block-largeopenshelfdoorcabinet-north": "Large Cabinet",
+  "block-largeopenshelfdoorcabinet-acacia-north": "Large Open Shelf & Door Cabinet (acacia)",
+  "block-largeopenshelfdoorcabinet-birch-north": "Large Open Shelf & Door Cabinet (birch)",
+  "block-largeopenshelfdoorcabinet-kapok-north": "Large Open Shelf & Door Cabinet (kapok)",
+  "block-largeopenshelfdoorcabinet-maple-north": "Large Open Shelf & Door Cabinet (maple)",
+  "block-largeopenshelfdoorcabinet-oak-north": "Large Open Shelf & Door Cabinet (oak)",
+  "block-largeopenshelfdoorcabinet-pine-north": "Large Open Shelf & Door Cabinet (pine)",
+  "block-largeopenshelfdoorcabinet-baldcypress-north": "Large Open Shelf & Door Cabinet (bald cypress)",
+  "block-largeopenshelfdoorcabinet-larch-north": "Large Open Shelf & Door Cabinet (larch)",
+  "block-largeopenshelfdoorcabinet-redwood-north": "Large Open Shelf & Door Cabinet (redwood)",
+  "block-largeopenshelfdoorcabinet-ebony-north": "Large Open Shelf & Door Cabinet (ebony)",
+  "block-largeopenshelfdoorcabinet-walnut-north": "Large Open Shelf & Door Cabinet (walnut)",
+  "block-largeopenshelfdoorcabinet-purpleheart-north": "Large Open Shelf & Door Cabinet (purpleheart)",
+  "block-largeopenshelfdoorcabinet-desc-storage": "Storage slots: 32",
+  "block-largeopenshelfdoorcabinet-desc": "Can store only items. Blocks and tools are not allowed.",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }

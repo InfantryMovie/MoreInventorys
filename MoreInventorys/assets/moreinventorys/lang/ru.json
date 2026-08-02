@@ -334,5 +334,21 @@
   "block-openshelfdoorcabinet-desc-storage": "Слотов для хранения: 16",
   "block-openshelfdoorcabinet-desc": "Может хранить только предметы, не блоки, не инструменты",
 
+  "block-largeopenshelfdoorcabinet-north": "Большая тумба",
+  "block-largeopenshelfdoorcabinet-acacia-north": "Большая тумба с открытой полкой и дверцей (акация)",
+  "block-largeopenshelfdoorcabinet-birch-north": "Большая тумба с открытой полкой и дверцей (береза)",
+  "block-largeopenshelfdoorcabinet-kapok-north": "Большая тумба с открытой полкой и дверцей (капок)",
+  "block-largeopenshelfdoorcabinet-maple-north": "Большая тумба с открытой полкой и дверцей (клён)",
+  "block-largeopenshelfdoorcabinet-oak-north": "Большая тумба с открытой полкой и дверцей (дуб)",
+  "block-largeopenshelfdoorcabinet-pine-north": "Большая тумба с открытой полкой и дверцей (сосна)",
+  "block-largeopenshelfdoorcabinet-baldcypress-north": "Большая тумба с открытой полкой и дверцей (болотный кипарис)",
+  "block-largeopenshelfdoorcabinet-larch-north": "Большая тумба с открытой полкой и дверцей (лиственница)",
+  "block-largeopenshelfdoorcabinet-redwood-north": "Большая тумба с открытой полкой и дверцей (секвойя)",
+  "block-largeopenshelfdoorcabinet-ebony-north": "Большая тумба с открытой полкой и дверцей (чёрное дерево)",
+  "block-largeopenshelfdoorcabinet-walnut-north": "Большая тумба с открытой полкой и дверцей (грецкий орех)",
+  "block-largeopenshelfdoorcabinet-purpleheart-north": "Большая тумба с открытой полкой и дверцей (пурпурное дерево)",
+  "block-largeopenshelfdoorcabinet-desc-storage": "Слотов для хранения: 32",
+  "block-largeopenshelfdoorcabinet-desc": "Может хранить только предметы, не блоки, не инструменты",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }
