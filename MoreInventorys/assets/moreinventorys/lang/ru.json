@@ -302,7 +302,7 @@
 
   "block-firstshelf-action-place": "Поставить на полку",
   "block-firstshelf-action-unplace": "Забрать с полки",
-  "block-drawertopped-north": "Тумба с ящиком и нишей",
+  "block-drawertopped-north": "Тумба",
   "block-drawertopped-acacia-north": "Тумба с ящиком и нишей (акация)",
   "block-drawertopped-birch-north": "Тумба с ящиком и нишей (береза)",
   "block-drawertopped-kapok-north": "Тумба с ящиком и нишей (капок)",
@@ -317,6 +317,22 @@
   "block-drawertopped-purpleheart-north": "Тумба с ящиком и нишей (пурпурное дерево)",
   "block-drawertopped-desc-storage": "Слотов для хранения: 16",
   "block-drawertopped-desc": "Может хранить только предметы, не блоки, не инструменты",
+
+  "block-openshelfdoorcabinet-north": "Тумба",
+  "block-openshelfdoorcabinet-acacia-north": "Тумба с открытой полкой и дверцей (акация)",
+  "block-openshelfdoorcabinet-birch-north": "Тумба с открытой полкой и дверцей (береза)",
+  "block-openshelfdoorcabinet-kapok-north": "Тумба с открытой полкой и дверцей (капок)",
+  "block-openshelfdoorcabinet-maple-north": "Тумба с открытой полкой и дверцей (клён)",
+  "block-openshelfdoorcabinet-oak-north": "Тумба с открытой полкой и дверцей (дуб)",
+  "block-openshelfdoorcabinet-pine-north": "Тумба с открытой полкой и дверцей (сосна)",
+  "block-openshelfdoorcabinet-baldcypress-north": "Тумба с открытой полкой и дверцей (болотный кипарис)",
+  "block-openshelfdoorcabinet-larch-north": "Тумба с открытой полкой и дверцей (лиственница)",
+  "block-openshelfdoorcabinet-redwood-north": "Тумба с открытой полкой и дверцей (секвойя)",
+  "block-openshelfdoorcabinet-ebony-north": "Тумба с открытой полкой и дверцей (чёрное дерево)",
+  "block-openshelfdoorcabinet-walnut-north": "Тумба с открытой полкой и дверцей (грецкий орех)",
+  "block-openshelfdoorcabinet-purpleheart-north": "Тумба с открытой полкой и дверцей (пурпурное дерево)",
+  "block-openshelfdoorcabinet-desc-storage": "Слотов для хранения: 16",
+  "block-openshelfdoorcabinet-desc": "Может хранить только предметы, не блоки, не инструменты",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

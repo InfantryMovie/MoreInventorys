@@ -302,7 +302,7 @@
   "block-firstshelf-action-place": "Put on shelf",
   "block-firstshelf-action-unplace": "Take from shelf",
 
-  "block-drawertopped-north": "Drawer and niche cabinet",
+  "block-drawertopped-north": "Cabinet",
   "block-drawertopped-acacia-north": "Drawer and niche cabinet (acacia)",
   "block-drawertopped-birch-north": "Drawer and niche cabinet (birch)",
   "block-drawertopped-kapok-north": "Drawer and niche cabinet (kapok)",
@@ -317,6 +317,22 @@
   "block-drawertopped-purpleheart-north": "Drawer and niche cabinet (purpleheart)",
   "block-drawertopped-desc-storage": "Storage slots: 16",
   "block-drawertopped-desc": "Can store only items. Blocks and tools are not allowed.",
+
+  "block-openshelfdoorcabinet-north": "Cabinet",
+  "block-openshelfdoorcabinet-acacia-north": "Open Shelf & Door Cabinet (acacia)",
+  "block-openshelfdoorcabinet-birch-north": "Open Shelf & Door Cabinet (birch)",
+  "block-openshelfdoorcabinet-kapok-north": "Open Shelf & Door Cabinet (kapok)",
+  "block-openshelfdoorcabinet-maple-north": "Open Shelf & Door Cabinet (maple)",
+  "block-openshelfdoorcabinet-oak-north": "Open Shelf & Door Cabinet (oak)",
+  "block-openshelfdoorcabinet-pine-north": "Open Shelf & Door Cabinet (pine)",
+  "block-openshelfdoorcabinet-baldcypress-north": "Open Shelf & Door Cabinet (bald cypress)",
+  "block-openshelfdoorcabinet-larch-north": "Open Shelf & Door Cabinet (larch)",
+  "block-openshelfdoorcabinet-redwood-north": "Open Shelf & Door Cabinet (redwood)",
+  "block-openshelfdoorcabinet-ebony-north": "Open Shelf & Door Cabinet (ebony)",
+  "block-openshelfdoorcabinet-walnut-north": "Open Shelf & Door Cabinet (walnut)",
+  "block-openshelfdoorcabinet-purpleheart-north": "Open Shelf & Door Cabinet (purpleheart)",
+  "block-openshelfdoorcabinet-desc-storage": "Storage slots: 16",
+  "block-openshelfdoorcabinet-desc": "Can store only items. Blocks and tools are not allowed.",
 
   "game:tabname-moreinventorys": "More Inventorys"
 }

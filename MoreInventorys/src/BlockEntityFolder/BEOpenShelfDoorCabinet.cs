@@ -15,7 +15,7 @@ using Vintagestory.GameContent;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    public class BEDrawerTopped : BlockEntityDisplay
+    public class BEOpenShelfDoorCabinet : BlockEntityDisplay
     {
         InventoryDrawer inv;
         public override InventoryDrawer Inventory => inv;
@@ -32,9 +32,9 @@ namespace MoreInventorys.src.BlockEntityFolder
         private BlockEntityAnimationUtil animUtil => GetBehavior<BEBehaviorAnimatable>()?.animUtil;
         private bool _isOpen = false;
 
-        public BEDrawerTopped()
+        public BEOpenShelfDoorCabinet()
         {
-            inv = new InventoryDrawer("drawertopped-0", slotCount, null);
+            inv = new InventoryDrawer("openshelfdoorcabinet-0", slotCount, null);
         }
 
         public override void Initialize(ICoreAPI api)
@@ -50,11 +50,11 @@ namespace MoreInventorys.src.BlockEntityFolder
                 ICoreClientAPI capi = api as ICoreClientAPI;
                 if (capi == null) return;
 
-                AssetLocation shapeLoc = new AssetLocation("moreinventorys:shapes/drawertopped.json");
+                AssetLocation shapeLoc = new AssetLocation("moreinventorys:shapes/openshelfdoorcabinet.json");
                 Shape shape = Shape.TryGet(capi, shapeLoc);
                 if (shape == null) return;
 
-                animUtil?.InitializeAnimator("drawertopped", shape, null, new Vec3f(0, block.Shape.rotateY, 0));
+                animUtil?.InitializeAnimator("openshelfdoorcabinet", shape, null, new Vec3f(0, block.Shape.rotateY, 0));
             }
         }
 
@@ -201,7 +201,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (storageDlg == null)
                 {
                     Open(); 
-                    storageDlg = new GuiDialogDrawers(Lang.Get("moreinventorys:block-drawertopped-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI,DrawerType.DrawerWithNiche);
+                    storageDlg = new GuiDialogDrawers(Lang.Get("moreinventorys:block-openshelfdoorcabinet-north"), (InventoryGeneric)Inventory, Pos, Api as ICoreClientAPI, DrawerType.OpenShelfWithDoor);
 
                     storageDlg.OnClosed += delegate
                     {
@@ -337,37 +337,67 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                     if (index == 3) x = 0.8f;
                 }
-                else if (index <= 7) //ЯЩИК
+                else if (index <= 5) //Открытая полка слоты 4-5
                 {
                     x += 0.3f;
-                    z = 0.1f;
-                    y = 0.55f;
+                    z = 0.05f;
+                    y = 0.68f;
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scaleShelf, scaleShelf, scaleShelf)
+                       .Scale(scale, scale, scale)
                        .Values;
-                    if (index == 7) x = 0.8f;
+                    if (index == 5) x = 0.8f;
                 }
-                else if (index <= 11) //ЯЩИК
+                else if (index <= 7) //Открытая полка слоты 6-7
                 {
                     x += 0.3f;
                     z = 0.4f;
-                    y = 0.55f;
+                    y = 0.68f;
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 1f, y, z)
                        .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scaleShelf, scaleShelf, scaleShelf)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                    if (index == 7) x = 0.8f;
+                }
+                else if (index <= 9) //закрытая полка 1, слоты 8-9
+                {
+                    x += 0.3f;
+                    z = 0.05f;
+                    y = 0.38f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
+                       .Values;
+                    if (index == 9) x = 0.8f;
+                }
+                else if (index <= 11) //закрытая полка 1, слоты 10-11
+                {
+                    x += 0.3f;
+                    z = 0.4f;
+                    y = 0.38f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(x - 1f, y, z)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scale, scale, scale)
                        .Values;
                     if (index == 11) x = 0.8f;
                 }
-                else if (index <= 13) //НИЖНЯЯ ПОЛКА
+                else if (index <= 13) //закрытая полка 2, слоты 12-13
                 {
                     x += 0.3f;
                     z = 0.05f;
@@ -382,7 +412,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Values;
                     if (index == 13) x = 0.8f;
                 }
-                else if (index <= 15) //НИЖНЯЯ ПОЛКА
+                else if (index <= 15) //закрытая полка 2, слоты 14-15
                 {
                     x += 0.3f;
                     z = 0.4f;
@@ -395,9 +425,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scale, scale, scale)
                        .Values;
+                   
                 }
-                
-                
+
+
             }
             return tfMatrices;
         }

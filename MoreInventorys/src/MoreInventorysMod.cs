@@ -149,7 +149,8 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("drawertoppedblock", typeof(DrawerToppedBlock));
             api.RegisterBlockEntityClass("bedrawertopped", typeof(BEDrawerTopped));
 
-            //api.RegisterBlockEntityBehaviorClass("BEBehaviorDrawerDisplay", typeof(BEBehaviorDrawerDisplay));
+            api.RegisterBlockClass("openshelfdoorcabinetblock", typeof(OpenShelfDoorCabinetBlock));
+            api.RegisterBlockEntityClass("beopenshelfdoorcabinet", typeof(BEOpenShelfDoorCabinet));
 
 
             // Выводим сообщение в консоль, чтобы убедиться, что мод загружен
