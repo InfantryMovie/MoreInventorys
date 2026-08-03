@@ -21,6 +21,7 @@ namespace MoreInventorys.src.GuiFolder
         /// Тумба с открытой полкой и дверцей (8 сверху, 8 снизу)
         /// </summary>
         OpenShelfWithDoor,
+        LargeOpenShelfDoorCabinet
 
         // ============================================================
         //    КАК ДОБАВИТЬ НОВЫЙ ТИП ТУМБОЧКИ:
@@ -36,6 +37,7 @@ namespace MoreInventorys.src.GuiFolder
         private InventoryDrawer _inventory;
         private BlockPos _pos;
         private DrawerType _drawerType;
+        private int slotCount;
 
         // Определяем группы слотов
         private int[] topSlots;
@@ -86,6 +88,15 @@ namespace MoreInventorys.src.GuiFolder
                     bottomSlots = new int[] { 8, 9, 10, 11, 12, 13, 14, 15 };
                     break;
 
+                case DrawerType.LargeOpenShelfDoorCabinet:
+                    
+                    topSlots = new int[] { 0, 1, 2, 3, 4, 5, 6, 7,8,9,10,11,
+                                           12,13,14,15,16,17,18,19,20,21,22,23};
+                    middleSlots = null; // Нет средних слотов
+                    bottomSlots = new int[] {24,25,26,27,28,29,30,31,32,33,34,35,
+                                             36,37,38,39,40,41,42,43,44,45,46,47};
+                    break;
+
 
             }
         }
@@ -127,15 +138,17 @@ namespace MoreInventorys.src.GuiFolder
             const int titleBarHeight = 30;
 
             // Определяем, сколько рядов нужно
-            int topRows = topSlots != null ? (int)Math.Ceiling((double)topSlots.Length / 4) : 0;
-            int middleRows = middleSlots != null ? (int)Math.Ceiling((double)middleSlots.Length / 4) : 0;
-            int bottomRows = bottomSlots != null ? (int)Math.Ceiling((double)bottomSlots.Length / 4) : 0;
+            int rowCount = 4;
+            if (_drawerType == DrawerType.LargeOpenShelfDoorCabinet) rowCount = 6;
+            int topRows = topSlots != null ? (int)Math.Ceiling((double)topSlots.Length / rowCount) : 0;
+            int middleRows = middleSlots != null ? (int)Math.Ceiling((double)middleSlots.Length / rowCount) : 0;
+            int bottomRows = bottomSlots != null ? (int)Math.Ceiling((double)bottomSlots.Length / rowCount) : 0;
 
             // Проверяем, нужен ли разделитель между секциями
             bool hasGap = HasGapBetweenSections();
 
             // Ширина: 4 слота + отступы между ними + отступы по краям
-            int width = padding + (slotSize * 4) + (gap * 3) + padding;
+            int width = padding + (slotSize * rowCount) + (gap * 3) + padding;
             //width += 10;
 
             // Высота: заголовок + отступ сверху + все ряды + отступы между секциями
@@ -182,8 +195,8 @@ namespace MoreInventorys.src.GuiFolder
             // ===== 1. ВЕРХНИЕ СЛОТЫ =====
             if (topSlots != null && topSlots.Length > 0)
             {
-                int cols = Math.Min(4, topSlots.Length);
-                int rows = (int)Math.Ceiling((double)topSlots.Length / 4);
+                int cols = Math.Min(rowCount, topSlots.Length);
+                int rows = (int)Math.Ceiling((double)topSlots.Length / rowCount);
 
                 ElementBounds topBounds = ElementStdBounds.SlotGrid(
                     EnumDialogArea.None,
@@ -206,8 +219,8 @@ namespace MoreInventorys.src.GuiFolder
             // ===== 2. СРЕДНИЕ СЛОТЫ (если есть) =====
             if (middleSlots != null && middleSlots.Length > 0)
             {
-                int cols = Math.Min(4, middleSlots.Length);
-                int rows = (int)Math.Ceiling((double)middleSlots.Length / 4);
+                int cols = Math.Min(rowCount, middleSlots.Length);
+                int rows = (int)Math.Ceiling((double)middleSlots.Length / rowCount);
 
                 ElementBounds middleBounds = ElementStdBounds.SlotGrid(
                     EnumDialogArea.None,
@@ -229,8 +242,8 @@ namespace MoreInventorys.src.GuiFolder
             // ===== 3. НИЖНИЕ СЛОТЫ =====
             if (bottomSlots != null && bottomSlots.Length > 0)
             {
-                int cols = Math.Min(4, bottomSlots.Length);
-                int rows = (int)Math.Ceiling((double)bottomSlots.Length / 4);
+                int cols = Math.Min(rowCount, bottomSlots.Length);
+                int rows = (int)Math.Ceiling((double)bottomSlots.Length / rowCount);
 
                 ElementBounds bottomBounds = ElementStdBounds.SlotGrid(
                     EnumDialogArea.None,

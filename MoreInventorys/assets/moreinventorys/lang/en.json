@@ -347,7 +347,7 @@
   "block-largeopenshelfdoorcabinet-ebony-north": "Large Open Shelf & Door Cabinet (ebony)",
   "block-largeopenshelfdoorcabinet-walnut-north": "Large Open Shelf & Door Cabinet (walnut)",
   "block-largeopenshelfdoorcabinet-purpleheart-north": "Large Open Shelf & Door Cabinet (purpleheart)",
-  "block-largeopenshelfdoorcabinet-desc-storage": "Storage slots: 32",
+  "block-largeopenshelfdoorcabinet-desc-storage": "Storage slots: 48",
   "block-largeopenshelfdoorcabinet-desc": "Can store only items. Blocks and tools are not allowed.",
 
   "game:tabname-moreinventorys": "More Inventorys"

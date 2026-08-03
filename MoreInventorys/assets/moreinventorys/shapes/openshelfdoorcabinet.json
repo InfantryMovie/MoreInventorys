@@ -495,13 +495,25 @@
 				{
 					"frame": 0,
 					"elements": {
-						"door1": { "offsetX": 0.0, "offsetY": 0.0, "offsetZ": 0.0, "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 }
+						"door1": {
+							"offsetX": 0.0,
+							"offsetY": 0.0,
+							"offsetZ": 0.0,
+							"rotationX": 0.0,
+							"rotationY": 0.0,
+							"rotationZ": 0.0
+						}
 					}
 				},
 				{
 					"frame": 29,
 					"elements": {
-						"door1": { "rotationX": 0.0, "rotationY": 90.0, "rotationZ": 0.0 }
+
+						"door1": {
+							"rotationX": 0.0,
+							"rotationY": 90.0,
+							"rotationZ": 0.0
+						}
 					}
 				}
 			]

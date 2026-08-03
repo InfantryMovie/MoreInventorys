@@ -347,7 +347,7 @@
   "block-largeopenshelfdoorcabinet-ebony-north": "Большая тумба с открытой полкой и дверцей (чёрное дерево)",
   "block-largeopenshelfdoorcabinet-walnut-north": "Большая тумба с открытой полкой и дверцей (грецкий орех)",
   "block-largeopenshelfdoorcabinet-purpleheart-north": "Большая тумба с открытой полкой и дверцей (пурпурное дерево)",
-  "block-largeopenshelfdoorcabinet-desc-storage": "Слотов для хранения: 32",
+  "block-largeopenshelfdoorcabinet-desc-storage": "Слотов для хранения: 48",
   "block-largeopenshelfdoorcabinet-desc": "Может хранить только предметы, не блоки, не инструменты",
 
   "game:tabname-moreinventorys": "More Inventorys"

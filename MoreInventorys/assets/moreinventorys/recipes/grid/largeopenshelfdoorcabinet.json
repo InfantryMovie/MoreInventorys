@@ -1,0 +1,34 @@
+{
+  "ingredientPattern": "_H_,DPD,P_P",
+/*
+  Рецепт из двух обычных тумб + доски, тумбы и доски из нужного дерева
+  */
+  "ingredients": {
+    "P": {
+      "type": "item",
+      "code": "game:plank-*",
+      "name": "planks",
+      "allowedVariants": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ],
+      "quantity": 1
+    },
+    "D": {
+      "type": "block",
+      "code": "moreinventorys:openshelfdoorcabinet-{planks}-north",
+      "quantity": 1
+    },
+    "H": {
+      "type": "item",
+      "code": "game:hammer-*",
+      "isTool": true,
+      "quantity": 1
+    }
+  },
+
+  "width": 3,
+  "height": 3,
+  "shapeless": false,
+  "output": {
+    "type": "block",
+    "code": "largeopenshelfdoorcabinet-{planks}-north"
+  }
+}
