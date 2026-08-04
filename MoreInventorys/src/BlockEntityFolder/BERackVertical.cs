@@ -602,7 +602,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     x = 1.02f;
                     z = 0.05f;
-                    y = 0f;
+                    y = 0.06f;
                     if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
                     {
                         z -= 0.01f;

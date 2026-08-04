@@ -13,6 +13,7 @@
     "up": "false"
   },
   "blockmaterial": "Wood",
+  "materialDensity": 400,
   "snowcoverage": false,
   "collisionbox": {
     "x1": 0,

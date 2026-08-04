@@ -769,7 +769,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     x = 1.02f;
                     z = 0.05f;
-                    y = 0f;
+                    y = 0.06f;
                     if (code == "trunk") z += 0.05f;
                     if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
                     {
@@ -789,7 +789,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     x = 2.04f;
                     z = 0.05f;
-                    y = 0f;
+                    y = 0.06f;
                     if (code.Contains("chest"))
                     {
                         z += 1;
