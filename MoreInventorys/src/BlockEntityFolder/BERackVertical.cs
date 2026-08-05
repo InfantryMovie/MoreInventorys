@@ -324,7 +324,16 @@ namespace MoreInventorys.src.BlockEntityFolder
             {
                 int slotsCount = 0;
                 var storageBlock = slot.Itemstack.Block;
-                if (storageBlock == null) return false;
+                if (storageBlock == null)
+                {
+                    OpenGui(byPlayer);
+                    return true;
+                }
+                if (storageBlock.Code == null)
+                {
+                    OpenGui(byPlayer);
+                    return true;
+                }
                 var isContainerResult = IsValidContainer(slot);
                 var isContainer = isContainerResult.Item1;
                 var quantitySlots = isContainerResult.quantitySlots;
@@ -405,6 +414,24 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             MarkDirty();
             return true;
+        }
+
+        private void OpenGui(IPlayer byPlayer)
+        {
+            if (Api.Side != EnumAppSide.Client)
+            {
+                byte[] data;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    BinaryWriter writer = new BinaryWriter(ms);
+                    TreeAttribute tree = new TreeAttribute();
+                    inventory.ToTreeAttributes(tree);
+                    tree.ToBytes(writer);
+                    data = ms.ToArray();
+                }
+                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
+                byPlayer.InventoryManager.OpenInventory(inventory);
+            }
         }
 
         bool TryPut(ItemSlot slot, BlockSelection blockSel, Block storageContainer)

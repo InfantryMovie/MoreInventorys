@@ -27,7 +27,24 @@ namespace MoreInventorys.src
             "storagevessel"
             //"stationarybasket",
         };
+        public Dictionary<string, int> VanilaStorageItemContainersCode { get; set; } = new Dictionary<string, int> {
+            {
+                "basket-normal-reed", 3
+            },
+            {
+                "basket-normal-papyrus", 3
+            },
+            {
+                "hunterbackpack", 4
+            },
+            {
+                "backpack-normal", 6
+            },
+            {
+                "backpack-sturdy", 8
+            },
 
+        };
         public List<string> VanilaStorageWeaponsCode { get; set; } = new List<string>
         {
             "blade",

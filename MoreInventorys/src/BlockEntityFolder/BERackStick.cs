@@ -1,5 +1,6 @@
 ﻿using MoreInventorys.src.GuiFolder;
 using MoreInventorys.src.InventoryFolder;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,7 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
+using Vintagestory.ServerMods.NoObf;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
@@ -172,36 +174,6 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
-        bool InitializeStorageContainers()
-        {
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        if (container1 != "") storageContainers.Add(0, container1);
-                        break;
-
-                    case 1:
-                        if (container2 != "") storageContainers.Add(1, container2);
-                        break;
-
-                    case 2:
-                        if (container3 != "") storageContainers.Add(2, container3);
-                        break;
-
-                    case 3:
-                        if (container4 != "") storageContainers.Add(3, container4);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            return true;
-        }
-
         public override void OnReceivedServerPacket(int packetid, byte[] data)
         {
             if (packetid == 1101)
@@ -268,14 +240,20 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
         }
 
-        public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
+
+
+        public (bool, int quantitySlots) IsValidContainer(string path)
         {
-            string cod = GetValueBeforeDash(slot.Itemstack.Block.Code.Path);
             int? quantitySlots = 0;
 
-            if (cod.Contains("mibasket"))
+            if (path.Contains("mibasket"))
             {
                 quantitySlots = 8;
+            }
+            else if (ItemConteinerHelper.IsValidContainer(path))
+            {
+                quantitySlots = ItemConteinerHelper.GetQuantitySlots(path);
+
             }
 
             if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
@@ -316,38 +294,67 @@ namespace MoreInventorys.src.BlockEntityFolder
         public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
             ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
-
+            string blockPath = "";
+            
             if (inventory[blockSel.SelectionBoxIndex].Empty)
             {
+                
                 if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
                 {
-                    if (slot.Itemstack.Block == null) return false;
+                    if(slot.Itemstack == null)
+                    {
+                        OpenGui(byPlayer);
+                        return true;
+                    }
+                    if(slot.Itemstack.Block == null)
+                    {
+                        if(slot.Itemstack.Item != null)
+                        {
+                            blockPath = slot.Itemstack.Item.Code.Path;
+                            if(!ItemConteinerHelper.IsValidContainer(blockPath))
+                            {
+                                OpenGui(byPlayer);
+                                return true;
+                            }
+
+
+                        }
+                        else
+                        {
+                            OpenGui(byPlayer);
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        blockPath = slot.Itemstack.Block.Code.Path;
+                    }
+
+
 
                     int slotsCount = 0;
-                    var storageBlock = slot.Itemstack.Block;
-                    if (storageBlock.Code == null) return false;
-
-                    var isContainerResult = IsValidContainer(slot);
+                    var isContainerResult = IsValidContainer(blockPath);
                     var isContainer = isContainerResult.Item1;
                     var quantitySlots = isContainerResult.quantitySlots;
-
                     slotsCount = (int)quantitySlots;
-
+                    
                     if (isContainer)
                     {
-                        if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
+                        if (blockPath != "" || storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
                         {
                             int slotIndex = inventory.containerBlockSlotsActive;
                             if (!storageContainers.ContainsKey(slotIndex))
                             {
-                                storageContainers.Add(slotIndex, storageBlock.Code.Path + DateTime.Now.ToString());
+                                blockPath += DateTime.Now.ToString();
+                                storageContainers.Add(slotIndex, blockPath);
                             }
                             else
                             {
-                                storageContainers[slotIndex] = storageBlock.Code.Path + DateTime.Now.ToString();
+                                blockPath += DateTime.Now.ToString();
+                                storageContainers[slotIndex] = blockPath;
                             }
                         }
-                        if (TryPut(slot, blockSel, storageBlock))
+                        if (TryPut(slot, blockSel))
                         {
                             int lastId = inventory[inventory.Count - 1].SlotId;
                             int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
@@ -360,19 +367,19 @@ namespace MoreInventorys.src.BlockEntityFolder
                             switch (blockSel.SelectionBoxIndex)
                             {
                                 case 0:
-                                    container1 = storageBlock.Code.Path;
+                                    container1 = blockPath;
                                     break;
 
                                 case 1:
-                                    container2 = storageBlock.Code.Path;
+                                    container2 = blockPath;
                                     break;
 
                                 case 2:
-                                    container3 = storageBlock.Code.Path;
+                                    container3 = blockPath;
                                     break;
 
                                 case 3:
-                                    container4 = storageBlock.Code.Path;
+                                    container4 = blockPath;
                                     break;
 
                                 default:
@@ -421,7 +428,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             return true;
         }
 
-        bool TryPut(ItemSlot slot, BlockSelection blockSel, Block storageContainer)
+        bool TryPut(ItemSlot slot, BlockSelection blockSel)
         {
             int blockIndex = blockSel.SelectionBoxIndex;
             if (inventory[blockIndex].Empty)
@@ -545,11 +552,9 @@ namespace MoreInventorys.src.BlockEntityFolder
         int GetOrientationRateForMartices(int containerIndex)
         {
             int orientationRotate = 0;
-
             if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
             if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
             if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-
             return orientationRotate;
         }
 
@@ -557,11 +562,23 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             float[][] tfMatrices = new float[MAX_CONTAINER_BLOC_SLOTS][];
             float scale = 0.9f;
+            float itemScale = 1f;
 
             for (int index = 0; index < MAX_CONTAINER_BLOC_SLOTS; index++)
             {
                 int orientationRotate = GetOrientationRateForMartices(index);
+                string path = "";
+                if (storageContainers.ContainsKey(index))
+                {
+                    var value = storageContainers[index];
+                    if (value != null) path = value;
+                }
 
+                bool isItemContainer = false;
+                if (!string.IsNullOrEmpty(path))
+                {
+                    isItemContainer = ItemConteinerHelper.IsValidContainer(path);
+                }
                 float x, z, y;
 
                 if (index == 0 || index == 2)
@@ -575,15 +592,51 @@ namespace MoreInventorys.src.BlockEntityFolder
                     z = 0.05f;
                 }
 
-                y = (index < 2) ? 0f : 1f;
+                if(isItemContainer)
+                {
+                    y = (index < 2) ? 0.12f : 1f;
+                    if (path.Contains("hunterbackpack"))
+                    {
+                        itemScale = 1.2f;
+                        var xOldValue = x;
+                        x -= 0.1f;
+                        tfMatrices[index] = new Matrixf()
+                           .Translate(0.5f, 0f, 0.5f)
+                           .RotateYDeg(orientationRotate)
+                           .Translate(x - 1f, y, z)
+                           .Translate(-0.5f, 0f, -0.5f)
+                           .Scale(itemScale, itemScale, itemScale)
+                           .Values;
+                        itemScale = 1f;
+                        x = xOldValue;
+                    }
+                    else
+                    {
+                        tfMatrices[index] = new Matrixf()
+                           .Translate(0.5f, 0f, 0.5f)
+                           .RotateYDeg(orientationRotate)
+                           .Translate(x - 1f, y, z)
+                           .Translate(-0.5f, 0f, -0.5f)
+                           .Scale(itemScale, itemScale, itemScale)
+                           .Values;
+                        itemScale = 1f;
+                    }
+                    
+                }
+                else
+                {
+                    if (path.Contains("mibasket")) y = (index < 2) ? 0.12f : 1f;
+                    else y = (index < 2) ? 0f : 1f;
 
-                tfMatrices[index] = new Matrixf()
+                    tfMatrices[index] = new Matrixf()
                    .Translate(0.5f, 0f, 0.5f)
                    .RotateYDeg(orientationRotate)
                    .Translate(x - 1f, y, z)
                    .Translate(-0.5f, 0f, -0.5f)
                    .Scale(scale, scale, scale)
                    .Values;
+                }
+
             }
             return tfMatrices;
         }
