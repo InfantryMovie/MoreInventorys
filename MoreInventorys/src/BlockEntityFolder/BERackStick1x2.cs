@@ -1,4 +1,5 @@
-﻿using MoreInventorys.src.GuiFolder;
+﻿using MoreInventorys.src.BlockEntityFolder.Interface;
+using MoreInventorys.src.GuiFolder;
 using MoreInventorys.src.InventoryFolder;
 using System;
 using System.Collections.Generic;
