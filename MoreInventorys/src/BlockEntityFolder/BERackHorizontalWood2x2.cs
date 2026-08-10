@@ -159,7 +159,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 0.215f;
                         x += 0.17f;
                     }
-                    if (code.Contains("micrateclosed"))
+                    if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
                     {
                         z += 0.05f;
                         x += 0.16f;
@@ -169,7 +169,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 0.05f;
                         x += 0.16f;
                     }
-                    if (code.Contains("chest") || code.Contains("storagevessel"))
+                    if (code.Contains("chest") )
                     {
                         z += 0.14f;
                         x += 0.17f;
@@ -188,12 +188,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 2.04f;
                     z = 0.05f;
                     y = 0.25f;
-                    if (code.Contains("chest") || code.Contains("storagevessel"))
+                    if (code.Contains("chest") )
                     {
                         z += 1f;
                         x -= 0.85f;
                     }
-                    if (code.Contains("micrateclosed"))
+                    if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
                     {
                         z += 0.05f;
                         x += 0.02f;
@@ -222,7 +222,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 0.215f;
                         x += 0.17f;
                     }
-                    if (code.Contains("micrateclosed"))
+                    if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
                     {
                         z += 0.05f;
                         x += 0.16f;
@@ -232,7 +232,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 0.05f;
                         x += 0.16f;
                     }
-                    if (code.Contains("chest") || code.Contains("storagevessel"))
+                    if (code.Contains("chest") )
                     {
                         z += 0.14f;
                         x += 0.17f;
@@ -250,12 +250,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 2.04f;
                     z = 0.05f;
                     y = 1f;
-                    if (code.Contains("chest") || code.Contains("storagevessel"))
+                    if (code.Contains("chest") )
                     {
                         z += 1f;
                         x -= 0.85f;
                     }
-                    if (code.Contains("micrateclosed"))
+                    if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
                     {
                         z += 0.05f;
                         x += 0.02f;
