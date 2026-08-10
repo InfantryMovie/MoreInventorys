@@ -21,20 +21,36 @@
   "textures": {
     "oak1": { "base": "game:block/wood/planks/{planks}1" }
   },
-  "selectionBox": {
-    "x1": 0,
-    "y1": 0,
-    "z1": 0,
-    "x2": 1,
-    "y2": 1,
-    "z2": 2,
-    "rotateYByType": {
-      "*-north": 90,
-      "*-east": 0,
-      "*-west": 180,
-      "*-south": 270
+  "collisionselectionboxes": [
+    {
+      "x1": 0,
+      "y1": 0,
+      "z1": 0,
+      "x2": 1,
+      "y2": 1,
+      "z2": 2,
+      "rotateYByType": {
+        "*-north": 90,
+        "*-east": 0,
+        "*-west": 180,
+        "*-south": 270
+      }
+    },
+    {
+      "x1": 0,
+      "y1": 0,
+      "z1": 0,
+      "x2": 1,
+      "y2": 1,
+      "z2": 2,
+      "rotateYByType": {
+        "*-north": 90,
+        "*-east": 0,
+        "*-west": 180,
+        "*-south": 270
+      }
     }
-  },
+  ],
   "guiTransform": {
     "rotation": {
       "x": -11,

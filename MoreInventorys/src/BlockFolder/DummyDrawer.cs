@@ -14,7 +14,7 @@ namespace MoreInventorys.src.BlockFolder
     {
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
-            BlockEntityDummy be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityDummy;
+            BlockEntityDummyDrawer be = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityDummyDrawer;
             if (be?.MainBlockPos == null) return false;
 
             BlockSelection mainSel = new BlockSelection
@@ -30,7 +30,7 @@ namespace MoreInventorys.src.BlockFolder
 
         public override void OnBlockBroken(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier = 1)
         {
-            BlockEntityDummy be = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityDummy;
+            BlockEntityDummyDrawer be = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityDummyDrawer;
             if (be?.MainBlockPos != null)
             {
                 world.BlockAccessor.BreakBlock(be.MainBlockPos, byPlayer);
@@ -40,7 +40,7 @@ namespace MoreInventorys.src.BlockFolder
 
         public override string GetPlacedBlockName(IWorldAccessor world, BlockPos pos)
         {
-            BlockEntityDummy be = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityDummy;
+            BlockEntityDummyDrawer be = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityDummyDrawer;
             return be?.MainBlockPos != null
                 ? world.BlockAccessor.GetBlock(be.MainBlockPos).GetPlacedBlockName(world, be.MainBlockPos)
                 : base.GetPlacedBlockName(world, pos);
@@ -48,7 +48,7 @@ namespace MoreInventorys.src.BlockFolder
 
         public override string GetPlacedBlockInfo(IWorldAccessor world, BlockPos pos, IPlayer forPlayer)
         {
-            BlockEntityDummy be = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityDummy;
+            BlockEntityDummyDrawer be = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityDummyDrawer;
             return be?.MainBlockPos != null
                 ? world.BlockAccessor.GetBlock(be.MainBlockPos).GetPlacedBlockInfo(world, be.MainBlockPos, forPlayer)
                 : base.GetPlacedBlockInfo(world, pos, forPlayer);
@@ -56,7 +56,7 @@ namespace MoreInventorys.src.BlockFolder
 
         public override Cuboidf[] GetSelectionBoxes(IBlockAccessor blockAccessor, BlockPos pos)
         {
-            var be = blockAccessor.GetBlockEntity(pos) as BlockEntityDummy;
+            var be = blockAccessor.GetBlockEntity(pos) as BlockEntityDummyDrawer;
             if (be == null) return base.GetSelectionBoxes(blockAccessor, pos);
 
             Block mainBlock = blockAccessor.GetBlock(be.MainBlockPos);
@@ -79,7 +79,7 @@ namespace MoreInventorys.src.BlockFolder
 
         public override Cuboidf[] GetCollisionBoxes(IBlockAccessor blockAccessor, BlockPos pos)
         {
-            var be = blockAccessor.GetBlockEntity(pos) as BlockEntityDummy;
+            var be = blockAccessor.GetBlockEntity(pos) as BlockEntityDummyDrawer;
             if (be == null) return base.GetCollisionBoxes(blockAccessor, pos);
 
             Block mainBlock = blockAccessor.GetBlock(be.MainBlockPos);
@@ -102,7 +102,7 @@ namespace MoreInventorys.src.BlockFolder
 
         public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
         {
-            var be = world.BlockAccessor.GetBlockEntity(selection.Position) as BlockEntityDummy;
+            var be = world.BlockAccessor.GetBlockEntity(selection.Position) as BlockEntityDummyDrawer;
             if (be?.MainBlockPos == null) return base.GetPlacedBlockInteractionHelp(world, selection, forPlayer);
 
             BlockSelection mainSel = new BlockSelection

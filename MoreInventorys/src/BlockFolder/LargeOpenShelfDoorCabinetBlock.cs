@@ -42,7 +42,7 @@ namespace MoreInventorys.src.BlockFolder
 
             world.RegisterCallback((dt) =>
             {
-                var dummyBe = world.BlockAccessor.GetBlockEntity(dummyPos) as BlockEntityDummy;
+                var dummyBe = world.BlockAccessor.GetBlockEntity(dummyPos) as BlockEntityDummyDrawer;
                 if (dummyBe != null)
                 {
                     dummyBe.MainBlockPos = mainPos;
