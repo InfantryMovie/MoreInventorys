@@ -17,7 +17,7 @@ using Vintagestory.GameContent;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    internal abstract class BERackBase : BlockEntityDisplay, IRackable
+    internal abstract class BERackBase : BlockEntityDisplay
     {
         protected const int PACKET_SYNC_STATE = 2000;
         protected InventoryDynamic inventory;
@@ -133,6 +133,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
 
                 if (storageBlock.Code == null)
+                {
+                    OpenGui(byPlayer);
+                    return true;
+                }
+
+                if (storageBlock.Code.GetName().Contains("trunk") && !isDoubleChestEnable)
                 {
                     OpenGui(byPlayer);
                     return true;
@@ -660,7 +666,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         }
 
 
-        (int, string) GetOrientationRateForMartices(int containerIndex)
+        protected (int, string) GetOrientationRateForMartices(int containerIndex)
         {
 
             int orientationRotate = 0;

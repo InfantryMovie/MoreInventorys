@@ -114,7 +114,6 @@ namespace MoreInventorys.src.BlockEntityFolder
         {
             base.ToTreeAttributes(tree);
 
-            // Только новые поля для этого стеллажа
             tree.SetString("container3", container3);
             tree.SetString("container4", container4);
             tree.SetString("container5", container5);

@@ -37,7 +37,7 @@ namespace MoreInventorys.src.BlockFolder
 
         private void SetDummyBlock(IWorldAccessor world, BlockPos dummyPos, BlockPos mainPos)
         {
-            Block dummyBlock = world.GetBlock(new AssetLocation("moreinventorys:dummyrh"));
+            Block dummyBlock = world.GetBlock(new AssetLocation("moreinventorys:dummydrawer"));
             world.BlockAccessor.SetBlock(dummyBlock.BlockId, dummyPos);
 
             world.RegisterCallback((dt) =>

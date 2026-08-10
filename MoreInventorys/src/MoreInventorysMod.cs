@@ -128,6 +128,9 @@ namespace MoreInventorys.src
             api.RegisterBlockClass("dummyrh", typeof(DummyRH));
             api.RegisterBlockEntityClass("bedummyrh", typeof(BlockEntityDummy));
 
+            api.RegisterBlockClass("dummydrawer", typeof(DummyDrawer));
+            api.RegisterBlockEntityClass("bedummydrawer", typeof(BlockEntityDummy));
+
             api.RegisterBlockClass("dummyrv", typeof(DummyRV));
 
             api.RegisterBlockClass("smallhorizontleswordstandblock", typeof(SmallHorizontleSwordStandBlock));

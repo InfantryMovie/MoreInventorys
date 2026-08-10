@@ -23,487 +23,68 @@ using Vintagestory.ServerMods;
 
 namespace MoreInventorys.src.BlockEntityFolder
 {
-    internal class BERackHorizontal2x2 : BlockEntityDisplay
+    internal class BERackHorizontal2x2 : BERackBase
     {
-        public override int DisplayedItems => MAX_CONTAINER_BLOC_SLOTS;
-        private const int PACKET_SYNC_STATE = 2000;
-        public List<BlockPos> DummyPositions { get; set; } = new List<BlockPos>();
-
-        //словарь с контейнерами на стеллажах, для корректного отображения на полках
-        Dictionary<int, string> storageContainers { get; set; }
-
-        //ссылки на слоты контейнеров на стеллажах для сохранения в дереве
-        string container1;
-        string container2;
+        public override string GuiTitle { get; }
         string container3;
         string container4;
 
-
-        private int _containerCounter = 0;
-
-        int doubleChestIndex1;
-        int doubleChestIndex2;
-
-        bool isFirstLoad = true;
-
-        Block block;
-        InventoryDynamic inventory;
-
-        public override InventoryBase Inventory => inventory;
-        public override string InventoryClassName => "rackhorizontal2x2dynamic";
-
-        GuiDialogDynamic storageDlg;
-
-        //число слотов для инвентарей которые будут установлены на стеллажи
-        public const int MAX_CONTAINER_BLOC_SLOTS = 4;
-        public bool isOpened;
-        public BERackHorizontal2x2()
+        public BERackHorizontal2x2() : base("rackhorizontal2x2-0", 2, 2, true, 4)
         {
-            inventory = new InventoryDynamic("rackhorizontal2x2-0", MAX_CONTAINER_BLOC_SLOTS, null);
-            storageContainers = new Dictionary<int, string>();
-            doubleChestIndex1 = -1;
-            doubleChestIndex2 = -1;
-
+            GuiTitle = Lang.Get("moreinventorys:block-rackhorizontal2x2-north");
         }
 
-        public override void Initialize(ICoreAPI api)
+        public override bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
         {
-            inventory.LateInitialize(InventoryClassName + "-" + Pos.X + "/" + Pos.Y + "/" + Pos.Z, api);
-            inventory.SlotModified += OnSlotModified;
-            block = api.World.BlockAccessor.GetBlock(Pos);
-            base.Initialize(api);
-
-            // При инициализации на сервере отправляем состояние всем
-            if (api.Side == EnumAppSide.Server && !(api is ICoreClientAPI))
-            {
-                // Небольшая задержка для полной инициализации
-                api.Event.RegisterCallback(dt => {
-                    BroadcastStateToNearbyPlayers();
-                }, 100);
-            }
-
+            return base.OnBlockInteract(byPlayer, blockSel);
         }
 
-       
-
-        private void BroadcastStateToNearbyPlayers()
+        protected override bool SetContainerCode(int index, string code)
         {
-            if (Api.Side != EnumAppSide.Server) return;
-            if (Api is ICoreClientAPI) return;
-            
-
-            using (MemoryStream ms = new MemoryStream())
+            switch (index)
             {
-                BinaryWriter writer = new BinaryWriter(ms);
-                TreeAttribute tree = new TreeAttribute();
-                ToTreeAttributes(tree);
-                tree.ToBytes(writer);
-                byte[] data = ms.ToArray();
-               
-                // Отправляем только игрокам, у которых загружен этот чанк
-                ((ICoreServerAPI)Api).Network.BroadcastBlockEntityPacket(
-                    Pos,
-                    PACKET_SYNC_STATE,
-                    data,
-                    null 
-                );
-            }
-        }
-
-        public override void OnBlockPlaced(ItemStack byItemStack = null)
-        {
-            base.OnBlockPlaced(byItemStack);
-
-            // При размещении блока отправляем состояние всем игрокам
-            if (Api?.Side == EnumAppSide.Server && !(Api is ICoreClientAPI))
-            {
-                Api.Event.RegisterCallback(dt => {
-                    BroadcastStateToNearbyPlayers();
-                }, 100);
-            }
-        }
-
-        public override void OnBlockUnloaded()
-        {
-            base.OnBlockUnloaded();
-            if (inventory != null)
-            {
-                inventory.SlotModified -= OnSlotModified;
+                case 0:
+                    container1 = code;
+                    break;
+                case 1:
+                    container2 = code;
+                    break;
+                case 2:
+                    container3 = code;
+                    break;
+                case 3:
+                    container4 = code;
+                    break;
+                default:
+                    break;
             }
 
-            storageDlg = null;
-        }
-
-        public override void OnBlockRemoved()
-        {
-            if (storageDlg != null)
-            {
-                var dlg = storageDlg;
-                storageDlg = null;
-
-                dlg.TryClose();
-                dlg.Dispose();
-            }
-
-            if (inventory != null)
-            {
-                inventory.SlotModified -= OnSlotModified;
-            }
-
-            storageDlg = null;
-
-            base.OnBlockRemoved();
-        }
-
-        public void UpdateAllMeshes()
-        {
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
-            {
-                updateMesh(i);
-            }
-            MarkDirty(true);
-        }
-
-        private void OnSlotModified(int slotid)
-        {
-            if (Api.World.Side == EnumAppSide.Client) return;
-            updateMesh(slotid);
-            MarkDirty(true);
-            UpdateShape();
-        }
-
-        public void UpdateShape()
-        {
-            if (Api.Side == EnumAppSide.Server && !(Api is ICoreClientAPI))
-            {
-                BroadcastStateToNearbyPlayers();
-            }
-            else if (Api.Side == EnumAppSide.Client)
-            {
-                updateMeshes();
-                MarkDirty(true);
-            }
-        }
-
-
-        public override void OnReceivedServerPacket(int packetid, byte[] data)
-        {
-            if (packetid == 1101)
-            {
-                isOpened = BitConverter.ToBoolean(data, 0);
-            }
-            if (packetid == 1000)
-            {
-                using MemoryStream ms = new MemoryStream(data);
-                BinaryReader reader = new BinaryReader(ms);
-                TreeAttribute tree = new TreeAttribute();
-                tree.FromBytes(reader);
-                Inventory.FromTreeAttributes(tree);
-                Inventory.ResolveBlocksOrItems();
-                _ = (IClientWorldAccessor)Api.World;
-                if (storageDlg == null)
-                {
-                    Open();
-                    Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelopen.ogg"), Pos.X, Pos.Y, Pos.Z);
-                                                                            //Lang.Get("moreinventorys:block-rackhorizontal-desc-storage")
-                    storageDlg = new GuiDialogDynamic(inventory.dynamicSlots, Lang.Get("moreinventorys:block-rackhorizontal2x2-north"), (InventoryDynamic)Inventory, Pos, Api as ICoreClientAPI);
-                    storageDlg.OnClosed += delegate
-                    {
-                        Open();
-                        Api.World.PlaySoundAt(new AssetLocation("moreinventorys:sounds/barrelclose.ogg"), Pos.X, Pos.Y, Pos.Z);
-                        capi.Network.SendBlockEntityPacket(Pos.X, Pos.Y, Pos.Z, 1001);
-                        storageDlg = null;
-                    };
-                    storageDlg.TryOpen();
-                }
-                else
-                {
-                    (Api.World as IClientWorldAccessor).Player.InventoryManager.CloseInventory(Inventory);
-                    storageDlg?.TryClose();
-                    storageDlg?.Dispose();
-                    storageDlg = null;
-                }
-            }
-            if (packetid == 1001)
-            {
-                (Api.World as IClientWorldAccessor).Player.InventoryManager.CloseInventory(Inventory);
-                storageDlg?.TryClose();
-                storageDlg?.Dispose();
-                storageDlg = null;
-            }
-            if (packetid == PACKET_SYNC_STATE)
-            {
-                using MemoryStream ms = new MemoryStream(data);
-                BinaryReader reader = new BinaryReader(ms);
-                TreeAttribute tree = new TreeAttribute();
-                tree.FromBytes(reader);
-
-                Inventory.FromTreeAttributes(tree);
-                Inventory.ResolveBlocksOrItems();
-
-                FromTreeAttributes(tree, Api.World);
-
-                RebuildStorageContainers();
-
-                if (Api.Side == EnumAppSide.Client)
-                {
-                    // ✅ Обновляем все меши
-                    UpdateAllMeshes();
-                    MarkDirty(true);
-                }
-            }
-        }
-
-
-  
-
-        public (bool, int quantitySlots) IsValidContainer(ItemSlot slot)
-        {
-            string cod = GetValueBeforeDash(slot.Itemstack.Block.Code.Path);
-            int? quantitySlots = 0;
-            if (!ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod) &&
-                !ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
-                return (false, 0);
-
-
-            if (ModConfigFile.Current.VanilaStorageContainersCode.Contains(cod))
-            {
-                string type = slot.Itemstack.Attributes.GetString("type");
-                if (type != null)
-                {
-                    int? num = slot.Itemstack.ItemAttributes?["quantitySlots"]?[type]?.AsInt();
-                    if (num != null) quantitySlots = (int)num;
-                }
-
-            }
-
-            if (ModConfigFile.Current.ModedStorageContainersCode.ContainsKey(cod))
-            {
-                quantitySlots = ModConfigFile.Current.ModedStorageContainersCode[cod];
-            }
-
-            if (quantitySlots == 0 || quantitySlots == null) return (false, 0);
-
-            return (true, (int)quantitySlots);
-        }
-
-        string GetValueBeforeDash(string input)
-        {
-            int indexOfDash = input.IndexOf('-');
-
-            if (indexOfDash >= 0)
-            {
-                return input.Substring(0, indexOfDash);
-            }
-
-            return input;
-        }
-
-        private bool IsSlotOccupied(int slotIndex)
-        {
-            // Проверяем, не занят ли слот обычным контейнером
-            if (!inventory[slotIndex].Empty) return true;
-
-            // Проверяем, не является ли слот частью двойного сундука
-            if (slotIndex % 2 == 1) // 1, 3, 5
-            {
-                int leftSlot = slotIndex - 1;
-                if (inventory.DoubleChestIndex.Contains(leftSlot)) return true;
-            }
-
-            if (slotIndex % 2 == 0) // 0, 2, 4
-            {
-                if (inventory.DoubleChestIndex.Contains(slotIndex)) return true;
-            }
-
-            return false;
-        }
-
-        public bool OnBlockInteract(IPlayer byPlayer, BlockSelection blockSel)
-        {
-            ItemSlot slot = byPlayer.InventoryManager.ActiveHotbarSlot;
-            if (!slot.Empty && inventory.containerBlockSlotsActive < MAX_CONTAINER_BLOC_SLOTS)
-            {
-
-                // Проверяем, не занят ли слот (учитывая двойные сундуки)
-                if (IsSlotOccupied(blockSel.SelectionBoxIndex))
-                {
-                    // Слот занят - открываем GUI
-                    OpenGui(byPlayer);
-                    return true;
-                }
-
-                int slotsCount = 0;
-                var storageBlock = slot.Itemstack.Block;
-                if (storageBlock == null)
-                {
-                    OpenGui(byPlayer);
-                    return true;
-                }
-                if (storageBlock.Code == null)
-                {
-                    OpenGui(byPlayer);
-                    return true;
-                }
-
-                var isContainerResult = IsValidContainer(slot);
-                var isContainer = isContainerResult.Item1;
-                var quantitySlots = isContainerResult.quantitySlots;
-
-                slotsCount = (int)quantitySlots;
-                bool isLegitDoubleChest = true;
-                int targetSlotIndex = blockSel.SelectionBoxIndex;
-                if (storageBlock.Code.GetName().Contains("trunk"))
-                {
-                    int leftSlot = targetSlotIndex % 2 == 0 ? targetSlotIndex : targetSlotIndex - 1;
-
-                    if (leftSlot >= 0 && leftSlot < MAX_CONTAINER_BLOC_SLOTS - 1)
-                    {
-                        bool leftFree = inventory[leftSlot].Empty && !inventory.DoubleChestIndex.Contains(leftSlot);
-                        bool rightFree = inventory[leftSlot + 1].Empty && !inventory.DoubleChestIndex.Contains(leftSlot);
-
-                        if (!leftFree || !rightFree)
-                        {
-                            isLegitDoubleChest = false;
-                        }
-                        else
-                        {
-                            targetSlotIndex = leftSlot;
-                        }
-                    }
-                    else
-                    {
-                        isLegitDoubleChest = false;
-                    }
-                }
-
-
-                if (isContainer && isLegitDoubleChest)
-                {
-                    string type = slot.Itemstack.Attributes.GetString("type");
-                    if (storageBlock.Code.Path != "" && storageContainers.Count != MAX_CONTAINER_BLOC_SLOTS)
-                    {
-                        string containerKey = storageBlock.Code.Path;
-
-                        if (!string.IsNullOrEmpty(type))
-                        {
-                            containerKey += "-" + type;
-                        }
-
-                        storageContainers.Add(targetSlotIndex, containerKey + DateTime.Now.ToString());
-                        inventory.ContainerTypes[targetSlotIndex] = storageBlock.Code.Path;
-                    }
-
-
-
-                    if (TryPut(slot, targetSlotIndex, storageBlock, isLegitDoubleChest))
-                    {
-                        int lastId = inventory[inventory.Count - 1].SlotId;
-                        int[] quantitySlotsId = Enumerable.Range(lastId + 1, quantitySlots).ToArray();
-
-                        lock (inventory.LockContainerSlots)
-                        {
-                            inventory.ContainerSlots[targetSlotIndex] = quantitySlotsId;
-                            _containerCounter++;
-                        }
-
-                        switch (targetSlotIndex)
-                        {
-                            case 0:
-                                container1 = storageBlock.Code.Path;
-                                break;
-
-                            case 1:
-                                container2 = storageBlock.Code.Path;
-                                break;
-
-                            case 2:
-                                container3 = storageBlock.Code.Path;
-                                break;
-
-                            case 3:
-                                container4 = storageBlock.Code.Path;
-                                break;
-
-
-                            default:
-                                break;
-                        }
-
-                        inventory.AddSlots(slotsCount);
-                        inventory.dynamicSlots += slotsCount;
-                        if (storageBlock.Code.GetName().Contains("trunk"))
-                        {
-                            inventory.containerBlockSlotsActive++;
-                            inventory.DoubleChestIndex.Add(targetSlotIndex);
-
-                            var result = AddDoubleChestIndex(targetSlotIndex);
-                        }
-                        inventory.containerBlockSlotsActive++;
-
-                        MoreInventorysMod.PlaySoundBlockAt(Api, slot, byPlayer);
-
-                        UpdateAllMeshes();
-
-                        UpdateShape();
-
-                        if (Api.Side == EnumAppSide.Server)
-                        {
-                            SendStateToPlayer(byPlayer);
-                        }
-                        return true;
-                    }
-                }
-                else
-                {
-                    OpenGui(byPlayer);
-                    return true;
-                }
-            }
-
-            if (Api.Side != EnumAppSide.Client)
-            {
-                byte[] data;
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    BinaryWriter writer = new BinaryWriter(ms);
-                    TreeAttribute tree = new TreeAttribute();
-                    inventory.ToTreeAttributes(tree);
-                    tree.ToBytes(writer);
-                    data = ms.ToArray();
-                }
-                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
-                byPlayer.InventoryManager.OpenInventory(inventory);
-            }
-           
-
-            MarkDirty();
             return true;
         }
 
-        private void SendStateToPlayer(IPlayer player)
+        protected override void RebuildStorageContainers()
         {
-            if (Api.Side != EnumAppSide.Server) return;
-            if (Api is ICoreClientAPI) return;
+            StorageContainers.Clear();
 
-            using (MemoryStream ms = new MemoryStream())
+            for (int i = 0; i < MaxContainerSlots; i++)
             {
-                BinaryWriter writer = new BinaryWriter(ms);
-                TreeAttribute tree = new TreeAttribute();
-                ToTreeAttributes(tree);
-                tree.ToBytes(writer);
-                byte[] data = ms.ToArray();
+                string containerCode = i switch
+                {
+                    0 => container1,
+                    1 => container2,
+                    2 => container3,
+                    3 => container4,
+                    _ => ""
+                };
 
-                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket(
-                    (IServerPlayer)player,
-                    Pos,
-                    PACKET_SYNC_STATE,
-                    data
-                );
+                if (!string.IsNullOrEmpty(containerCode))
+                {
+                    StorageContainers[i] = containerCode;
+                }
             }
         }
 
-        bool AddDoubleChestIndex(int index)
+        protected override bool AddDoubleChestIndex(int index)
         {
             if (doubleChestIndex1 == -1)
             {
@@ -518,248 +99,44 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
 
 
-
-
-
             return true;
         }
 
-        private void OpenGui(IPlayer byPlayer)
+        public override void OnReceivedServerPacket(int packetid, byte[] data)
         {
-            if (Api.Side != EnumAppSide.Client)
+            base.OnReceivedServerPacket(packetid, data);
+
+            if (packetid == PACKET_SYNC_STATE)
             {
-                byte[] data;
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    BinaryWriter writer = new BinaryWriter(ms);
-                    TreeAttribute tree = new TreeAttribute();
-                    inventory.ToTreeAttributes(tree);
-                    tree.ToBytes(writer);
-                    data = ms.ToArray();
-                }
-                ((ICoreServerAPI)Api).Network.SendBlockEntityPacket((IServerPlayer)byPlayer, new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1000, data);
-                byPlayer.InventoryManager.OpenInventory(inventory);
+                RebuildStorageContainers();
             }
         }
-
-        bool TryPut(ItemSlot slot, int blockSelIndex, Block storageContainer, bool isLegitDoubleChest)
-        {
-            if (!isLegitDoubleChest) return false;
-
-            if (IsSlotOccupied(blockSelIndex)) return false;
-
-            if (inventory[blockSelIndex].Empty)
-            {
-                inventory.IsTryPut = true;
-                int num = slot.TryPutInto(Api.World, inventory[blockSelIndex]);
-                inventory.IsTryPut = false;
-                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-                /*if (num > 0)
-                {
-                    UpdateShape(); 
-                    return true;
-                }*/
-                return num > 0;
-            }
-            return false;
-        }
-
-        public bool Open()
-        {
-            if (Api.World.Side == EnumAppSide.Client)
-            {
-                ((ICoreClientAPI)Api).Network.SendBlockEntityPacket(Pos.X, Pos.Y, Pos.Z, 1101);
-            }
-            return true;
-        }
-        public override void OnReceivedClientPacket(IPlayer fromPlayer, int packetid, byte[] data)
-        {
-            if (packetid <= 1000)
-            {
-                inventory.InvNetworkUtil.HandleClientPacket(fromPlayer, packetid, data);
-            }
-            if (packetid == 1101)
-            {
-                ICoreServerAPI obj = (ICoreServerAPI)Api;
-                isOpened = !isOpened;
-                obj.Network.BroadcastBlockEntityPacket(new Vec3i(Pos.X, Pos.Y, Pos.Z).AsBlockPos, 1101, BitConverter.GetBytes(isOpened));
-            }
-            if (packetid == 1001 && fromPlayer.InventoryManager != null)
-            {
-                fromPlayer.InventoryManager.CloseInventory(Inventory);
-                if (Api.Side == EnumAppSide.Server)
-                {
-                    SendStateToPlayer(fromPlayer);
-                    BroadcastStateToNearbyPlayers();
-                }
-            }
-        }
-
-
         public override void ToTreeAttributes(ITreeAttribute tree)
         {
             base.ToTreeAttributes(tree);
-
-            tree.SetBool("isOpened", isOpened);
-            tree.SetInt("dynamicSlots", inventory.dynamicSlots);
-            tree.SetInt("containerBlockSlotsActive", inventory.containerBlockSlotsActive);
-
-            tree.SetString("container1", container1);
-            tree.SetString("container2", container2);
             tree.SetString("container3", container3);
             tree.SetString("container4", container4);
 
-
-            tree.SetInt("_containerCounter", _containerCounter);
-
-            tree.SetInt("doubleChestIndex1", doubleChestIndex1);
-            tree.SetInt("doubleChestIndex2", doubleChestIndex2);
-
-            tree.SetInt("dummyCount", DummyPositions.Count);
-            for (int i = 0; i < DummyPositions.Count; i++)
-            {
-                tree.SetInt("dx" + i, DummyPositions[i].X);
-                tree.SetInt("dy" + i, DummyPositions[i].Y);
-                tree.SetInt("dz" + i, DummyPositions[i].Z);
-            }
         }
 
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
         {
             base.FromTreeAttributes(tree, worldAccessForResolve);
-            isOpened = tree.GetBool("isOpened");
-            inventory.dynamicSlots = tree.GetInt("dynamicSlots");
-            inventory.containerBlockSlotsActive = tree.GetInt("containerBlockSlotsActive");
-            container1 = tree.GetString("container1");
-            container2 = tree.GetString("container2");
+
             container3 = tree.GetString("container3");
             container4 = tree.GetString("container4");
-
-
-            _containerCounter = tree.GetInt("_containerCounter");
-
-            doubleChestIndex1 = tree.GetInt("doubleChestIndex1");
-            doubleChestIndex2 = tree.GetInt("doubleChestIndex2");
 
             if (isFirstLoad)
             {
                 isFirstLoad = false;
                 RebuildStorageContainers();
             }
-
-            DummyPositions = new List<BlockPos>();
-            int count = tree.GetInt("dummyCount");
-            for (int i = 0; i < count; i++)
-            {
-                DummyPositions.Add(new BlockPos(tree.GetInt("dx" + i), tree.GetInt("dy" + i), tree.GetInt("dz" + i)));
-            }
-
-            RedrawAfterReceivingTreeAttributes(worldAccessForResolve);
         }
 
-        private void RebuildStorageContainers()
-        {
-            storageContainers.Clear();
-
-            for (int i = 0; i < MAX_CONTAINER_BLOC_SLOTS; i++)
-            {
-                string containerCode = i switch
-                {
-                    0 => container1,
-                    1 => container2,
-                    2 => container3,
-                    3 => container4,
-                    _ => ""
-                };
-
-                if (!string.IsNullOrEmpty(containerCode))
-                {
-                    storageContainers[i] = containerCode;
-                }
-            }
-        }
-
-        public override void updateMeshes()
-        {
-            base.updateMeshes();
-        }
-
-        (int, string) GetOrientationRateForMartices(int containerIndex)
-        {
-
-            int orientationRotate = 0;
-
-            if (storageContainers.Count == 0)
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "");
-            }
-
-            if (!storageContainers.ContainsKey(containerIndex)) return (orientationRotate, "");
-
-            var container = storageContainers[containerIndex];
-            if (string.IsNullOrEmpty(container))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "");
-            }
-
-            if (container.Contains("trunk"))
-            {
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
-                return (orientationRotate, "trunk");
-            }
-            else if (container.Contains("chest"))
-            {
-                string type = "normal-generic";
-                int typeStartIndex = container.IndexOf("chest-") + 6;
-                if (typeStartIndex > 5 && typeStartIndex < container.Length)
-                {
-                    string extractedType = container.Substring(typeStartIndex);
-                    int dateIndex = extractedType.IndexOf(' ');
-                    if (dateIndex > 0) extractedType = extractedType.Substring(0, dateIndex);
-                    if (!string.IsNullOrEmpty(extractedType)) type = extractedType;
-                }
-
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 0;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "north") orientationRotate = 90;
-                return (orientationRotate, "chest-" + type);
-            }
-            else if (container.Contains("micrateclosed"))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "micrateclosed");
-            }
-            else if (container.Contains("mibasketclosed"))
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-                return (orientationRotate, "mibasketclosed");
-            }
-            else
-            {
-                if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-                if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-                if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
-            }
-
-            return (orientationRotate, "");
-        }
 
         protected override float[][] genTransformationMatrices()
         {
-            float[][] tfMatrices = new float[MAX_CONTAINER_BLOC_SLOTS][];
+            float[][] tfMatrices = new float[MaxContainerSlots][];
             float scale = 0.9f;
             float x = 0; //Лево/Право
             float z = 0; //Глубина
@@ -767,7 +144,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
             int orientationRotate = 0;
             string code = "";
-            for (int index = 0; index < MAX_CONTAINER_BLOC_SLOTS; index++)
+            for (int index = 0; index < MaxContainerSlots; index++)
             {
                 var orientationRotateResult = GetOrientationRateForMartices(index);
                 orientationRotate = orientationRotateResult.Item1;
