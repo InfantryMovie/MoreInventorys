@@ -350,5 +350,21 @@
   "block-largeopenshelfdoorcabinet-desc-storage": "Storage slots: 48",
   "block-largeopenshelfdoorcabinet-desc": "Can store only items. Blocks and tools are not allowed.",
 
+  "block-micratecloseddouble-north": "Big Closed Crate",
+  "block-micratecloseddouble-acacia-north": "Big Closed Crate (Acacia)",
+  "block-micratecloseddouble-birch-north": "Big Closed Crate (Birch)",
+  "block-micratecloseddouble-kapok-north": "Big Closed Crate (Kapok)",
+  "block-micratecloseddouble-maple-north": "Big Closed Crate (Maple)",
+  "block-micratecloseddouble-oak-north": "Big Closed Crate (Oak)",
+  "block-micratecloseddouble-pine-north": "Big Closed Crate (Pine)",
+  "block-micratecloseddouble-baldcypress-north": "Big Closed Crate (Bald Cypress)",
+  "block-micratecloseddouble-larch-north": "Big Closed Crate (Larch)",
+  "block-micratecloseddouble-redwood-north": "Big Closed Crate (Redwood)",
+  "block-micratecloseddouble-ebony-north": "Big Closed Crate (Ebony)",
+  "block-micratecloseddouble-walnut-north": "Big Closed Crate (Walnut)",
+  "block-micratecloseddouble-purpleheart-north": "Big Closed Crate (Purpleheart)",
+  "block-micratecloseddouble-desc-storage": "Storage slots: 32",
+  "block-micratecloseddouble-desc": "Can store items",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }

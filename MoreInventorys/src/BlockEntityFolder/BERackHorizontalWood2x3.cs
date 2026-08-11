@@ -182,7 +182,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 0.215f;
                         x += 0.17f;
                     }
-                    if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z += 0.05f;
+                        x += 0.24f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
                     {
                         z += 0.05f;
                         x += 0.16f;
@@ -245,7 +250,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 0.215f;
                         x += 0.17f;
                     }
-                    if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z += 0.05f;
+                        x += 0.24f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
                     {
                         z += 0.05f;
                         x += 0.16f;
@@ -306,7 +316,12 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 0.215f;
                         x += 0.17f;
                     }
-                    if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z += 0.05f;
+                        x += 0.24f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("storagevessel"))
                     {
                         z += 0.05f;
                         x += 0.16f;

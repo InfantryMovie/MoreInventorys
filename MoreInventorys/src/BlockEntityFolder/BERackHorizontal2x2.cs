@@ -155,8 +155,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 1.02f;
                     z = 0.05f;
                     y = 0.06f;
-                    if (code == "trunk") z += 0.05f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    if (code.Contains("trunk")) z += 0.05f;
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z -= 0.01f;
+                        x += 0.08f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
                     {
                         z -= 0.01f;
                         x += 0.05f;
@@ -199,8 +204,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 1.02f;
                     z = 0.05f;
                     y = 1f;
-                    if (code == "trunk") z += 0.05f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    if (code.Contains("trunk")) z += 0.05f;
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z -= 0.01f;
+                        x += 0.08f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
                     {
                         z -= 0.01f;
                         x += 0.05f;
@@ -236,7 +246,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scale, scale, scale)
                        .Values;
                 }
-               
+
             }
             return tfMatrices;
         }

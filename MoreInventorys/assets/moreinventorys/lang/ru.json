@@ -350,5 +350,21 @@
   "block-largeopenshelfdoorcabinet-desc-storage": "Слотов для хранения: 48",
   "block-largeopenshelfdoorcabinet-desc": "Может хранить только предметы, не блоки, не инструменты",
 
+  "block-micratecloseddouble-north": "Большой закрытый ящик",
+  "block-micratecloseddouble-acacia-north": "Большой закрытый ящик (акация)",
+  "block-micratecloseddouble-birch-north": "Большой закрытый ящик (береза)",
+  "block-micratecloseddouble-kapok-north": "Большой закрытый ящик (капок)",
+  "block-micratecloseddouble-maple-north": "Большой закрытый ящик (клён)",
+  "block-micratecloseddouble-oak-north": "Большой закрытый ящик (дуб)",
+  "block-micratecloseddouble-pine-north": "Большой закрытый ящик (сосна)",
+  "block-micratecloseddouble-baldcypress-north": "ЗБольшой закрытый ящик (болотный кипарис)",
+  "block-micratecloseddouble-larch-north": "Большой закрытый ящик (лиственница)",
+  "block-micratecloseddouble-redwood-north": "Большой закрытый ящик (секвойя)",
+  "block-micratecloseddouble-ebony-north": "Большой закрытый ящик (чёрное дерево)",
+  "block-micratecloseddouble-walnut-north": "Большой закрытый ящик (грецкий орех)",
+  "block-micratecloseddouble-purpleheart-north": "Большой закрытый ящик (пурпурное дерево)",
+  "block-micratecloseddouble-desc-storage": "Слотов для хранения: 32",
+  "block-micratecloseddouble-desc": "Может хранить предметы",
+
   "game:tabname-moreinventorys": "More Inventorys"
 }

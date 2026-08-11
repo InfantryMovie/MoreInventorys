@@ -138,7 +138,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                     return true;
                 }
 
-                if (storageBlock.Code.GetName().Contains("trunk") && !isDoubleChestEnable)
+                if ((storageBlock.Code.GetName().Contains("trunk") && !isDoubleChestEnable) || (storageBlock.Code.GetName().Contains("micratecloseddouble") && !isDoubleChestEnable))
                 {
                     OpenGui(byPlayer);
                     return true;
@@ -151,7 +151,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 slotsCount = (int)quantitySlots;
                 bool isLegitDoubleChest = true;
                 int targetSlotIndex = blockSel.SelectionBoxIndex;
-                if (storageBlock.Code.GetName().Contains("trunk") && isDoubleChestEnable)
+                if ((storageBlock.Code.GetName().Contains("trunk") && isDoubleChestEnable) || (storageBlock.Code.GetName().Contains("micratecloseddouble") && isDoubleChestEnable))
                 {
                     int leftSlot = targetSlotIndex % 2 == 0 ? targetSlotIndex : targetSlotIndex - 1;
 
@@ -209,7 +209,7 @@ namespace MoreInventorys.src.BlockEntityFolder
 
                         inventory.AddSlots(slotsCount);
                         inventory.dynamicSlots += slotsCount;
-                        if (storageBlock.Code.GetName().Contains("trunk") && isDoubleChestEnable)
+                        if ((storageBlock.Code.GetName().Contains("trunk") && isDoubleChestEnable) || (storageBlock.Code.GetName().Contains("micratecloseddouble") && isDoubleChestEnable))
                         {
                             inventory.containerBlockSlotsActive++;
                             inventory.DoubleChestIndex.Add(targetSlotIndex);
@@ -728,8 +728,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 1.02f;
                     z = 0.05f;
                     y = 0.06f;
-                    if (code == "trunk") z += 0.05f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    if (code.Contains("trunk")) z += 0.05f;
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z -= 0.01f;
+                        x += 0.08f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
                     {
                         z -= 0.01f;
                         x += 0.05f;
@@ -772,8 +777,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 1.02f;
                     z = 0.05f;
                     y = 1f;
-                    if (code == "trunk") z += 0.05f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    if (code.Contains("trunk")) z += 0.05f;
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z -= 0.01f;
+                        x += 0.08f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
                     {
                         z -= 0.01f;
                         x += 0.05f;
@@ -814,8 +824,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                     x = 1.02f;
                     z = 0.05f;
                     y = 2f;
-                    if (code == "trunk") z += 0.05f;
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    if (code.Contains("trunk")) z += 0.05f;
+                    else if (code.Contains("micratecloseddouble"))
+                    {
+                        z -= 0.01f;
+                        x += 0.08f;
+                    }
+                    else if (code.Contains("micrateclosed") || code.Contains("mibasketclosed") )
                     {
                         z -= 0.01f;
                         x += 0.05f;
@@ -838,7 +853,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                         z += 1;
                         x = 1;
                     }
-                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed"))
+                    if (code.Contains("micrateclosed") || code.Contains("mibasketclosed") )
                     {
                         z -= 0.01f;
                         x -= 0.01f;

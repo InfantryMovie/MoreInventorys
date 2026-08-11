@@ -44,6 +44,7 @@ namespace MoreInventorys.src
                 "backpack-sturdy", 8
             },
 
+
         };
         public List<string> VanilaStorageWeaponsCode { get; set; } = new List<string>
         {
@@ -88,6 +89,9 @@ namespace MoreInventorys.src
             },
             {
                 "mibasketclosed",8
+            },
+            {
+                "micratecloseddouble", 32
             }
         };
 
@@ -156,6 +160,9 @@ namespace MoreInventorys.src
 
             api.RegisterBlockClass("crateclosedblock", typeof(CrateClosedBlock));
             api.RegisterBlockEntityClass("becrateclosed", typeof(BECrateClosed));
+
+            api.RegisterBlockClass("cratecloseddoubleblock", typeof(CrateClosedDoubleBlock));
+            api.RegisterBlockEntityClass("becratecloseddouble", typeof(BECrateClosedDouble));
 
             api.RegisterBlockClass("basketclosedblock", typeof(BasketClosedBlock));
             api.RegisterBlockEntityClass("bebasketclosed", typeof(BEBasketClosed));
