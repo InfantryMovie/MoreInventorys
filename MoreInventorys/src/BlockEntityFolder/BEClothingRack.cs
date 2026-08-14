@@ -135,7 +135,9 @@ namespace MoreInventorys.src.BlockEntityFolder
             {
                 var clothing = inv[index];
                 var code = clothing.Itemstack?.Item?.Code?.Path;
-                float scale = 0.5f;
+                float scalx = 0.3f;
+                float scaly = 1f;
+                float scalz = 1f;
 
                 if (string.IsNullOrEmpty(code))
                 {
@@ -146,15 +148,15 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
 
                 float x = index * 0.125f + 0.52f;
-                float z = 0.65f;
-                float y = 0.67f;
+                float z = 0.401f;
+                float y = 0.19f;
 
                 if(code != null)
                 {
                     if(code.Contains("shoulder-survivor")|| code.Contains("shoulder-miner") || code.Contains("shoulder-malefactor-cloak") ||
                         code.Contains("shoulder-marketeer"))
                     {
-                        y -= 0.23f;
+                        y -= 0.33f;
                     }
                 }
 
@@ -164,7 +166,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 0.5f, y, z - 0.4f)
                        .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(0.3f, 0.7f, scale)
+                       .Scale(scalx, scaly, scalz)
                        .Values;
             }
 
