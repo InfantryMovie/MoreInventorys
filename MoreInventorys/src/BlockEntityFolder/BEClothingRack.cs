@@ -24,8 +24,8 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override string InventoryClassName => "clothingrackInventory";
         public override string AttributeTransformCode => "onClothingrackTransform";
         Block block;
-        static int slotCount = 6;
-        public override int DisplayedItems => 6;
+        static int slotCount = 10;
+        public override int DisplayedItems => 10;
 
         public BEClothingRack()
         {
@@ -50,7 +50,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 return false;
             }
 
-            if (!IsValidWClothing(slot)) return false;
+            if (!IsValidWClothing(slot, blockSel)) return false;
 
             if (slot.Itemstack.Collectible.ItemClass != EnumItemClass.Item) return false;
 
@@ -63,16 +63,27 @@ namespace MoreInventorys.src.BlockEntityFolder
             return false;
         }
 
-        public bool IsValidWClothing(ItemSlot slot)
+        public bool IsValidWClothing(ItemSlot slot, BlockSelection blockSel)
         {
             if (slot.Itemstack.Item == null) return false;
             bool isValidTag = false;
             var code = slot.Itemstack.Item.Code.Path;
-            if (code.StartsWith("clothes") || code.StartsWith("armor-body")) isValidTag = true;
-            if ((code.Contains("shoulder") || code.Contains("upperbody") || code.StartsWith("armor-body")) && isValidTag)
+            if(blockSel.SelectionBoxIndex <= 5)
             {
-                return true;
+                if (code.StartsWith("clothes") || code.StartsWith("armor-body")) isValidTag = true;
+                if ((code.Contains("shoulder") || code.Contains("upperbody") || code.StartsWith("armor-body")) && isValidTag)
+                {
+                    return true;
+                }
             }
+            else
+            {
+                if (code.Contains("foot"))
+                {
+                    return true;
+                }
+            }
+           
 
 
             return false;
@@ -151,6 +162,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                 float z = 0.401f;
                 float y = 0.19f;
 
+                
+
                 if(code != null)
                 {
                     if(code.Contains("shoulder-survivor")|| code.Contains("shoulder-miner") || code.Contains("shoulder-malefactor-cloak") ||
@@ -160,14 +173,73 @@ namespace MoreInventorys.src.BlockEntityFolder
                     }
                 }
 
+                if (index == 6)
+                {
+                    x = 0.125f + 0.32f;
+                    z = 1.34f;
+                    scalx = 0.56f;
+                    scaly = 0.5f;
+                    scalz = 0.5f;
+                    y += 0.11f;
 
-                tfMatrices[index] = new Matrixf()
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(x - 0.5f, y, z - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalx, scaly, scalz)
+                       .RotateYDeg(90f)
+                       .Values;
+                }
+                else if (index == 7)
+                {
+                    x = 0.23f + 0.125f + 0.36f;
+                    z = 1.34f;
+                    scalx = 0.56f;
+                    scaly = 0.5f;
+                    scalz = 0.5f;
+                    y += 0.11f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(x - 0.5f, y, z - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalx, scaly, scalz)
+                       .RotateYDeg(90f)
+                       .Values;
+                }
+                else if (index == 8)
+                {
+                    x = 0.50f + 0.125f + 0.36f;
+                    z = 1.34f;
+                    scalx = 0.56f;
+                    scaly = 0.5f;
+                    scalz = 0.5f;
+                    y += 0.11f;
+
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(x - 0.5f, y, z - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalx, scaly, scalz)
+                       .RotateYDeg(90f)
+                       .Values;
+                }
+                else
+                {
+                    tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
                        .Translate(x - 0.5f, y, z - 0.4f)
                        .Translate(-0.5f, 0f, -0.5f)
                        .Scale(scalx, scaly, scalz)
                        .Values;
+                }
+
+
+                
             }
 
             return tfMatrices;
