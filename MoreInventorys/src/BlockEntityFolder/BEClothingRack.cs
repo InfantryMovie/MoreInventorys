@@ -24,8 +24,8 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override string InventoryClassName => "clothingrackInventory";
         public override string AttributeTransformCode => "onClothingrackTransform";
         Block block;
-        static int slotCount = 10;
-        public override int DisplayedItems => 10;
+        static int slotCount = 12;
+        public override int DisplayedItems => 12;
 
         public BEClothingRack()
         {
@@ -89,19 +89,121 @@ namespace MoreInventorys.src.BlockEntityFolder
             return false;
         }
 
-        string GetValueBeforeDash(string input)
+        bool TakeBootsSlot(IPlayer byPlayer, int blockSel)
         {
-            int indexOfDash = input.IndexOf('-');
-
-            if (indexOfDash >= 0)
+            ItemStack stack = inv[blockSel].TakeOut(1);
+            if (byPlayer.InventoryManager.TryGiveItemstack(stack))
             {
-                return input.Substring(0, indexOfDash);
+                MoreInventorysMod.PlaySoundBlockAt(Api, stack, byPlayer);
             }
-
-            return input;
+            if (stack.StackSize > 0)
+            {
+                Api.World.SpawnItemEntity(stack, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
+            }
+            (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+            MarkDirty();
+            return true;
         }
 
+        private bool TryTake(IPlayer byPlayer, BlockSelection blockSel)
+        {
+            if (!inv[blockSel.SelectionBoxIndex].Empty && blockSel.SelectionBoxIndex < 6)
+            {
+                return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+            }
+            else if (blockSel.SelectionBoxIndex >= 6)
+            {
+                switch (blockSel.SelectionBoxIndex)
+                {
+                    case 6:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        }
+                        else if (!inv[blockSel.SelectionBoxIndex+3].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex+3);
+                        }
+                        break;
+                    case 7:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        }
+                        else if (!inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 3);
+                        }
+                        break;
+                    case 8:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        }
+                        else if (!inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 3);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            return false;
+        }
         private bool TryPut(ItemSlot slot, BlockSelection blockSel)
+        {
+            if (inv[blockSel.SelectionBoxIndex].Empty && blockSel.SelectionBoxIndex < 6)
+            {
+                int num = slot.TryPutInto(Api.World, inv[blockSel.SelectionBoxIndex]);
+                MarkDirty();
+                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+                return num > 0;
+            }
+            else 
+            {
+                switch (blockSel.SelectionBoxIndex)
+                {
+                    case 6:
+                        if (inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return PutBootsSlot(slot, blockSel);
+                        }
+                        else if (inv[blockSel.SelectionBoxIndex+3].Empty)
+                        {
+                            return PutBootsSlot(slot, blockSel);
+                        }
+                        break;
+                    case 7:
+                        if (inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return PutBootsSlot(slot, blockSel);
+                        }
+                        else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        {
+                            return PutBootsSlot(slot, blockSel);
+                        }
+                        break;
+                    case 8:
+                        if (inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return PutBootsSlot(slot, blockSel);
+                        }
+                        else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        {
+                            return PutBootsSlot(slot, blockSel);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            return false;
+        }
+
+        bool PutBootsSlot(ItemSlot slot, BlockSelection blockSel)
         {
             if (inv[blockSel.SelectionBoxIndex].Empty)
             {
@@ -110,28 +212,18 @@ namespace MoreInventorys.src.BlockEntityFolder
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
             }
+            else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
+            {
+                int num = slot.TryPutInto(Api.World, inv[blockSel.SelectionBoxIndex + 3]);
+                MarkDirty();
+                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+                return num > 0;
+            }
+
             return false;
         }
 
-        private bool TryTake(IPlayer byPlayer, BlockSelection blockSel)
-        {
-            if (!inv[blockSel.SelectionBoxIndex].Empty)
-            {
-                ItemStack stack = inv[blockSel.SelectionBoxIndex].TakeOut(1);
-                if (byPlayer.InventoryManager.TryGiveItemstack(stack))
-                {
-                    MoreInventorysMod.PlaySoundBlockAt(Api, stack, byPlayer);
-                }
-                if (stack.StackSize > 0)
-                {
-                    Api.World.SpawnItemEntity(stack, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
-                }
-                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-                MarkDirty();
-                return true;
-            }
-            return false;
-        }
+        
 
         protected override float[][] genTransformationMatrices()
         {
@@ -150,6 +242,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                 float scaly = 1f;
                 float scalz = 1f;
 
+                float scalxBoots = 0.56f;
+                float scalyBoots = 0.5f;
+                float scalzBoots = 0.5f;
+
                 if (string.IsNullOrEmpty(code))
                 {
                     tfMatrices[index] = new Matrixf()
@@ -162,9 +258,10 @@ namespace MoreInventorys.src.BlockEntityFolder
                 float z = 0.401f;
                 float y = 0.19f;
 
-                
-
-                if(code != null)
+                float yboots = 0.29f;
+                float zboots = 0f;
+                float xboots = 0f;
+                if (code != null)
                 {
                     if(code.Contains("shoulder-survivor")|| code.Contains("shoulder-miner") || code.Contains("shoulder-malefactor-cloak") ||
                         code.Contains("shoulder-marketeer"))
@@ -173,59 +270,34 @@ namespace MoreInventorys.src.BlockEntityFolder
                     }
                 }
 
-                if (index == 6)
+                //-----------ботинки-----------//
+                if (index >= 6 && index < 9)
                 {
-                    x = 0.125f + 0.32f;
-                    z = 1.34f;
-                    scalx = 0.56f;
-                    scaly = 0.5f;
-                    scalz = 0.5f;
-                    y += 0.11f;
+                    zboots = 1.3f;
+                    xboots = 0.445f + (index - 6) * 0.27f;
 
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
-                       .Translate(x - 0.5f, y, z - 0.4f)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
                        .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scalx, scaly, scalz)
+                       .Scale(scalxBoots, scalyBoots, scalzBoots)
                        .RotateYDeg(90f)
                        .Values;
                 }
-                else if (index == 7)
+                else if (index >= 9)
                 {
-                    x = 0.23f + 0.125f + 0.36f;
-                    z = 1.34f;
-                    scalx = 0.56f;
-                    scaly = 0.5f;
-                    scalz = 0.5f;
-                    y += 0.11f;
-
+                    zboots = 1.02f;
+                    xboots = 0.445f + (index - 9) * 0.27f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
-                       .Translate(x - 0.5f, y, z - 0.4f)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
                        .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scalx, scaly, scalz)
+                       .Scale(scalxBoots, scalyBoots, scalzBoots)
                        .RotateYDeg(90f)
                        .Values;
-                }
-                else if (index == 8)
-                {
-                    x = 0.50f + 0.125f + 0.36f;
-                    z = 1.34f;
-                    scalx = 0.56f;
-                    scaly = 0.5f;
-                    scalz = 0.5f;
-                    y += 0.11f;
 
-                    tfMatrices[index] = new Matrixf()
-                       .Translate(0.5f, 0f, 0.5f)
-                       .RotateYDeg(Block.Shape.rotateY)
-                       .Translate(x - 0.5f, y, z - 0.4f)
-                       .Translate(-0.5f, 0f, -0.5f)
-                       .Scale(scalx, scaly, scalz)
-                       .RotateYDeg(90f)
-                       .Values;
                 }
                 else
                 {
