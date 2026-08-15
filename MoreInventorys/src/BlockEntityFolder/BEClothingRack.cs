@@ -11,6 +11,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
+using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 using Vintagestory.ServerMods;
 
@@ -24,8 +25,8 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override string InventoryClassName => "clothingrackInventory";
         public override string AttributeTransformCode => "onClothingrackTransform";
         Block block;
-        static int slotCount = 12;
-        public override int DisplayedItems => 12;
+        static int slotCount = 18;
+        public override int DisplayedItems => slotCount;
 
         public BEClothingRack()
         {
@@ -70,8 +71,8 @@ namespace MoreInventorys.src.BlockEntityFolder
             var code = slot.Itemstack.Item.Code.Path;
             if(blockSel.SelectionBoxIndex <= 5)
             {
-                if (code.StartsWith("clothes") || code.StartsWith("armor-body")) isValidTag = true;
-                if ((code.Contains("shoulder") || code.Contains("upperbody") || code.StartsWith("armor-body")) && isValidTag)
+                if (code.StartsWith("clothes") || code.StartsWith("armor-body") || code.StartsWith("armor-legs")) isValidTag = true;
+                if ((code.Contains("shoulder") || code.Contains("upperbody") || code.StartsWith("armor-body") || code.StartsWith("armor-legs") || code.Contains("lowerbody")) && isValidTag)
                 {
                     return true;
                 }
@@ -107,9 +108,39 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         private bool TryTake(IPlayer byPlayer, BlockSelection blockSel)
         {
-            if (!inv[blockSel.SelectionBoxIndex].Empty && blockSel.SelectionBoxIndex < 6)
+            if (blockSel.SelectionBoxIndex < 6)
             {
-                return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                switch (blockSel.SelectionBoxIndex)
+                {
+                    case 0:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        else if(!inv[blockSel.SelectionBoxIndex+12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        break;
+                    case 1:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        break;
+                    case 2:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        break;
+                    case 3:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        break;
+                    case 4:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        break;
+                    case 5:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        break;
+
+                    default:
+                        break;
+                }
+                
             }
             else if (blockSel.SelectionBoxIndex >= 6)
             {
@@ -153,46 +184,102 @@ namespace MoreInventorys.src.BlockEntityFolder
             return false;
         }
         private bool TryPut(ItemSlot slot, BlockSelection blockSel)
-        {
-            if (inv[blockSel.SelectionBoxIndex].Empty && blockSel.SelectionBoxIndex < 6)
-            {
-                int num = slot.TryPutInto(Api.World, inv[blockSel.SelectionBoxIndex]);
-                MarkDirty();
-                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-                return num > 0;
+        {   //одежда верхние 6 слотов, далее до 12 это ботинки, и 13-18 штаны (да, не логично, но мне лень переписывать, и тааак пойдет!)
+            var code = slot.Itemstack?.Item?.Code?.Path;
+            if (code == null) return false;
+
+            bool isChest = false;
+            if (code.Contains("armor-body") || code.Contains("upperbody") || (code.Contains("shoulder"))) isChest = true;
+            bool isLegs = false;
+            if (code.Contains("armor-legs") || code.Contains("lowerbody")) isLegs = true;
+            bool isFoot = false;
+            if (code.Contains("foot")) isFoot = true;
+
+            if (blockSel.SelectionBoxIndex < 6)
+            {   
+                switch (blockSel.SelectionBoxIndex)
+                {
+                    case 0:
+                        if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
+                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        {
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                        }
+                        break;
+                    case 1:
+                        if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
+                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        {
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                        }
+                        break;
+                    case 2:
+                        if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
+                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        {
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                        }
+                        break;
+                    case 3:
+                        if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
+                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        {
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                        }
+                        break;
+                    case 4:
+                        if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
+                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        {
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                        }
+                        break;
+                    case 5:
+                        if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
+                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        {
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                
             }
             else 
             {
+                if (!isFoot) return false;
+
                 switch (blockSel.SelectionBoxIndex)
-                {
+                {   //ботинки
                     case 6:
                         if (inv[blockSel.SelectionBoxIndex].Empty)
                         {
-                            return PutBootsSlot(slot, blockSel);
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
                         }
                         else if (inv[blockSel.SelectionBoxIndex+3].Empty)
                         {
-                            return PutBootsSlot(slot, blockSel);
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 3);
                         }
                         break;
                     case 7:
                         if (inv[blockSel.SelectionBoxIndex].Empty)
                         {
-                            return PutBootsSlot(slot, blockSel);
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
                         }
                         else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
                         {
-                            return PutBootsSlot(slot, blockSel);
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 3);
                         }
                         break;
                     case 8:
                         if (inv[blockSel.SelectionBoxIndex].Empty)
                         {
-                            return PutBootsSlot(slot, blockSel);
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex);
                         }
                         else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
                         {
-                            return PutBootsSlot(slot, blockSel);
+                            return PutBootsSlot(slot, blockSel.SelectionBoxIndex + 3);
                         }
                         break;
 
@@ -203,18 +290,11 @@ namespace MoreInventorys.src.BlockEntityFolder
             return false;
         }
 
-        bool PutBootsSlot(ItemSlot slot, BlockSelection blockSel)
+        bool PutBootsSlot(ItemSlot slot, int blockSelIndex)
         {
-            if (inv[blockSel.SelectionBoxIndex].Empty)
+            if (inv[blockSelIndex].Empty)
             {
-                int num = slot.TryPutInto(Api.World, inv[blockSel.SelectionBoxIndex]);
-                MarkDirty();
-                (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-                return num > 0;
-            }
-            else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
-            {
-                int num = slot.TryPutInto(Api.World, inv[blockSel.SelectionBoxIndex + 3]);
+                int num = slot.TryPutInto(Api.World, inv[blockSelIndex]);
                 MarkDirty();
                 (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
                 return num > 0;
@@ -264,7 +344,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 if (code != null)
                 {
                     if(code.Contains("shoulder-survivor")|| code.Contains("shoulder-miner") || code.Contains("shoulder-malefactor-cloak") ||
-                        code.Contains("shoulder-marketeer"))
+                        code.Contains("shoulder-marketeer") || code.Contains("upperbodyover"))
                     {
                         y -= 0.33f;
                     }
@@ -285,7 +365,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .RotateYDeg(90f)
                        .Values;
                 }
-                else if (index >= 9)
+                else if (index >= 9 && index < 12)
                 {
                     zboots = 1.02f;
                     xboots = 0.445f + (index - 9) * 0.27f;
@@ -298,6 +378,19 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .RotateYDeg(90f)
                        .Values;
 
+                }
+                else if (index >= 12)
+                {
+                    //x = index * 0.125f + 0.52f;
+                    x = 0.576f + (index - 12) * 0.125f;
+                    y = 0.53f;
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(x - 0.5f, y, z - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalx - 0.1f, scaly , scalz )
+                       .Values;
                 }
                 else
                 {
