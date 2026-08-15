@@ -8,9 +8,39 @@
   ],
   "variantgroups": [
     {
+      "code": "metal",
+      "states": [
+        "bismuth",
+        "bismuthbronze",
+        "blackbronze",
+        "brass",
+        "chromium",
+        "copper",
+        "electrum",
+        "gold",
+        "iron",
+        "lead",
+        "meteoriciron",
+        "molybdochalkos",
+        "nickel",
+        "platinum",
+        "silver",
+        "stainlesssteel",
+        "steel",
+        "tin",
+        "tinbronze",
+        "titanium",
+        "uranium",
+        "zinc"
+      ]
+    },
+    {
       "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
+  "textures": {
+    "brass": { "base": "game:block/metal/plate/{metal}" }
+  },
   "collisionselectionboxes": [
     { //разница между круками 0,125
       "x1": 0.15, // Начальный отступ от левой границы //центр первого клюка 0.19
