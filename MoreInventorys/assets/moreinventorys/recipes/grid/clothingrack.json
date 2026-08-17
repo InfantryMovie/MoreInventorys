@@ -1,16 +1,10 @@
 {
-  "ingredientPattern": "R_R,P_P,RPR",
+  "ingredientPattern": "HHH,R_R,R_R",
   "ingredients": {
-    "P": {
-      "type": "item",
-      "code": "game:plank-*",
-      "name": "planks",
-      "allowedVariants": [ "acacia", "birch", "kapok", "maple", "oak", "pine", "baldcypress", "larch", "redwood", "ebony", "walnut", "purpleheart" ],
-      "quantity": 2
-    },
     "R": {
       "type": "item",
-      "code": "moreinventorys:rackrailcorner-*",
+      "name": "metal",
+      "code": "moreinventorys:rackrail-*",
       "allowedVariants": [
         "bismuth",
         "bismuthbronze",
@@ -31,6 +25,11 @@
         "zinc"
       ],
       "quantity": 1
+    },
+    "H": {
+      "type": "item",
+      "code": "moreinventorys:hanger",
+      "quantity": 2
     }
   },
   "width": 3,
@@ -38,6 +37,6 @@
   "shapeless": false,
   "output": {
     "type": "block",
-    "code": "rackverticalframecorner1x2-{planks}-north"
+    "code": "clothingrack-{metal}-north"
   }
 }

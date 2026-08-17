@@ -308,11 +308,6 @@ namespace MoreInventorys.src.BlockEntityFolder
         protected override float[][] genTransformationMatrices()
         {
             float[][] tfMatrices = new float[slotCount][];
-            int orientationRotate = 0;
-
-            if (Block.Variant["horizontalorientation"] == "east") orientationRotate = 270;
-            if (Block.Variant["horizontalorientation"] == "south") orientationRotate = 180;
-            if (Block.Variant["horizontalorientation"] == "west") orientationRotate = 90;
 
             for (int index = 0; index < slotCount; index++)
             {
@@ -341,14 +336,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 float yboots = 0.29f;
                 float zboots = 0f;
                 float xboots = 0f;
-                if (code != null)
-                {
-                    if(code.Contains("shoulder-survivor")|| code.Contains("shoulder-miner") || code.Contains("shoulder-malefactor-cloak") ||
-                        code.Contains("shoulder-marketeer") || code.Contains("upperbodyover"))
-                    {
-                        y -= 0.33f;
-                    }
-                }
+
 
                 //-----------ботинки-----------//
                 if (index >= 6 && index < 9)
@@ -381,9 +369,15 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
                 else if (index >= 12)
                 {
+
                     //x = index * 0.125f + 0.52f;
                     x = 0.576f + (index - 12) * 0.125f;
                     y = 0.53f;
+
+                    if (code.Contains("clothes-nadiya-lowerbody-fisher"))
+                    {
+                        y = 0.18f;
+                    }
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
@@ -394,6 +388,31 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
                 else
                 {
+                    if (code != null)
+                    {
+                        string[] shoulderAndUpperBodys =
+                         {
+                            "shoulder-survivor",
+                            "shoulder-miner",
+                            "shoulder-malefactor-cloak",
+                            "shoulder-marketeer",
+                            "ruralhunter",
+                            "shoulder-stained-leather",
+                            "upperbodyover-embroid",
+                            "upperbodyover-arcticfisher",
+                            "upperbodyover-arctichunter",
+                            "upperbodyover-forgotten",
+                            "upperbodyover-fur-coat",
+                            "shoulder-midnight",
+                            "shoulder-musician"
+                        };
+
+                        if (shoulderAndUpperBodys.Any(p => code.Contains(p)))
+                        {
+                            y -= 0.33f;
+                        }
+                    }
+
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)

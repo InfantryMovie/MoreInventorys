@@ -4,7 +4,25 @@
   "variantgroups": [
     {
       "code": "plate",
-      "states": [ "iron", "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ]
+      "states": [
+        "bismuth",
+        "bismuthbronze",
+        "blackbronze",
+        "brass",
+        "copper",
+        "electrum",
+        "gold",
+        "iron",
+        "lead",
+        "meteoriciron",
+        "molybdochalkos",
+        "nickel",
+        "silver",
+        "steel",
+        "tin",
+        "tinbronze",
+        "zinc"
+      ]
     }
   ],
   "creativeinventory": {

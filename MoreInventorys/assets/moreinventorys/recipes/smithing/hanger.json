@@ -1,0 +1,22 @@
+{
+  "ingredient": {
+    "type": "item",
+    "code": "game:ingot-iron"
+  },
+  "name": "Hanger for Clothing Rack",
+  "output": {
+    "type": "item",
+    "code": "moreinventorys:hanger",
+    "quantity": 6
+  },
+  "pattern": [
+    [
+      "____#__",
+      "___##__",
+      "_##_#__",
+      "___##__",
+      "____#__"
+    ]
+  ]
+
+}

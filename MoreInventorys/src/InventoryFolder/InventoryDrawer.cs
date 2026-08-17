@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Util;
 
 namespace MoreInventorys.src.InventoryFolder
 {
@@ -72,6 +73,7 @@ namespace MoreInventorys.src.InventoryFolder
             var isPlant = collectible.Attributes?.ToString().Contains("beeFeed");
             var isShelvable = collectible.Attributes?.ToString().Contains("shelvable");
             var isEatble = collectible.Attributes?.ToString().Contains("eat");
+            if (code.Contains("armor")) isEatble = false;
             var isTool = collectible.CreativeInventoryTabs.Contains("tools");
 
             // Проверяем по коду предмета (если материал не указан)
@@ -97,6 +99,11 @@ namespace MoreInventorys.src.InventoryFolder
             }
 
             // ===== ЗАПРЕЩАЕМ ИНСТРУМЕНТЫ И ОРУЖИЕ (по тегам) =====
+            if (code.Contains("clothes") || code.Contains("armor"))
+            {
+                return false;
+            }
+
             if (isShelvable == true) return true;
             if (isRackble == true || isTool)
             {
@@ -108,6 +115,7 @@ namespace MoreInventorys.src.InventoryFolder
                 return false;
             }
 
+            
             
 
             // ===== РАЗРЕШАЕМ ВСЁ ОСТАЛЬНОЕ =====

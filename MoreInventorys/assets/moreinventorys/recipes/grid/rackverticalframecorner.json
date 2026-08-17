@@ -11,7 +11,25 @@
     "R": {
       "type": "item",
       "code": "moreinventorys:rackrailcorner-*",
-      "allowedVariants": [ "iron", "copper", "tinbronze", "bismuthbronze", "blackbronze", "gold", "silver", "lead", "tin", "zinc" ],
+      "allowedVariants": [
+        "bismuth",
+        "bismuthbronze",
+        "blackbronze",
+        "brass",
+        "copper",
+        "electrum",
+        "gold",
+        "iron",
+        "lead",
+        "meteoriciron",
+        "molybdochalkos",
+        "nickel",
+        "silver",
+        "steel",
+        "tin",
+        "tinbronze",
+        "zinc"
+      ],
       "quantity": 1
     }
   },

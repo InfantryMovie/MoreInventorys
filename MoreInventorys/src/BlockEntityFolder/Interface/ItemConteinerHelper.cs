@@ -9,9 +9,10 @@ namespace MoreInventorys.src.BlockEntityFolder.Interface
     {
         public static bool IsValidContainer(string path)
         {
-            return !string.IsNullOrEmpty(path) &&
+            return false;
+            /*return !string.IsNullOrEmpty(path) &&
             ModConfigFile.Current?.VanilaStorageItemContainersCode?.Keys
-               .Any(key => path.StartsWith(key)) == true;
+               .Any(key => path.StartsWith(key)) == true;*/
         }
 
         public static int GetQuantitySlots(string path)
