@@ -26,7 +26,7 @@ namespace MoreInventorys.src.BlockEntityFolder
         public override int DisplayedItems => slotCount;
         Block block;
 
-        static int slotCount = 68;
+        static int slotCount = 52;
         bool isOpen;
 
         private BlockEntityAnimationUtil animUtil => GetBehavior<BEBehaviorAnimatable>()?.animUtil;
@@ -67,7 +67,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                 OpenAnimation();
                 isOpen = true;
             }
-            else if (sbi > 17)
+            else if (sbi > 17 && slot.Empty)
             {
                 CloseAnimation();
                 isOpen = false;
@@ -100,9 +100,9 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (slot.Itemstack.Item == null) return false;
             bool isValidTag = false;
             var code = slot.Itemstack.Item.Code.Path;
-            if (blockSel.SelectionBoxIndex <= 12)
+            if (blockSel.SelectionBoxIndex < 12)
             {
-                if (code.StartsWith("clothes") || code.StartsWith("armor-body") || code.StartsWith("armor-legs")) isValidTag = true;
+                if (code.StartsWith("clothes") || code.StartsWith("armor-body") || code.StartsWith("armor-legs") || code.StartsWith("armor")) isValidTag = true;
                 if ((code.Contains("shoulder") || code.Contains("upperbody") || code.StartsWith("armor-body") || code.StartsWith("armor-legs") || code.Contains("lowerbody")) && isValidTag)
                 {
                     return true;
@@ -110,7 +110,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             else
             {
-                if (code.Contains("foot"))
+                if (code.Contains("foot") || code.Contains("head") || code.Contains("face"))
                 {
                     return true;
                 }
@@ -139,57 +139,58 @@ namespace MoreInventorys.src.BlockEntityFolder
 
         private bool TryTake(IPlayer byPlayer, BlockSelection blockSel)
         {
+            int legsStartIndex = 40;
             if (blockSel.SelectionBoxIndex < 12)
             {
                 switch (blockSel.SelectionBoxIndex)
                 {
                     case 0:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 1:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 2:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 3:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 4:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 5:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 6:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 7:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 8:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 9:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 10:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
                     case 11:
                         if (!inv[blockSel.SelectionBoxIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
-                        else if (!inv[blockSel.SelectionBoxIndex + 12].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 12);
+                        else if (!inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty) return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + legsStartIndex);
                         break;
 
                     default:
@@ -197,38 +198,68 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
 
             }
-            else if (blockSel.SelectionBoxIndex >= 6)
+            else if (blockSel.SelectionBoxIndex >= 12)
             {
                 switch (blockSel.SelectionBoxIndex)
                 {
-                    case 6:
+                    case 12:
                         if (!inv[blockSel.SelectionBoxIndex].Empty)
                         {
                             return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
                         }
-                        else if (!inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        else if (!inv[blockSel.SelectionBoxIndex + 6].Empty)
                         {
-                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 3);
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 6);
                         }
                         break;
-                    case 7:
+                    case 13:
                         if (!inv[blockSel.SelectionBoxIndex].Empty)
                         {
                             return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
                         }
-                        else if (!inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        else if (!inv[blockSel.SelectionBoxIndex + 6].Empty)
                         {
-                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 3);
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 6);
                         }
                         break;
-                    case 8:
+                    case 14:
                         if (!inv[blockSel.SelectionBoxIndex].Empty)
                         {
                             return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
                         }
-                        else if (!inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        else if (!inv[blockSel.SelectionBoxIndex + 6].Empty)
                         {
-                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 3);
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 6);
+                        }
+                        break;
+                    case 15:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        }
+                        else if (!inv[blockSel.SelectionBoxIndex + 6].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 6);
+                        }
+                        break;
+                    case 16:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        }
+                        else if (!inv[blockSel.SelectionBoxIndex + 6].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 6);
+                        }
+                        break;
+                    case 17:
+                        if (!inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex);
+                        }
+                        else if (!inv[blockSel.SelectionBoxIndex + 6].Empty)
+                        {
+                            return TakeBootsSlot(byPlayer, blockSel.SelectionBoxIndex + 6);
                         }
                         break;
 
@@ -239,7 +270,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             return false;
         }
         private bool TryPut(ItemSlot slot, BlockSelection blockSel)
-        {   //одежда верхние 6 слотов, далее до 12 это ботинки, и 13-18 штаны (да, не логично, но мне лень переписывать, и тааак пойдет!)
+        {   //одежда верхние 12 слотов, далее 12-25 это ботинки/шлем/перчи/пояс/украшения
             var code = slot.Itemstack?.Item?.Code?.Path;
             if (code == null) return false;
 
@@ -249,6 +280,18 @@ namespace MoreInventorys.src.BlockEntityFolder
             if (code.Contains("armor-legs") || code.Contains("lowerbody")) isLegs = true;
             bool isFoot = false;
             if (code.Contains("foot")) isFoot = true;
+            bool isHelmet = false;
+            if(code.Contains("clothes") || code.Contains("armor"))
+            {
+                if (code.Contains("head") || code.Contains("face"))
+                {
+                    isHelmet = true;
+                    isFoot = true;
+                }
+
+            }
+
+            int legsStartIndex = 40;
 
             if (blockSel.SelectionBoxIndex < 12)
             {
@@ -256,86 +299,86 @@ namespace MoreInventorys.src.BlockEntityFolder
                 {
                     case 0:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 1:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 2:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 3:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 4:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 5:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 6:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 7:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 8:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 9:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 10:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     case 11:
                         if (inv[blockSel.SelectionBoxIndex].Empty && isChest) return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
-                        else if (inv[blockSel.SelectionBoxIndex + 12].Empty && isLegs)
+                        else if (inv[blockSel.SelectionBoxIndex + legsStartIndex].Empty && isLegs)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 12);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + legsStartIndex);
                         }
                         break;
                     default:
@@ -343,40 +386,70 @@ namespace MoreInventorys.src.BlockEntityFolder
                 }
 
             }
-            else
+            else if (blockSel.SelectionBoxIndex >= 12 && blockSel.SelectionBoxIndex < 18)
             {
                 if (!isFoot) return false;
 
                 switch (blockSel.SelectionBoxIndex)
                 {   //ботинки
-                    case 6:
+                    case 12:
                         if (inv[blockSel.SelectionBoxIndex].Empty)
                         {
                             return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
                         }
-                        else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        else if (inv[blockSel.SelectionBoxIndex + 6].Empty)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 3);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 6);
                         }
                         break;
-                    case 7:
+                    case 13:
                         if (inv[blockSel.SelectionBoxIndex].Empty)
                         {
                             return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
                         }
-                        else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        else if (inv[blockSel.SelectionBoxIndex + 6].Empty)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 3);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 6);
                         }
                         break;
-                    case 8:
+                    case 14:
                         if (inv[blockSel.SelectionBoxIndex].Empty)
                         {
                             return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
                         }
-                        else if (inv[blockSel.SelectionBoxIndex + 3].Empty)
+                        else if (inv[blockSel.SelectionBoxIndex + 6].Empty)
                         {
-                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 3);
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 6);
+                        }
+                        break;
+                    case 15:
+                        if (inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
+                        }
+                        else if (inv[blockSel.SelectionBoxIndex + 6].Empty)
+                        {
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 6);
+                        }
+                        break;
+                    case 16:
+                        if (inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
+                        }
+                        else if (inv[blockSel.SelectionBoxIndex + 6].Empty)
+                        {
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 6);
+                        }
+                        break;
+                    case 17:
+                        if (inv[blockSel.SelectionBoxIndex].Empty)
+                        {
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex);
+                        }
+                        else if (inv[blockSel.SelectionBoxIndex + 6].Empty)
+                        {
+                            return PutClothsSlot(slot, blockSel.SelectionBoxIndex + 6);
                         }
                         break;
 
@@ -497,12 +570,90 @@ namespace MoreInventorys.src.BlockEntityFolder
 
 
                 //-----------ботинки-----------//
-                //if (index >= 6 && index < 9)
-                if (index >= 12)
-                {
+                
+                if (index >= 12 && index < 18)
+                {//передний ряд
+                    if(code.Contains("foot"))
+                    {
+                        zboots = 1.3f;
+                        xboots = 0.532f + (index - 12) * 0.265f;
+                        yboots = 1.065f;
+                    }
+                    else if(code.Contains("head") || code.Contains("face"))
+                    {
+                        if(code.Contains("clothes-nadiya-head"))
+                        {
+                            zboots = 1.3f;
+                            xboots = 0.532f + (index - 12) * 0.265f;
+                            yboots = 0.24f;
+                        }
+                        else if (code.Contains("face"))
+                        {
+                            zboots = 1.3f;
+                            xboots = 0.532f + (index - 12) * 0.265f;
+                            yboots = 0.34f;
+                        }
+                        else
+                        {
+                            zboots = 1.3f;
+                            xboots = 0.532f + (index - 12) * 0.265f;
+                            yboots = 0.285f;
+                        }
+                            
+                    }
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalxBoots, scalyBoots, scalzBoots)
+                       .RotateYDeg(90f)
+                       .Values;
+                }
+                else if (index >= 18 && index < 24)
+                {//задний ряд
+                    if(code.Contains("foot"))
+                    {
+                        zboots = 1.02f;
+                        xboots = 0.532f + (index - 18) * 0.265f;
+                        yboots = 1.065f;
+                    }
+                    else if (code.Contains("head") || code.Contains("face"))
+                    {
+                        if (code.Contains("clothes-nadiya-head"))
+                        {
+                            zboots = 1.02f;
+                            xboots = 0.532f + (index - 18) * 0.265f;
+                            yboots = 0.24f;
+                        }
+                        else if (code.Contains("face"))
+                        {
+                            zboots = 1.02f;
+                            xboots = 0.532f + (index - 18) * 0.265f;
+                            yboots = 0.34f;
+                        }
+                        else
+                        {
+                            zboots = 1.02f;
+                            xboots = 0.532f + (index - 18) * 0.265f;
+                            yboots = 0.285f;
+                        }
+                    }
+                    tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalxBoots, scalyBoots, scalzBoots)
+                       .RotateYDeg(90f)
+                       .Values;
+
+                }
+                else if (index >=24 && index < 32)
+                {//за дверцей передний ряд
                     zboots = 1.3f;
                     xboots = 0.445f + (index - 6) * 0.27f;
-
+                    yboots = 0.2f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
@@ -511,12 +662,13 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scalxBoots, scalyBoots, scalzBoots)
                        .RotateYDeg(90f)
                        .Values;
+
                 }
-                //else if (index >= 9 && index < 12)
-                else if (index >= 24)
-                {
+                else if (index >= 32 && index < 40)
+                {//за дверцей задний ряд
                     zboots = 1.02f;
                     xboots = 0.445f + (index - 9) * 0.27f;
+                    yboots = 0.2f;
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
@@ -527,14 +679,14 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Values;
 
                 }
-                else if (index >= 33)
-                {
-                    x = 0.576f + (index - 12) * 0.125f;
-                    y = 0.53f;
+                else if (index >= 40)
+                {//верхние 12 слотов для штанов
+                    x = 0.582f + (index - 39) * 0.125f;
+                    y = 1.33f;
 
                     if (code.Contains("clothes-nadiya-lowerbody-fisher"))
                     {
-                        y = 0.18f;
+                        y = 0.92f;
                     }
                     tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
@@ -545,7 +697,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Values;
                 }
                 else
-                {
+                {//верхние 12 слотов для верхней одежды
                     if (code != null)
                     {
                         string[] shoulderAndUpperBodys =
