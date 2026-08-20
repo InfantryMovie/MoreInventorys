@@ -110,7 +110,7 @@ namespace MoreInventorys.src.BlockEntityFolder
             }
             else
             {
-                if (code.Contains("foot") || code.Contains("head") || code.Contains("face"))
+                if (code.Contains("foot") || code.Contains("head") || code.Contains("face") || code.Contains("hand") || code.Contains("bracers") || code.Contains("manacles"))
                 {
                     return true;
                 }
@@ -281,12 +281,14 @@ namespace MoreInventorys.src.BlockEntityFolder
             bool isFoot = false;
             if (code.Contains("foot")) isFoot = true;
             bool isHelmet = false;
-            if(code.Contains("clothes") || code.Contains("armor"))
+            bool isHand = false;
+            if (code.Contains("clothes") || code.Contains("armor"))
             {
-                if (code.Contains("head") || code.Contains("face"))
+                if (code.Contains("head") || code.Contains("face") || code.Contains("hand") || code.Contains("bracers") || code.Contains("manacles"))
                 {
                     isHelmet = true;
                     isFoot = true;
+                    isHand = true;
                 }
 
             }
@@ -578,10 +580,26 @@ namespace MoreInventorys.src.BlockEntityFolder
                         zboots = 1.3f;
                         xboots = 0.532f + (index - 12) * 0.265f;
                         yboots = 1.065f;
+
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalxBoots, scalyBoots, scalzBoots)
+                       .RotateYDeg(90f)
+                       .Values;
                     }
                     else if(code.Contains("head") || code.Contains("face"))
                     {
-                        if(code.Contains("clothes-nadiya-head"))
+                        if (code.Contains("head-barber") || code.Contains("head-miner") || code.Contains("head-musician")
+                            || code.Contains("head-shepherd") || code.Contains("head-tailor") || code.Contains("head-alchemist"))
+                        {
+                            zboots = 1.3f;
+                            xboots = 0.532f + (index - 12) * 0.265f;
+                            yboots = 0.16f;
+                        }
+                        else if(code.Contains("clothes-nadiya-head"))
                         {
                             zboots = 1.3f;
                             xboots = 0.532f + (index - 12) * 0.265f;
@@ -599,9 +617,8 @@ namespace MoreInventorys.src.BlockEntityFolder
                             xboots = 0.532f + (index - 12) * 0.265f;
                             yboots = 0.285f;
                         }
-                            
-                    }
-                    tfMatrices[index] = new Matrixf()
+
+                        tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
                        .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
@@ -609,6 +626,25 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scalxBoots, scalyBoots, scalzBoots)
                        .RotateYDeg(90f)
                        .Values;
+
+                    }
+                    else if (code.Contains("hand") || code.Contains("bracers") || code.Contains("manacles"))
+                    {
+                        zboots = 0.7f;
+                        xboots = 0.665f + (index - 12) * 0.265f;
+                        yboots = 0.839f;
+                        
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(0.3f, scalyBoots, scalzBoots)
+                       .RotateYDeg(90f)
+                       .RotateZDeg(90f)
+                       .Values;
+                    }
+                    
                 }
                 else if (index >= 18 && index < 24)
                 {//задний ряд
@@ -617,10 +653,25 @@ namespace MoreInventorys.src.BlockEntityFolder
                         zboots = 1.02f;
                         xboots = 0.532f + (index - 18) * 0.265f;
                         yboots = 1.065f;
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(scalxBoots, scalyBoots, scalzBoots)
+                       .RotateYDeg(90f)
+                       .Values;
                     }
                     else if (code.Contains("head") || code.Contains("face"))
                     {
-                        if (code.Contains("clothes-nadiya-head"))
+                        if (code.Contains("head-barber") || code.Contains("head-miner") || code.Contains("head-musician")
+                           || code.Contains("head-shepherd") || code.Contains("head-tailor") || code.Contains("head-alchemist"))
+                        {
+                            zboots = 1.02f;
+                            xboots = 0.532f + (index - 18) * 0.265f;
+                            yboots = 0.155f;
+                        }
+                        else if (code.Contains("clothes-nadiya-head"))
                         {
                             zboots = 1.02f;
                             xboots = 0.532f + (index - 18) * 0.265f;
@@ -638,8 +689,7 @@ namespace MoreInventorys.src.BlockEntityFolder
                             xboots = 0.532f + (index - 18) * 0.265f;
                             yboots = 0.285f;
                         }
-                    }
-                    tfMatrices[index] = new Matrixf()
+                        tfMatrices[index] = new Matrixf()
                        .Translate(0.5f, 0f, 0.5f)
                        .RotateYDeg(Block.Shape.rotateY)
                        .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
@@ -647,6 +697,24 @@ namespace MoreInventorys.src.BlockEntityFolder
                        .Scale(scalxBoots, scalyBoots, scalzBoots)
                        .RotateYDeg(90f)
                        .Values;
+                    }
+                    else if (code.Contains("hand") || code.Contains("bracers") || code.Contains("manacles"))
+                    {
+                        zboots = 0.42f;
+                        xboots = 0.665f + (index - 18) * 0.265f;
+                        yboots = 0.839f;
+
+                        tfMatrices[index] = new Matrixf()
+                       .Translate(0.5f, 0f, 0.5f)
+                       .RotateYDeg(Block.Shape.rotateY)
+                       .Translate(xboots - 0.5f, yboots, zboots - 0.4f)
+                       .Translate(-0.5f, 0f, -0.5f)
+                       .Scale(0.3f, scalyBoots, scalzBoots)
+                       .RotateYDeg(90f)
+                       .RotateZDeg(90f)
+                       .Values;
+                    }
+                    
 
                 }
                 else if (index >=24 && index < 32)
